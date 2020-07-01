@@ -7,12 +7,6 @@ import Wel from "../components/Wel";
 import addOldPerson from "../components/OldPerMan/addOldPerson";
 import queryOddPerson from "../components/OldPerMan/queryOddPerson";
 
-
-// const originalPush = VueRouter.prototype.push;
-// VueRouter.prototype.push = function(location) {
-//   return originalPush.call(this, location).catch(err => err)
-// }
-
 Vue.use(VueRouter)
 
   const routes = [

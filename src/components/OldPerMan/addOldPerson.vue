@@ -22,22 +22,15 @@
             </el-form-item>
           </el-aside>
           <el-main>
-            <el-form-item label="姓名" >
-              <el-input style="width: 200px" v-model="addOldPersonForm.username"></el-input>
-            </el-form-item>
-            <el-form-item label="性别">
-              <el-radio v-model="addOldPersonForm.gender" label="M">男</el-radio>
-              <el-radio v-model="addOldPersonForm.gender" label="F">女</el-radio>
-            </el-form-item>
+<!--            <el-form-item label="姓名" >-->
+<!--              <el-input style="width: 200px" v-model="addOldPersonForm.username"></el-input>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="性别">-->
+<!--              <el-radio v-model="addOldPersonForm.gender" label="M">男</el-radio>-->
+<!--              <el-radio v-model="addOldPersonForm.gender" label="F">女</el-radio>-->
+<!--            </el-form-item>-->
           </el-main>
         </el-container>
-<!--        <el-form-item label="姓名" >-->
-<!--          <el-input style="width: 200px" v-model="addOldPersonForm.username"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="性别">-->
-<!--          <el-radio v-model="addOldPersonForm.gender" label="M">男</el-radio>-->
-<!--          <el-radio v-model="addOldPersonForm.gender" label="F">女</el-radio>-->
-<!--        </el-form-item>-->
         <el-row>
           <el-col :span="6">
             <el-form-item label="电话号码" prop="phone">
@@ -151,30 +144,32 @@
 <script>
   import Cookies from 'js-cookie';
   import { mapMutations } from 'vuex';
+  import {addOldPerson, Register} from "../../api";
 
   export default {
     name: "addOldPerson",
     data(){
       return{
+        admin_Name:'',
         addOldPersonForm:{
-          username:'',
-          gender:'',
+          username:'222',
+          gender:'女',
           phone:'11111111111',
           id_card:'1111111111111111111111',
           birthday:'',
           checkin_date:'',
-          room_number:'',
-          firstguardian_name:'',
-          firstguardian_relationship:'',
-          firstguardian_phone:'',
-          firstguardian_wechat:'',
-          secondguardian_name:'',
-          secondguardian_relationship:'',
-          secondguardian_phone:'',
-          secondguardian_wechat:'',
-          health_state:'',
-          DESCRIPTION:'',
-          ISACTIVE:'',
+          room_number:'12',
+          firstguardian_name:'aaa',
+          firstguardian_relationship:'儿子',
+          firstguardian_phone:'11111111111',
+          firstguardian_wechat:'aaaaaa',
+          secondguardian_name:'aaa',
+          secondguardian_relationship:'儿子',
+          secondguardian_phone:'11111111111',
+          secondguardian_wechat:'aaaaaa',
+          health_state:'好',
+          DESCRIPTION:'好得很',
+          ISACTIVE:'不知道',
           CREATEBY:'',
         },
         rulesForm:{
@@ -239,13 +234,81 @@
         let that = this;
         that.ChangeDate();//改变日期格式
         that.$refs[addOldPersonForm].validate((valid) => {
+          that.getID();
+          console.log('-----------addOldPersonForm---------------')
+          console.log(that.addOldPersonForm);
+          let params = JSON.stringify(that.addOldPersonForm);
           if(valid){
-            that.$message({
-              title: "录入信息成功",
-              message: "录入信息成功",
-              type: 'success'
-            });
-            console.log(that.addOldPersonForm.birthday);
+            console.log('-----------表单验证通过---------------')
+            addOldPerson(params).then(res => {
+              console.log('-----------res---------------')
+              console.log(res.code)
+              if (res.code == 1) {
+                console.log('=====================');
+                console.log("$store完成设置");
+                that.$message({
+                  title: "录入成功",
+                  message: "录入成功",
+                  type: 'success'
+                });
+              }else {
+                console.log('-----------老人重复---------------')
+                that.$message({
+                  title: "录入失败",
+                  message: "用户名重复",
+                  type: "error"
+                });
+              }
+            }).catch(function() {
+              that.$notify({
+                title: "录入失败",
+                message: "服务器异常",
+                type: "error"
+              });
+              console.log("服务呵呵呵");
+             });
+            // that
+            //   .$axios({
+            //       //请求方式
+            //       method: "post",
+            //       //请求路劲
+            //       url: "/api/oldperson/addOldPerson",
+            //       //请求参数
+            //       data: params
+            //       //请求成功的回调函数
+            //     },
+            //     {
+            //       emulateJSON: true
+            //     }
+            //   )
+            //   .then(function(res) {
+            //     console.log("请求已经成功");
+            //     console.log(res.data.code);
+            //
+            //     if (res.data.code == "1") {
+            //       console.log("进入if");
+            //
+            //       that.$message({
+            //         title: "录入成功",
+            //         message: "录入成功",
+            //         type: 'success'
+            //       });
+            //       console.log(res);
+            //     }else{
+            //       that.$message({
+            //         title: "录入失败",
+            //         message: "老人已经住院了",
+            //         type: "error"
+            //       });
+            //     }
+            //   }).catch(function() {
+            //   that.$notify({
+            //     title: "录入失败",
+            //     message: "服务器异常",
+            //     type: "error"
+            //   });
+            //   console.log("服务呵呵呵");
+            // });
           }else{
             that.$message({
               message: '表单填写有误',
@@ -258,17 +321,35 @@
       // 改变时间格式
       ChangeDate(){
         //UTC时间格式.toJSON().split('T')[0]截取后格式：2019-10-14
-        let birthday = new Date(this.addOldPersonForm.birthday).toJSON().split('T')[0];
-        this.addOldPersonForm.birthday=birthday;
-        console.log(this.addOldPersonForm.birthday);
+        if(this.addOldPersonForm.birthday!=''){
+          let delayTime = new Date(this.addOldPersonForm.birthday).toJSON();
+          this.addOldPersonForm.birthday = new Date(
+            +new Date(delayTime) + 8 * 3600 * 1000
+          )
+            .toISOString()
+            .replace(/T/g, " ")
+            .replace(/\.[\d]{3}Z/, "");
+          console.log(this.addOldPersonForm.birthday);
+        }
+        if(this.addOldPersonForm.checkin_date!=''){
+          //UTC时间格式.toJSON().split('T')[0]截取后格式：2019-10-14
+          let delayTime1 = new Date(this.addOldPersonForm.checkin_date).toJSON();
+          this.addOldPersonForm.checkin_date = new Date(
+            +new Date(delayTime1) + 8 * 3600 * 1000
+          )
+            .toISOString()
+            .replace(/T/g, " ")
+            .replace(/\.[\d]{3}Z/, "");
+          console.log(this.addOldPersonForm.checkin_date);
+        }
         console.log("----");
-        //UTC时间格式.toJSON().split('T')[0]截取后格式：2019-10-14
-        let checkin_date = new Date(this.addOldPersonForm.checkin_date).toJSON().split('T')[0];
-        this.addOldPersonForm.checkin_date=checkin_date;
-        console.log(this.addOldPersonForm.checkin_date);
 
+        // //UTC时间格式.toJSON().split('T')[0]截取后格式：2019-10-14
+        // let checkin_date = new Date(this.addOldPersonForm.checkin_date).toJSON().split('T')[0];
+        // this.addOldPersonForm.checkin_date=checkin_date;
+        // console.log(this.addOldPersonForm.checkin_date);
 
-        // // UTC时间格式转换——2019-10-14 12:20:12
+        // UTC时间格式转换——2019-10-14 12:20:12
         // let delayTime = new Date(this.addOldPersonForm.birthday).toJSON();
         // this.addOldPersonForm.birthday = new Date(
         //   +new Date(delayTime) + 8 * 3600 * 1000
@@ -277,7 +358,13 @@
         //   .replace(/T/g, " ")
         //   .replace(/\.[\d]{3}Z/, "");
         // console.log(this.addOldPersonForm.birthday);
-      }
+      },
+      //获得管理员ID
+      getID(){
+        // this.addOldPersonForm.CREATEBY=Cookies.get('User_ID')
+        this.addOldPersonForm.CREATEBY=this.$store.state.userId;
+        console.log(this.addOldPersonForm.CREATEBY);
+      },
     }
   }
 </script>

@@ -34,8 +34,8 @@
         <el-card class="RegisterCard" >
           <h3 class="register-title" >注册账号</h3>
           <el-form :model="RegisterForm" ref="RegisterForm" :rules="RegisterRules" label-width="100px">
-            <el-form-item label="用户名" prop="username" >
-              <el-input v-model="RegisterForm.username" autocomplete="off" placeholder="长度在3-10个字符之间"></el-input>
+            <el-form-item label="用户名" prop="UserName" >
+              <el-input v-model="RegisterForm.UserName" autocomplete="off" placeholder="长度在3-10个字符之间"></el-input>
             </el-form-item>
             <el-form-item label="性别" prop="SEX">
               <el-radio v-model="RegisterForm.SEX" label="M">男</el-radio>
@@ -53,8 +53,8 @@
             <el-form-item label="移动电话" prop="MOBILE" >
               <el-input v-model="RegisterForm.MOBILE" autocomplete="off" placeholder="11位移动电话号码"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="password" >
-              <el-input v-model="RegisterForm.password" autocomplete="off" type="password" placeholder="长度在3-10个字符之间"></el-input>
+            <el-form-item label="密码" prop="Password" >
+              <el-input v-model="RegisterForm.Password" autocomplete="off" type="password" placeholder="长度在3-10个字符之间"></el-input>
             </el-form-item>
           </el-form>
           <div class="demo-drawer__footer">
@@ -78,6 +78,7 @@
 <script>
   import Cookies from 'js-cookie';
   import { mapMutations } from 'vuex';
+  import {loginIn, Register} from "../api";
   export default {
     name: "Login",
     data() {
@@ -87,14 +88,15 @@
         loading: false,
         formLabelWidth: '80px',
         timer: null,
+        UserName:'',
         RegisterForm:{
-          username:'',
+          UserName:'',
           REAL_NAME:'',
           SEX:'',
           EMAIL:'',
           PHONE:'',
           MOBILE:'',
-          password:'',
+          Password:'',
         },
         loginForm:{
         //  这是登录界面
@@ -113,7 +115,7 @@
         },
         RegisterRules:{
 
-          username:[
+          UserName:[
             {required:true,message:'请输入正确格式',trigger:'blur'},
             { min: 3, max: 5, message: '长度在 3 到 5 个汉字', trigger: 'blur' }
           ],
@@ -151,63 +153,100 @@
         console.log(that.loginForm);
         console.log("------");
         that.$refs[formName].validate((valid) => {
-          console.log(that.loginForm);
-          let params = JSON.stringify(that.loginForm);
-          if(valid){
-            that
-              .$axios({
-                  //请求方式
-                  method: "post",
-                  //请求路劲
-                  url: "/api/sysUser/login",
-                  //请求参数
-                  data: params
-                  //请求成功的回调函数
-                },
-                {
-                  emulateJSON: true
-                }
-              )
-              .then(function(res) {
-                console.log("请求已经成功");
-                console.log(res.data.code);
-
-                if (res.data.code == "1") {
-                  console.log("进入if");
-                  Cookies.set('User_name', res.data.msg, 3600)
-                  console.log("cookie完成设置");
-
-                  that.$message({
-                    title: "登陆成功",
-                    message: "登陆成功",
-                    type: 'success'
-                  });
-                  that.$router.push("/main");
-                  console.log(res);
-                }else{
-                    that.$message({
-                      title: "登陆失败",
-                      message: "请输入正确的用户名或密码",
-                      type: "error"
-                    });
-                  }
-                }).catch(function() {
-                  that.$notify({
-                    title: "登陆失败",
-                    message: "服务器异常",
-                    type: "error"
-               });
-                console.log("服务呵呵呵");
-              });
-
-
+          if(valid) {
+            console.log(that.loginForm);
+            let params = JSON.stringify(that.loginForm);
+            loginIn(params).then(res => {
+              console.log('-----------获取登录信息---------------')
+              if (res.code == 1) {
+                console.log('=====================');
+                console.log(res.data[0]);
+                // that.UserName=res.data.data[0]
+                this.$store.commit('setUserId', res.data[0])
+                console.log('=====================');
+                console.log(res.data.msg);
+                this.$store.commit('setUsername', res.msg)
+                console.log("$store完成设置");
+                that.$message({
+                  title: "登陆成功",
+                  message: "登陆成功",
+                  type: 'success'
+                });
+                that.$router.push("/main");
+              } else {
+                that.$message({
+                  title: "登陆失败",
+                  message: "请输入正确的用户名或密码",
+                  type: "error"
+                });
+              }
+            })
+              .catch(failResponse => {
+              })
           }else{
-            that.$message({
-              message: '用户名或密码格式错误',
-              type: 'error'
-            });
-            return false;
-          }
+                that.$message({
+                  message: '用户名或密码格式错误',
+                  type: 'error'
+                });
+                return false;
+              }
+          // if(valid){
+          //   that
+          //     .$axios({
+          //         //请求方式
+          //         method: "post",
+          //         //请求路劲
+          //         url: "/api/sysUser/login",
+          //         //请求参数
+          //         data: params
+          //         //请求成功的回调函数
+          //       },
+          //       {
+          //         emulateJSON: true
+          //       }
+          //     )
+          //     .then(function(res) {
+          //       console.log("请求已经成功");
+          //       // console.log(res.data.data[0]);
+          //
+          //       if (res.data.code == "1") {
+          //
+          //         console.log("进入if");
+          //         Cookies.set('User_name', res.data.msg, 3600);
+          //         Cookies.set('User_id', res.data.data[0], 3600);
+          //         console.log("cookie完成设置");
+          //
+          //         that.$message({
+          //           title: "登陆成功",
+          //           message: "登陆成功",
+          //           type: 'success'
+          //         });
+          //         that.$router.push("/main");
+          //         console.log(res);
+          //       }else{
+          //           that.$message({
+          //             title: "登陆失败",
+          //             message: "请输入正确的用户名或密码",
+          //             type: "error"
+          //           });
+          //         }
+          //       }).catch(function() {
+          //         that.$notify({
+          //           title: "登陆失败",
+          //           message: "服务器异常",
+          //           type: "error"
+          //      });
+          //       console.log("服务呵呵呵");
+          //     });
+          //
+          //
+          // }else{
+          //   that.$message({
+          //     message: '用户名或密码格式错误',
+          //     type: 'error'
+          //   });
+          //   return false;
+          // }
         });
 
       },
@@ -215,60 +254,77 @@
       // 注册
       RegisterButton(formName) {
 
-
               let that = this;
               that.$refs[formName].validate((valid) => {
-
-
+                console.log(that.RegisterForm);
                 //-----------------------------------------------------------------
                 let params = JSON.stringify(that.RegisterForm);
                 if(valid){
-                  that
-                    .$axios({
-                        //请求方式
-                        method: "post",
-                        //请求路劲
-                        url: "/api/sysUser/login",
-                        //请求参数
-                        data: params
-                        //请求成功的回调函数
-                      },
-                      {
-                        emulateJSON: true
-                      }
-                    )
-                    .then(function(res) {
-                      console.log("请求已经成功");
-                      console.log(res.data.code);
+                  Register(params).then(res => {
+                    console.log('-----------获取登录信息---------------')
+                    if (res.code == 1) {
+                      console.log('=====================');
+                      console.log("$store完成设置");
+                      that.$message({
+                        title: "注册成功",
+                        message: "注册成功",
+                        type: 'success'
+                      });
+                      that.$router.push("/app_login");
+                    } else {
+                      that.$message({
+                        title: "注册失败",
+                        message: "用户名重复",
+                        type: "error"
+                      });
+                    }
+                  })
+                    .catch(failResponse => {})
 
-                      if (res.data.code == "1") {
-                        Cookies.set('User_name', res.data.msg, 3600)
-                        console.log("cookie完成设置");
-
-                        that.$message({
-                          title: "注册成功",
-                          message: "注册成功",
-                          type: 'success'
-                        });
-                        that.$router.push("/app_login");
-                        console.log(res);
-                      }else{
-                        that.$message({
-                          title: "注册失败",
-                          message: "请填写正确信息",
-                          type: "error"
-                        });
-                      }
-                    }).catch(function() {
-                    that.$notify({
-                      title: "注册失败",
-                      message: "服务器异常",
-                      type: "error"
-                    });
-                    console.log("服务呵呵呵");
-                  });
-
-
+                  // that
+                  //   .$axios({
+                  //       //请求方式
+                  //       method: "post",
+                  //       //请求路劲
+                  //       url: "/api/sysUser/register",
+                  //       //请求参数
+                  //       data: params
+                  //       //请求成功的回调函数
+                  //     },
+                  //     {
+                  //       emulateJSON: true
+                  //     }
+                  //   )
+                  //   .then(function(res) {
+                  //     console.log("请求已经成功");
+                  //     console.log(res.data.code);
+                  //
+                  //     if (res.data.code == "1") {
+                  //       Cookies.set('User_name', res.data.msg, 3600)
+                  //       console.log("cookie完成设置");
+                  //
+                  //       that.$message({
+                  //         title: "注册成功",
+                  //         message: "注册成功",
+                  //         type: 'success'
+                  //       });
+                  //       that.$router.push("/app_login");
+                  //       console.log(res);
+                  //     }else{
+                  //       that.$message({
+                  //         title: "注册失败",
+                  //         message: "请填写正确信息",
+                  //         type: "error"
+                  //       });
+                  //     }
+                  //   }).catch(function() {
+                  //   that.$notify({
+                  //     title: "注册失败",
+                  //     message: "服务器异常",
+                  //     type: "error"
+                  //   });
+                  //   console.log("服务呵呵呵");
+                  // });
                 }else{
                   that.$message({
                     message: '输入正确格式',
@@ -277,7 +333,6 @@
                   return false;
                 }
               });
-              //-----------------------------------------------------------------
       },
       // 关闭注册
       cancelRegForm() {

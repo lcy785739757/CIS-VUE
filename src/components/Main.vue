@@ -9,19 +9,44 @@
 <!--      <el-button type="info" @click="logout">退出</el-button>-->
       <el-dropdown trigger="click">
           <span class="el-dropdown-link" >
-            <el-button  type="info" round>
+            <el-button type="primary"  round >
               {{admin_Name}}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
           </span>
-        <el-dropdown-menu slot="dropdown" >
-          <el-dropdown-item @click.native="ChaneInfo()">个人资料</el-dropdown-item>
+        <el-dropdown-menu slot="dropdown" style="width: 150px">
           <el-dropdown-item >
-            消息
-            <el-badge class="mark" :value="12" />
+            <el-button @click="InfoDrawer = true" round style="width: 110px;border: none" >查看个人资料
+            </el-button>
           </el-dropdown-item>
-          <el-dropdown-item @click.native="logout()">退出登录</el-dropdown-item>
+          <el-dropdown-item >
+            <el-button @click="PassDrawer = true" style="width: 110px; border: none" >
+              修改密码
+            </el-button>
+          </el-dropdown-item>
+          <el-dropdown-item >
+            <el-button @click="logout()" style="width: 110px; border: none">
+              退出登录
+            </el-button>
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+
+      <el-drawer
+        :visible.sync="InfoDrawer"
+        :with-header="false">
+        <div class="demo-drawer__content">
+          <el-card class="InfoCard" >
+
+          </el-card>
+        </div>
+      </el-drawer>
+
+      <el-drawer
+        :visible.sync="PassDrawer"
+        :with-header="false">
+        <span>PassDrawer!</span>
+      </el-drawer>
+
     </el-header>
     <!--页面主体区域-->
     <el-container>
@@ -72,17 +97,26 @@
       </el-main>
     </el-container>
   </el-container>
+
+
+
 </template>
 
 
 <script >
   import Cookies from "js-cookie";
+  import {UserInfo} from "../api";
 
   export default {
     name: "Main",
     data(){
       return{
+        InfoDrawer: false,
+        PassDrawer: false,
         admin_Name:'',
+        admin:{
+          UserName:'',
+        },
         menuList: [
           {
             id:'01',
@@ -150,17 +184,57 @@
           '06':'el-icon-bangzhu',
         },
         path:'',
+        EditInfo:{
+          UserName:'aaa',
+          SEX:'',
+          EMAIL:'',
+          PHONE:'',
+          MOBILE:'',
+          real_NAME:''
+        },
+        UserInfo:{
+          CREATED: "2019-12-31 16:00:00",
+          UPDATED: "2019-12-31 16:00:00",
+          theme: "11",
+          defaultpage: "",
+          logoimage: null,
+          qqopenid: null,
+          appversion: null,
+          jsonauth: null,
+          id: 1,
+          createby: 11,
+          created: "2019-12-31T16:00:00.000+00:00",
+          description: "111",
+          isactive: "1",
+          real_NAME: "啊啊",
+          mobile: "111111111",
+          email: "11@qq.com",
+          phone: "11111111",
+          userName: "aaa",
+          sex: "man",
+          password: "E10ADC3949BA59ABBE56E057F20F883E",
+          org_ID: 1,
+          remove: "1",
+          updateby: 11,
+          client_ID: 1,
+          updated: "2019-12-31T16:00:00.000+00:00",
+          datafilter: "11"
+        },
 
         //是否折叠
         isCollapsed:false,
       }
     },
     created() {
-      this.getName()
+      this.getName();
     },
+    mounted() {
+      this.getInfo();
+    }
+    ,
     methods:{
       logout(){
-        Cookies.set('admin_name','',0)
+        // Cookies.set('admin_name','',0)
         this.$message({
           message: '退出登录成功',
           type: 'success'
@@ -179,10 +253,85 @@
       },
       //获得管理员名字
       getName(){
-        this.admin_Name=Cookies.get('User_name')
+        this.admin_Name=this.$store.state.username;
+        this.admin.UserName=this.$store.state.username;
       },
-      //修改资料
-      ChaneInfo(){
+      //获得管理员资料
+      getInfo(){
+        let that = this;
+        // let params = new URLSearchParams()
+        console.log('-----------获取信息---------------')
+        // params.append('UserName', this.admin.admin_Name)
+        console.log(that.admin)
+        let params = JSON.stringify(that.admin);
+        console.log('-----------完成传参---------------')
+
+        UserInfo(params)
+          .then(res =>{
+            console.log('-----------获取信息---------------')
+            if (res.code == 1) {
+
+              console.log('-----------UserInfo---------------')
+              that.UserInfo=res.data
+              console.log(res.data)
+              console.log('-----------UserInfo---------------')
+            }else {
+              _this.notify('错误', 'error')
+            }
+        }).catch(failResponse => {})
+          // console.log(that.admin);
+          // let params = JSON.stringify(that.admin);
+          //   that
+          //     .$axios({
+          //         //请求方式
+          //         method: "post",
+          //         //请求路劲
+          //         url: "/api/sysUser/seeSysUser",
+          //         //请求参数
+          //         data: params
+          //         //请求成功的回调函数
+          //       },
+          //       {
+          //         emulateJSON: true
+          //       }
+          //     )
+          //     .then(function(res) {
+          //       console.log("请求已经成功");
+          //       // console.log(res.data.data[0]);
+          //
+          //       if (res.data.code == "1") {
+          //
+          //         console.log("进入if");
+          //
+          //         that.$message({
+          //           title: "登陆成功",
+          //           message: "登陆成功",
+          //           type: 'success'
+          //         });
+          //         console.log(res);
+          //       }else{
+          //         that.$message({
+          //           title: "登陆失败",
+          //           message: "请输入正确的用户名或密码",
+          //           type: "error"
+          //         });
+          //       }
+          //     }).catch(function() {
+          //     that.$notify({
+          //       title: "登陆失败",
+          //       message: "服务器异常",
+          //       type: "error"
+          //     });
+          //     console.log("服务呵呵呵");
+          //   });
+
+      },
+      //查看修改资料
+      viewInfo(){
+        this.drawer=true;
+      },
+      //修改密码
+      ChangePass(){
 
       },
 
@@ -239,6 +388,14 @@
     letter-spacing: 0.2em;
     cursor: pointer;
   }
-
+  .InfoCard{
+    font-weight: bold;
+    font-family: 幼圆;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-bottom: 50px;
+    margin-top: 50px;
+    /*padding: 0px;*/
+  }
 
 </style>
