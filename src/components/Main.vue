@@ -35,14 +35,6 @@
         :visible.sync="InfoDrawer"
         :with-header="false">
         <div class="demo-drawer__content">
-<!--          <el-card class="InfoCard" @close="isEdit = false" :close-on-click-modal='false' >-->
-<!--            <h3 class="register-title" style="margin-left: 140px;margin-top: 10px">查看信息</h3>-->
-<!--              <el-form :model="UserInfo" ref="UserInfo" :rules="UserInfo" label-width="100px">-->
-<!--                <el-form-item label="用户名" prop="UserName" >-->
-<!--                  <el-input v-model="UserInfo.userName" autocomplete="off" placeholder=UserInfo.userName></el-input>-->
-<!--                </el-form-item>-->
-<!--              </el-form>-->
-<!--          </el-card>-->
           <el-card width="920px" @close="isEdit = false" class="dialog dialogAdd" custom-class="custom-dialog"
                      :close-on-click-modal='false'>
             <h3 class="register-title" style="margin-left: 140px;margin-top: 10px">管理员信息</h3>
@@ -54,7 +46,7 @@
                   <el-input v-model="EditInfo.UserName" :disabled="!isEdit"></el-input>
                 </el-form-item>
                 <el-form-item label="真实姓名" >
-                  <el-input v-model="EditInfo.real_NAME" :disabled="!isEdit" ></el-input>
+                  <el-input v-model="EditInfo.REAL_NAME" :disabled="!isEdit" ></el-input>
                 </el-form-item>
                 <el-form-item label="性别">
                   <el-input v-model="EditInfo.SEX" disabled></el-input>
@@ -81,9 +73,39 @@
       <el-drawer
         :visible.sync="PassDrawer"
         :with-header="false">
-        <span>PassDrawer!</span>
         <div class="demo-drawer__content">
-
+          <el-card width="920px" @close="isEdit2 = false" class="dialog dialogAdd" custom-class="custom-dialog"
+                   :close-on-click-modal='false'>
+            <h3 class="register-title" style="margin-left: 140px;margin-top: 10px">修改密码</h3>
+            <el-form ref="EditInfo" :model="EditInfo" style="margin-right: 20px;"   label-position="right" label-width="110px" >
+              <el-form-item label="用户ID" >
+                <el-input v-model="EditInfo.id" disabled></el-input>
+              </el-form-item>
+              <el-form-item label="用户名" >
+                <el-input v-model="EditInfo.UserName" :disabled="!isEdit2"></el-input>
+              </el-form-item>
+              <el-form-item label="真实姓名" >
+                <el-input v-model="EditInfo.REAL_NAME" :disabled="!isEdit2" ></el-input>
+              </el-form-item>
+              <el-form-item label="性别">
+                <el-input v-model="EditInfo.SEX" disabled></el-input>
+              </el-form-item>
+              <el-form-item label="电话" >
+                <el-input v-model="EditInfo.PHONE" :disabled="!isEdit2"></el-input>
+              </el-form-item>
+              <el-form-item label="移动电话" >
+                <el-input v-model="EditInfo.MOBILE" :disabled="!isEdit2"></el-input>
+              </el-form-item>
+              <el-form-item label="电子邮箱" >
+                <el-input v-model="EditInfo.EMAIL" :disabled="!isEdit2"></el-input>
+              </el-form-item>
+              <el-form-item >
+                <el-button v-if="!isEdit2" @click="isEdit2 = true" style="width: 100px">编 辑</el-button>
+                <el-button v-else @click="cancelEdit"  style="width: 100px">取消编辑</el-button>
+                <el-button type="primary" v-on:click="SaveEdit('EditInfo')" style="width: 100px">保 存</el-button>
+              </el-form-item>
+            </el-form>
+          </el-card>
         </div>
       </el-drawer>
 
@@ -152,6 +174,7 @@
     data(){
       return{
         isEdit: false,   // 是否编辑
+        isEdit2:false,
         InfoDrawer: false,
         PassDrawer: false,
         admin_Name:'',
@@ -231,7 +254,7 @@
           EMAIL:'',
           PHONE:'',
           MOBILE:'',
-          real_NAME:'',
+          REAL_NAME:'',
           id: '',
         },
         EditedInfo:{
@@ -241,7 +264,7 @@
           EMAIL:'',
           PHONE:'',
           MOBILE:'',
-          real_NAME:'',
+          REAL_NAME:'',
         },
         UserInfo:{
           CREATED: "2019-12-31 16:00:00",
@@ -401,7 +424,7 @@
         this.EditInfo.EMAIL=this.UserInfo.email;
         this.EditInfo.PHONE=this.UserInfo.phone;
         this.EditInfo.MOBILE=this.UserInfo.mobile;
-        this.EditInfo.real_NAME=this.UserInfo.real_NAME;
+        this.EditInfo.REAL_NAME=this.UserInfo.real_NAME;
         this.EditedInfo.UserName=this.EditInfo.UserName;
         this.EditedInfo.SEX=this.EditInfo.SEX;
         console.log("=======================EditInfo==================");
@@ -412,7 +435,7 @@
       //数据转换2
       getEditInfoFromInfo2(){
         this.EditedInfo.NewUserName=this.EditInfo.UserName;
-        this.EditedInfo.real_NAME=this.EditInfo.real_NAME;
+        this.EditedInfo.REAL_NAME=this.EditInfo.REAL_NAME;
         this.EditedInfo.MOBILE=this.EditInfo.MOBILE;
         this.EditedInfo.PHONE=this.EditInfo.PHONE;
         this.EditedInfo.EMAIL=this.EditInfo.EMAIL;

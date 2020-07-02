@@ -11,6 +11,8 @@ export const loginIn = (params) => post(`sysUser/login`, params)
 export const Register = (params) => post(`sysUser/register`, params)
 // 修改管理员信息
 export const editSysUser = (params) => post(`sysUser/editSysUser`, params)
+// 修改密码
+export const changePassword = (params) => post(`sysUser/changePassword`, params)
 
 // ==========================================》老人api
 // 录入信息
