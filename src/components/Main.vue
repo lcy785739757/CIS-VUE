@@ -77,32 +77,21 @@
           <el-card width="920px" @close="isEdit2 = false" class="dialog dialogAdd" custom-class="custom-dialog"
                    :close-on-click-modal='false'>
             <h3 class="register-title" style="margin-left: 140px;margin-top: 10px">修改密码</h3>
-            <el-form ref="EditInfo" :model="EditInfo" style="margin-right: 20px;"   label-position="right" label-width="110px" >
+            <el-form ref="EditPass" :model="EditPass" style="margin-right: 20px;"   label-position="right" label-width="110px" >
               <el-form-item label="用户ID" >
-                <el-input v-model="EditInfo.id" disabled></el-input>
+                <el-input v-model="EditPass.id" disabled></el-input>
               </el-form-item>
               <el-form-item label="用户名" >
-                <el-input v-model="EditInfo.UserName" :disabled="!isEdit2"></el-input>
+                <el-input v-model="EditPass.UserName" disabled></el-input>
               </el-form-item>
-              <el-form-item label="真实姓名" >
-                <el-input v-model="EditInfo.REAL_NAME" :disabled="!isEdit2" ></el-input>
+              <el-form-item label="密码" >
+                <el-input v-model="EditPass.Password" :disabled="!isEdit2" ></el-input>
               </el-form-item>
-              <el-form-item label="性别">
-                <el-input v-model="EditInfo.SEX" disabled></el-input>
-              </el-form-item>
-              <el-form-item label="电话" >
-                <el-input v-model="EditInfo.PHONE" :disabled="!isEdit2"></el-input>
-              </el-form-item>
-              <el-form-item label="移动电话" >
-                <el-input v-model="EditInfo.MOBILE" :disabled="!isEdit2"></el-input>
-              </el-form-item>
-              <el-form-item label="电子邮箱" >
-                <el-input v-model="EditInfo.EMAIL" :disabled="!isEdit2"></el-input>
-              </el-form-item>
+
               <el-form-item >
                 <el-button v-if="!isEdit2" @click="isEdit2 = true" style="width: 100px">编 辑</el-button>
-                <el-button v-else @click="cancelEdit"  style="width: 100px">取消编辑</el-button>
-                <el-button type="primary" v-on:click="SaveEdit('EditInfo')" style="width: 100px">保 存</el-button>
+                <el-button v-else @click="cancelEdit2"  style="width: 100px">取消编辑</el-button>
+                <el-button type="primary" v-on:click="SavePassEdit('EditPass')" style="width: 100px">保 存</el-button>
               </el-form-item>
             </el-form>
           </el-card>
@@ -167,7 +156,7 @@
 
 <script >
   import Cookies from "js-cookie";
-  import {editSysUser, UserInfo} from "../api";
+  import {changePassword, editSysUser, UserInfo} from "../api";
 
   export default {
     name: "Main",
@@ -249,6 +238,15 @@
           '06':'el-icon-bangzhu',
         },
         path:'',
+        EditPass:{
+          id:'',
+          UserName:'',
+          Password:''
+        },
+        EditedPass:{
+          UserName:'',
+          NewPassword:''
+        },
         EditInfo:{
           UserName:'',
           SEX:'',
@@ -268,32 +266,32 @@
           REAL_NAME:'',
         },
         UserInfo:{
-          CREATED: "2019-12-31 16:00:00",
-          UPDATED: "2019-12-31 16:00:00",
-          theme: "11",
+          CREATED: "",
+          UPDATED: "",
+          theme: "",
           defaultpage: "",
-          logoimage: null,
-          qqopenid: null,
-          appversion: null,
-          jsonauth: null,
-          id: 1,
-          createby: 11,
-          created: "2019-12-31T16:00:00.000+00:00",
-          description: "111",
-          isactive: "1",
-          real_NAME: "啊啊",
-          mobile: "111111111",
-          email: "11@qq.com",
-          phone: "11111111",
-          userName: "aaa",
-          sex: "man",
-          password: "E10ADC3949BA59ABBE56E057F20F883E",
-          org_ID: 1,
-          remove: "1",
-          updateby: 11,
-          client_ID: 1,
-          updated: "2019-12-31T16:00:00.000+00:00",
-          datafilter: "11"
+          logoimage: "",
+          qqopenid: "",
+          appversion: "",
+          jsonauth: "",
+          id: "",
+          createby: "",
+          created: "",
+          description: "",
+          isactive: "",
+          real_NAME: "",
+          mobile: "",
+          email: "",
+          phone: "",
+          userName: "",
+          sex: "",
+          password: "",
+          org_ID: "",
+          remove: "",
+          updateby: "",
+          client_ID: "",
+          updated: "0",
+          datafilter: ""
         },
 
         //是否折叠
@@ -364,9 +362,45 @@
         this.drawer=true;
       },
       //修改密码
-      ChangePass(){
+      SavePassEdit(formName){
+        let that = this;
 
+        that.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.getEditInfoFromInfo3();
+              let params = JSON.stringify(that.EditedPass);
+              changePassword(params)
+                .then(res =>{
+                  if (res.code == 1) {
+                    that.$message({
+                      title: "修改成功",
+                      message: "修改成功",
+                      type: 'success'
+                    });
+                  }else {
+                    that.$message({
+                      title: "修改失败",
+                      message: "修改失败",
+                      type: 'warning'
+                    });
+                  }
+                }).catch(function() {
+                that.$notify({
+                  title: "修改失败",
+                  message: "服务器异常",
+                  type: "error"
+                });
+                console.log("服务呵呵呵");
+              });
+            }else{
+              that.$message({
+                message: '输入正确格式',
+                type: 'error'
+              });
+            }
+        })
       },
+
       // 保存编辑
       SaveEdit(formName){
         let that = this;
@@ -396,7 +430,7 @@
                 }
               }).catch(function() {
                 that.$notify({
-                  title: "注册失败",
+                  title: "修改失败",
                   message: "服务器异常",
                   type: "error"
                 });
@@ -415,6 +449,10 @@
         this.isEdit = false
         // this.editForm = this.deepClone(this.currentItem)
       },
+      cancelEdit2(){
+        this.isEdit2 = false
+        // this.editForm = this.deepClone(this.currentItem)
+      },
       // 将数据转换1
       getEditInfoFromInfo(){
 
@@ -428,6 +466,9 @@
         this.EditInfo.REAL_NAME=this.UserInfo.real_NAME;
         this.EditedInfo.UserName=this.EditInfo.UserName;
         this.EditedInfo.SEX=this.EditInfo.SEX;
+        this.EditPass.id=this.EditInfo.id;
+        this.EditPass.Password=this.UserInfo.password;
+        this.EditPass.UserName=this.UserInfo.userName;
         console.log("=======================EditInfo==================");
         console.log(this.EditInfo);
         console.log(this.EditedInfo);
@@ -443,6 +484,11 @@
         console.log("=======================EditedInfo==================++++++++++");
         console.log(this.EditedInfo);
         console.log("=======================EditedInfo==================++++++++");
+      },
+      //数据转换3
+      getEditInfoFromInfo3(){
+        this.EditedPass.NewPassword=this.EditPass.Password;
+        this.EditedPass.UserName=this.EditPass.UserName;
       },
 
     },
