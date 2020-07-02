@@ -35,8 +35,45 @@
         :visible.sync="InfoDrawer"
         :with-header="false">
         <div class="demo-drawer__content">
-          <el-card class="InfoCard" >
-
+<!--          <el-card class="InfoCard" @close="isEdit = false" :close-on-click-modal='false' >-->
+<!--            <h3 class="register-title" style="margin-left: 140px;margin-top: 10px">查看信息</h3>-->
+<!--              <el-form :model="UserInfo" ref="UserInfo" :rules="UserInfo" label-width="100px">-->
+<!--                <el-form-item label="用户名" prop="UserName" >-->
+<!--                  <el-input v-model="UserInfo.userName" autocomplete="off" placeholder=UserInfo.userName></el-input>-->
+<!--                </el-form-item>-->
+<!--              </el-form>-->
+<!--          </el-card>-->
+          <el-card width="920px" @close="isEdit = false" class="dialog dialogAdd" custom-class="custom-dialog"
+                     :close-on-click-modal='false'>
+            <h3 class="register-title" style="margin-left: 140px;margin-top: 10px">管理员信息</h3>
+              <el-form ref="EditInfo" :model="EditInfo" style="margin-right: 20px;"   label-position="right" label-width="110px" >
+                <el-form-item label="用户ID" >
+                  <el-input v-model="EditInfo.id" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="用户名" >
+                  <el-input v-model="EditInfo.UserName" :disabled="!isEdit"></el-input>
+                </el-form-item>
+                <el-form-item label="真实姓名" >
+                  <el-input v-model="EditInfo.real_NAME" :disabled="!isEdit" ></el-input>
+                </el-form-item>
+                <el-form-item label="性别">
+                  <el-input v-model="EditInfo.SEX" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="电话" >
+                  <el-input v-model="EditInfo.PHONE" :disabled="!isEdit"></el-input>
+                </el-form-item>
+                <el-form-item label="移动电话" >
+                  <el-input v-model="EditInfo.MOBILE" :disabled="!isEdit"></el-input>
+                </el-form-item>
+                <el-form-item label="电子邮箱" >
+                  <el-input v-model="EditInfo.EMAIL" :disabled="!isEdit"></el-input>
+                </el-form-item>
+                <el-form-item >
+                  <el-button v-if="!isEdit" @click="isEdit = true" style="width: 100px">编 辑</el-button>
+                  <el-button v-else @click="cancelEdit"  style="width: 100px">取消编辑</el-button>
+                  <el-button type="primary" v-on:click="SaveEdit('EditInfo')" style="width: 100px">保 存</el-button>
+                </el-form-item>
+              </el-form>
           </el-card>
         </div>
       </el-drawer>
@@ -45,6 +82,9 @@
         :visible.sync="PassDrawer"
         :with-header="false">
         <span>PassDrawer!</span>
+        <div class="demo-drawer__content">
+
+        </div>
       </el-drawer>
 
     </el-header>
@@ -105,12 +145,13 @@
 
 <script >
   import Cookies from "js-cookie";
-  import {UserInfo} from "../api";
+  import {editSysUser, UserInfo} from "../api";
 
   export default {
     name: "Main",
     data(){
       return{
+        isEdit: false,   // 是否编辑
         InfoDrawer: false,
         PassDrawer: false,
         admin_Name:'',
@@ -185,12 +226,22 @@
         },
         path:'',
         EditInfo:{
-          UserName:'aaa',
+          UserName:'',
           SEX:'',
           EMAIL:'',
           PHONE:'',
           MOBILE:'',
-          real_NAME:''
+          real_NAME:'',
+          id: '',
+        },
+        EditedInfo:{
+          UserName:'',
+          NewUserName:'',
+          SEX:'',
+          EMAIL:'',
+          PHONE:'',
+          MOBILE:'',
+          real_NAME:'',
         },
         UserInfo:{
           CREATED: "2019-12-31 16:00:00",
@@ -227,9 +278,11 @@
     },
     created() {
       this.getName();
+      this.getInfo();
     },
     mounted() {
-      this.getInfo();
+      // this.getInfo();
+      // this.getEditInfoFromInfo();
     }
     ,
     methods:{
@@ -272,58 +325,14 @@
             if (res.code == 1) {
 
               console.log('-----------UserInfo---------------')
-              that.UserInfo=res.data
-              console.log(res.data)
+              that.UserInfo=res.data[0]
+              console.log( that.UserInfo)
               console.log('-----------UserInfo---------------')
+              this.getEditInfoFromInfo();
             }else {
               _this.notify('错误', 'error')
             }
         }).catch(failResponse => {})
-          // console.log(that.admin);
-          // let params = JSON.stringify(that.admin);
-          //   that
-          //     .$axios({
-          //         //请求方式
-          //         method: "post",
-          //         //请求路劲
-          //         url: "/api/sysUser/seeSysUser",
-          //         //请求参数
-          //         data: params
-          //         //请求成功的回调函数
-          //       },
-          //       {
-          //         emulateJSON: true
-          //       }
-          //     )
-          //     .then(function(res) {
-          //       console.log("请求已经成功");
-          //       // console.log(res.data.data[0]);
-          //
-          //       if (res.data.code == "1") {
-          //
-          //         console.log("进入if");
-          //
-          //         that.$message({
-          //           title: "登陆成功",
-          //           message: "登陆成功",
-          //           type: 'success'
-          //         });
-          //         console.log(res);
-          //       }else{
-          //         that.$message({
-          //           title: "登陆失败",
-          //           message: "请输入正确的用户名或密码",
-          //           type: "error"
-          //         });
-          //       }
-          //     }).catch(function() {
-          //     that.$notify({
-          //       title: "登陆失败",
-          //       message: "服务器异常",
-          //       type: "error"
-          //     });
-          //     console.log("服务呵呵呵");
-          //   });
 
       },
       //查看修改资料
@@ -333,6 +342,83 @@
       //修改密码
       ChangePass(){
 
+      },
+      // 保存编辑
+      SaveEdit(formName){
+        let that = this;
+
+        that.$refs[formName].validate((valid) => {
+          if (valid) {
+            console.log("=======================保存编辑==================");
+            console.log("=======================EditInfo==================");
+            console.log(that.EditInfo);
+            console.log("=======================EditInfo==================");
+            this.getEditInfoFromInfo2();
+            let params = JSON.stringify(that.EditedInfo);
+            editSysUser(params)
+              .then(res =>{
+                if (res.code == 1) {
+                  that.$message({
+                    title: "修改成功",
+                    message: "修改成功",
+                    type: 'success'
+                  });
+                }else {
+                  that.$message({
+                    title: "修改失败",
+                    message: "修改失败",
+                    type: 'warning'
+                  });
+                }
+              }).catch(function() {
+                that.$notify({
+                  title: "注册失败",
+                  message: "服务器异常",
+                  type: "error"
+                });
+              console.log("服务呵呵呵");
+              });
+          }else{
+            that.$message({
+              message: '输入正确格式',
+              type: 'error'
+            });
+          }
+        })
+      },
+      // 取消编辑
+      cancelEdit(){
+        this.isEdit = false
+        // this.editForm = this.deepClone(this.currentItem)
+      },
+      // 将数据转换1
+      getEditInfoFromInfo(){
+
+        console.log(this.UserInfo.id);
+        this.EditInfo.id=this.UserInfo.id;
+        this.EditInfo.UserName=this.UserInfo.userName;
+        this.EditInfo.SEX=this.UserInfo.sex;
+        this.EditInfo.EMAIL=this.UserInfo.email;
+        this.EditInfo.PHONE=this.UserInfo.phone;
+        this.EditInfo.MOBILE=this.UserInfo.mobile;
+        this.EditInfo.real_NAME=this.UserInfo.real_NAME;
+        this.EditedInfo.UserName=this.EditInfo.UserName;
+        this.EditedInfo.SEX=this.EditInfo.SEX;
+        console.log("=======================EditInfo==================");
+        console.log(this.EditInfo);
+        console.log(this.EditedInfo);
+        console.log("=======================EditInfo==================");
+      },
+      //数据转换2
+      getEditInfoFromInfo2(){
+        this.EditedInfo.NewUserName=this.EditInfo.UserName;
+        this.EditedInfo.real_NAME=this.EditInfo.real_NAME;
+        this.EditedInfo.MOBILE=this.EditInfo.MOBILE;
+        this.EditedInfo.PHONE=this.EditInfo.PHONE;
+        this.EditedInfo.EMAIL=this.EditInfo.EMAIL;
+        console.log("=======================EditedInfo==================++++++++++");
+        console.log(this.EditedInfo);
+        console.log("=======================EditedInfo==================++++++++");
       },
 
     },

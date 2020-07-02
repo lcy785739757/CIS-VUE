@@ -2,13 +2,15 @@
 import axios from 'axios'
 import { get, post } from './http'
 
-// ==========================================》用户api
-// 获取用户数据
+// ==========================================》管理员api
+// 获取管理员数据
 export const UserInfo = (params) => post(`sysUser/seeSysUser`, params)
 // 登录
 export const loginIn = (params) => post(`sysUser/login`, params)
 // 注册
 export const Register = (params) => post(`sysUser/register`, params)
+// 修改管理员信息
+export const editSysUser = (params) => post(`sysUser/editSysUser`, params)
 
 // ==========================================》老人api
 // 录入信息
