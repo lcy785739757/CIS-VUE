@@ -131,7 +131,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item>
-              <el-button style="margin-left: 600px" type="primary" @click="submitForm('addOldPersonForm')">录入</el-button>
+              <el-button id="btn" style="margin-left: 600px" :disabled="btnBoolean" type="primary" @click="submitForm('addOldPersonForm')">录入</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -150,6 +150,8 @@
     name: "addOldPerson",
     data(){
       return{
+        btnBoolean: false,
+        btnStatus: -1,
         admin_Name:'',
         addOldPersonForm:{
           username:'222',
@@ -229,7 +231,6 @@
     methods:{
       ...mapMutations(['setToken']),
       submitForm(addOldPersonForm){
-
         //为表单绑定验证功能
         let that = this;
         that.ChangeDate();//改变日期格式
@@ -245,12 +246,12 @@
               console.log(res.code)
               if (res.code == 1) {
                 console.log('=====================');
-                console.log("$store完成设置");
                 that.$message({
                   title: "录入成功",
                   message: "录入成功",
                   type: 'success'
                 });
+                this.btnBoolean = true;
               }else {
                 console.log('-----------老人重复---------------')
                 that.$message({

@@ -270,7 +270,6 @@
                         message: "注册成功",
                         type: 'success'
                       });
-                      that.$router.push("/app_login");
                     } else {
                       that.$message({
                         title: "注册失败",
