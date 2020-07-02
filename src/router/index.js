@@ -6,6 +6,9 @@ import Main from "../components/Main";
 import Wel from "../components/Wel";
 import addOldPerson from "../components/OldPerMan/addOldPerson";
 import queryOddPerson from "../components/OldPerMan/queryOddPerson";
+import Employ from "../components/DataMan/Employ";
+import OldPer from "../components/DataMan/OldPer";
+import Volunteer from "../components/DataMan/Volunteer";
 
 Vue.use(VueRouter)
 
@@ -29,6 +32,9 @@ Vue.use(VueRouter)
       {path:'/wel',name:'wel',component:Wel},
       {path:'/addOldPerson',name:'addOldPerson',component:addOldPerson},
       {path:'/queryOddPerson',name:'queryOddPerson',component:queryOddPerson},
+      {path:'/Employ',name:'Employ',component:Employ},
+      {path:'/OldPer',name:'OldPer',component:OldPer},
+      {path:'/Volunteer',name:'Volunteer',component:Volunteer},
     ]
   },
 

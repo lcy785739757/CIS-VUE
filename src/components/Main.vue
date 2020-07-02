@@ -223,10 +223,11 @@
           {
             id:'05',
             authName:'数据管理',
-            path:'blink',
+            path:'dataMan',
             children:[
-              {id:'quit', authName:'退出系统', path:'app_login',},
-              {id: 'wel', authName: '主页系统', path: 'wel',}
+              {id:'Employ', authName:'工作人员数据统计', path:'Employ',},
+              {id: 'OldPer', authName: '老人数据统计', path: 'OldPer',},
+              {id: 'Volunteer', authName: '义工数据统计', path: 'Volunteer',}
             ]
           },
           {
