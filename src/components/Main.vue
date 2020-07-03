@@ -3,7 +3,8 @@
   <el-container class="home-container">
     <!--头部区域-->
     <el-header>
-      <div>
+      <div >
+        <img src="../assets/images/ye.jpg" alt=""   >
         <span>智慧养老系统</span>
       </div>
 <!--      <el-button type="info" @click="logout">退出</el-button>-->
@@ -37,7 +38,7 @@
         <div class="demo-drawer__content">
           <el-card width="920px" @close="isEdit = false" class="InfoCard" custom-class="custom-dialog"
                      :close-on-click-modal='false'>
-            <h3 class="register-title" style="margin-left: 140px;margin-top: 10px">管理员信息</h3>
+            <h3 class="register-title" style="margin-left: 100px;margin-top: 10px">管理员信息</h3>
               <el-form :rules="InfoRules" ref="EditInfo" :model="EditInfo" style="margin-right: 20px;"   label-position="right" label-width="110px" >
                 <el-form-item label="用户ID" >
                   <el-input v-model="EditInfo.id" disabled></el-input>
@@ -61,9 +62,9 @@
                   <el-input v-model="EditInfo.EMAIL" :disabled="!isEdit"></el-input>
                 </el-form-item>
                 <el-form-item >
-                  <el-button v-if="!isEdit" @click="isEdit = true" style="width: 100px">编 辑</el-button>
-                  <el-button v-else @click="cancelEdit"  style="width: 100px">取消编辑</el-button>
-                  <el-button type="primary" v-on:click="SaveEdit('EditInfo')" style="width: 100px;margin-left: 100px">保 存</el-button>
+                  <el-button v-if="!isEdit" @click="isEdit = true" style="width: 100px;margin-left: -30px">编 辑</el-button>
+                  <el-button v-else @click="cancelEdit"  style="width: 100px ;margin-left: -30px">取消编辑</el-button>
+                  <el-button type="primary" v-on:click="SaveEdit('EditInfo')" style="width: 100px;margin-left: 50px">保 存</el-button>
                 </el-form-item>
               </el-form>
           </el-card>
@@ -76,7 +77,7 @@
         <div class="demo-drawer__content">
           <el-card width="1500px" @close="isEdit2 = false" class="InfoCard" custom-class="custom-dialog"
                    :close-on-click-modal='false'>
-            <h3 class="register-title" style="margin-left: 190px;margin-top: 10px">修改密码</h3>
+            <h3 class="register-title" style="margin-left: 110px;margin-top: 10px">修改密码</h3>
             <el-form :rules="PassRules" ref="EditPass" :model="EditPass" style="margin-right: 20px;"   label-position="right" label-width="110px" >
               <el-form-item label="用户ID" >
                 <el-input v-model="EditPass.id" disabled></el-input>
@@ -89,9 +90,9 @@
               </el-form-item>
 
               <el-form-item >
-                <el-button v-if="!isEdit2" @click="isEdit2 = true" style="width: 100px">编 辑</el-button>
-                <el-button v-else @click="cancelEdit2"  style="width: 100px">取消编辑</el-button>
-                <el-button type="primary" v-on:click="SavePassEdit('EditPass')" style="width: 100px; margin-left: 100px" >保 存</el-button>
+                <el-button v-if="!isEdit2" @click="isEdit2 = true" style="width: 100px ;margin-left: -30px">编 辑</el-button>
+                <el-button v-else @click="cancelEdit2"  style="width: 100px;margin-left: -30px">取消编辑</el-button>
+                <el-button type="primary" v-on:click="SavePassEdit('EditPass')" style="width: 100px; margin-left: 50px" >保 存</el-button>
               </el-form-item>
             </el-form>
           </el-card>
@@ -192,12 +193,10 @@
           {
             id:'03',
             authName:'工作人员信息管理',
-            path:'blink',
+            path:'/EmployeeMan',
             children:[
-              {id:'release', authName:'发布', path:'release',},
-              {id: 'browse', authName: '浏览', path: 'browse',},
-              {id: 'my_release', authName: '我的发布', path: 'my_release',},
-              {id: 'my_apply', authName: '我的加入', path: 'my_apply',}
+              {id: 'addEmployee', authName: '录入信息', path: 'addEmployee',},
+              {id: 'queryEmployee', authName: '工作人员列表', path: 'queryEmployee',}
             ]
           },
           {
@@ -577,6 +576,12 @@
     padding-bottom: 50px;
     margin-top: 50px;
     /*padding: 0px;*/
+  }
+  .PapaImg{
+    background-color: #373d41;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-bottom: 50px;
   }
 
 </style>

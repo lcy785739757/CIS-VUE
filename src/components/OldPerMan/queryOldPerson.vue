@@ -27,7 +27,7 @@
         <el-table-column label="姓别" prop="gender"  align="center"></el-table-column>
         <el-table-column label="电话" prop="phone"  align="center"></el-table-column>
         <el-table-column label="身份证号" prop="id_card" align="center"></el-table-column>
-        <el-table-column label="入院日期" prop="checkin_date"  align="center"></el-table-column>
+        <el-table-column label="房间号" prop="room_number"  align="center"></el-table-column>
         <el-table-column label="操作"   align="center">
           <template slot-scope="scope">
             <el-button
@@ -392,6 +392,7 @@
           if (valid) {
             that.getID();
             that.getEditInfoFromInfo();
+            that.ChangeDate();
             let params = JSON.stringify(that.EditedOldInfo);
 
             // console.log(params)
@@ -498,6 +499,32 @@
         this.EditedOldInfo.UPDATEBY=this.$store.state.userId;
         console.log(this.EditedOldInfo.UPDATEBY);
       },
+      // 改变时间格式
+      ChangeDate(){
+        //UTC时间格式.toJSON().split('T')[0]截取后格式：2019-10-14
+        if(this.EditedOldInfo.birthday!=''){
+          let delayTime = new Date(this.EditedOldInfo.birthday).toJSON();
+          this.EditedOldInfo.birthday = new Date(
+            +new Date(delayTime) + 8 * 3600 * 1000
+          )
+            .toISOString()
+            .replace(/T/g, " ")
+            .replace(/\.[\d]{3}Z/, "");
+          console.log(this.EditedOldInfo.birthday);
+        }
+        if(this.EditedOldInfo.checkin_date!=''){
+          //UTC时间格式.toJSON().split('T')[0]截取后格式：2019-10-14
+          let delayTime1 = new Date(this.EditedOldInfo.checkin_date).toJSON();
+          this.EditedOldInfo.checkin_date = new Date(
+            +new Date(delayTime1) + 8 * 3600 * 1000
+          )
+            .toISOString()
+            .replace(/T/g, " ")
+            .replace(/\.[\d]{3}Z/, "");
+          console.log(this.EditedOldInfo.checkin_date);
+        }
+        console.log("----");
+      }
     }
   }
 </script>

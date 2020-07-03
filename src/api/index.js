@@ -23,3 +23,13 @@ export const queryOldPerson = (params) => post(`oldperson/queryOldPerson`, param
 export const editOldPerson = (params) => post(`oldperson/editOldPerson`, params)
 //删除老人
 export const removeOldPerson = (params) => post(`oldperson/removeOldPerson`, params)
+
+// ==========================================》员工api
+// 录入信息
+export const addEmployee = (params) => post(`employee/addEmployee`, params)
+// 查看工作人员信息
+export const queryEmployee = (params) => post(`employee/queryEmployee`, params)
+//修改员工信息
+export const editEmployee = (params) => post(`employee/editEmployee`, params)
+//删除员工
+export const removeEmployee = (params) => post(`employee/removeEmployee`, params)

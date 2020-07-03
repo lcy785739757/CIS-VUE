@@ -16,12 +16,12 @@
             <el-form-item label="姓名" prop="username">
               <el-input style="width: 200px" v-model="addOldPersonForm.username"></el-input>
             </el-form-item>
-            <el-form-item label="性别" prop="gender">
+            <el-form-item label="性别" prop="gender" style="margin-top: -20px">
               <el-radio v-model="addOldPersonForm.gender" label="男">男</el-radio>
               <el-radio v-model="addOldPersonForm.gender" label="女">女</el-radio>
             </el-form-item>
           </el-aside>
-          <el-main>
+          <el-main style="background-color: #303133">
 <!--    头像        -->
           </el-main>
         </el-container>
