@@ -28,6 +28,7 @@
         <el-table-column label="电话" prop="phone"  align="center"></el-table-column>
         <el-table-column label="身份证号" prop="id_card" align="center"></el-table-column>
         <el-table-column label="房间号" prop="room_number"  align="center"></el-table-column>
+
         <el-table-column label="操作"   align="center">
           <template slot-scope="scope">
             <el-button
@@ -60,36 +61,61 @@
                  :close-on-click-modal='false'>
           <h3 class="register-title" style="margin-left: 600px;margin-top: 10px;font-size: 30px">老人信息管理</h3>
           <el-form ref="form" :rules="rulesForm" :model="form" label-width="90px" >
-            <el-row>
-              <el-col :span="4">
-                <el-form-item label="ID" prop="id">
-                  <el-input style="width: 100px" v-model="form.id" disabled></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="姓名" prop="username">
-                  <el-input style="width: 100px" v-model="form.username" disabled></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="性别" prop="gender" >
-                  <el-input style="width: 100px" v-model="form.gender" disabled></el-input>
-                </el-form-item>
-              </el-col>
+            <el-container>
+              <el-main>
+                <el-row>
+                  <el-col :span="8" style="margin-left: -20px">
+                    <el-form-item label="ID" prop="id">
+                      <el-input style="width: 200px" v-model="form.id" disabled></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8" style="margin-left: -10px">
+                    <el-form-item label="姓名" prop="username">
+                      <el-input style="width: 200px" v-model="form.username" disabled></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="1">
+                    <el-form-item label="性别" prop="gender" >
+                      <el-input style="width: 200px" v-model="form.gender" disabled></el-input>
+                    </el-form-item>
+                  </el-col>
 
-            </el-row>
-            <el-row>
-              <el-col :span="4">
-                <el-form-item label="电话号码" prop="phone">
-                  <el-input style="width: 150px" v-model="form.phone" :disabled="!isEdit"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="身份证号" prop="id_card" >
-                  <el-input style="width: 250px" v-model="form.id_card" disabled></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
+                </el-row>
+                <el-row>
+                  <el-col :span="8" style="margin-left: -20px">
+                    <el-form-item label="电话号码" prop="phone">
+                      <el-input style="width: 200px" v-model="form.phone" :disabled="!isEdit"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="7" style="margin-left: -10px">
+                    <el-form-item label="身份证号" prop="id_card" >
+                      <el-input style="width: 200px" v-model="form.id_card" disabled></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-main>
+              <el-aside >
+<!--                <el-upload-->
+<!--                  class="avatar-uploader"-->
+<!--                  action="https://jsonplaceholder.typicode.com/posts/"-->
+<!--                  :show-file-list="false"-->
+<!--                  :on-success="handleAvatarSuccess"-->
+<!--                  :before-upload="beforeAvatarUpload">-->
+<!--                  <img v-if="imageUrl" :src="imageUrl" class="avatar">-->
+<!--                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--                </el-upload>-->
+                <el-upload
+                  class="avatar-uploader;"
+                  style="margin-left: 76px"
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccess"
+                  :before-upload="beforeAvatarUpload">
+                  <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-aside>
+            </el-container>
             <el-row>
               <el-col :span="6">
                 <el-form-item label="出生日期" prop="birthday" >
@@ -178,7 +204,7 @@
             <el-row>
               <el-col :span="16">
                 <el-form-item label="备注" prop="DESCRIPTION" >
-                  <el-input style="width: 200px" v-model="form.description" :disabled="!isEdit"></el-input>
+                  <el-input style="width: 560px" v-model="form.description" :disabled="!isEdit"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
@@ -209,6 +235,7 @@
 
     data(){
       return{
+        imageUrl: '',
         healths: healthsOptions,
         checkedHealth: [],
         isEdit: false,   // 是否编辑
@@ -404,7 +431,7 @@
 
             let params = JSON.stringify(that.EditedOldInfo);
 
-            // console.log(params)
+            console.log(params)
             editOldPerson(params)
               .then(res =>{
                 if (res.code == 1) {
@@ -495,7 +522,7 @@
         this.EditedOldInfo.secondguardian_phone=this.form.secondguardian_phone;
         this.EditedOldInfo.secondguardian_relationship =this.form.secondguardian_relationship;
         this.EditedOldInfo.secondguardian_wechat=this.form.secondguardian_wechat;
-        // this.EditedOldInfo.health_state=this.form.health_state;
+        this.EditedOldInfo.health_state=this.form.health_state;
         this.EditedOldInfo.DESCRIPTION=this.form.description;
 
         console.log(this.EditedOldInfo.ID)
@@ -536,7 +563,6 @@
       },
       //检测选项框
       handleCheckedHealthChange(value) {
-        // console.log(this.checkedHealth[0])
         let checkedCount = value.length;
         // console.log(checkedCount)
         // let sick=0;
@@ -563,8 +589,8 @@
 
         let total = sick0+'_'+sick1+'_'+sick2+'_'+sick3;
         console.log(total)
-        this.EditedOldInfo.health_state=total
-        console.log(this.EditedOldInfo.health_state)
+        this.form.health_state=total
+        console.log(this.form.health_state)
       },
       //解析健康状况
       Analyse(){
@@ -589,6 +615,21 @@
         }
         console.log(this.checkedHealth)
       },
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
     }
   }
 </script>
@@ -609,9 +650,55 @@
      font-family: 幼圆;
      margin-left: 20px;
      margin-right: 20px;
-     padding-bottom: 50px;
+     /*padding-bottom: 0px;*/
      margin-top: 10px;
      /*padding: 0px;*/
    }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 150px;
+    height: 150px;
+    line-height: 150px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 150px;
+    height: 150px;
+    line-height: 150px;
+    text-align: center;
+  }
+  .avatar {
+    width: 150px;
+    height: 150px;
+    display: block;
+  }
 
 </style>

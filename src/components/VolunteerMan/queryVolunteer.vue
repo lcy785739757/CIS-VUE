@@ -57,40 +57,50 @@
       <div class="demo-drawer__content">
         <el-card @close="isEdit = false" class="InfoCard" custom-class="custom-dialog"
                  :close-on-click-modal='false'>
-          <h3 class="register-title" style="margin-left:360px;margin-top: 10px;font-size: 30px">义工信息管理</h3>
+          <h3 class="register-title" style="margin-left:250px;margin-top: 10px;font-size: 30px">工作人员信息管理</h3>
           <el-form ref="form" :rules="rulesForm" :model="form" label-width="90px" >
-            <el-row>
-              <el-col :span="7">
-                <el-form-item label="ID" prop="id">
-                  <el-input style="width: 100px" v-model="form.id" disabled></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="7">
-                <el-form-item label="姓名" prop="name">
-                  <el-input style="width: 100px" v-model="form.name" disabled></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="7 ">
-                <el-form-item label="性别" prop="gender" >
-                  <el-input style="width: 100px" v-model="form.gender" disabled></el-input>
-                </el-form-item>
-              </el-col>
+            <el-container>
+              <el-main>
+                <el-row>
+                  <el-col :span="8" style="margin-left: -20px">
+                    <el-form-item label="ID" prop="id">
+                      <el-input style="width: 200px" v-model="form.id" disabled></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="1" style="margin-left: -20px">
+                    <el-form-item label="姓名" prop="name">
+                      <el-input style="width: 200px" v-model="form.name" disabled></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8" style="margin-left: -20px">
+                    <el-form-item label="性别" prop="gender" >
+                      <el-input style="width: 200px" v-model="form.gender" disabled></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-main>
+              <el-aside style="background-color: #303133">
 
-            </el-row>
+              </el-aside>
+            </el-container>
             <el-row>
-              <el-col :span="10">
+              <el-col :span="12">
                 <el-form-item label="电话号码" prop="phone">
-                  <el-input style="width: 150px" v-model="form.phone" :disabled="!isEdit"></el-input>
+                  <el-input style="width: 200px" v-model="form.phone" :disabled="!isEdit"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="10">
+              <el-col :span="8">
                 <el-form-item label="身份证号" prop="id_card" >
-                  <el-input style="width: 250px" v-model="form.id_card" disabled></el-input>
+                  <el-input style="width: 200px" v-model="form.id_card" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="10">
+              <el-col :span="12">
                 <el-form-item label="出生日期" prop="birthday" >
                   <div class="block" >
                     <span class="demonstration" ></span>
@@ -122,7 +132,7 @@
             <el-row>
               <el-col :span="10">
                 <el-form-item label="备注" prop="DESCRIPTION" >
-                  <el-input style="width: 200px" v-model="form.description" :disabled="!isEdit"></el-input>
+                  <el-input style="width: 560px" v-model="form.description" :disabled="!isEdit"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -130,8 +140,8 @@
 
               <el-col :span="5">
                 <el-form-item>
-                  <el-button v-if="!isEdit" @click="isEdit = true" style="width: 100px; margin-left: 400px" >编 辑</el-button>
-                  <el-button v-else @click="cancelEdit"  style="width: 100px; margin-left: 400px">取消编辑</el-button>
+                  <el-button v-if="!isEdit" @click="isEdit = true" style="width: 100px; margin-left: 300px" >编 辑</el-button>
+                  <el-button v-else @click="cancelEdit"  style="width: 100px; margin-left: 300px">取消编辑</el-button>
 
                 </el-form-item>
               </el-col>
@@ -139,7 +149,7 @@
 
               <el-col :span="5">
                 <el-form-item>
-                  <el-button type="primary" v-on:click="SaveVolunteerEdit('form')" style="width: 100px; margin-left: 400px" >保 存</el-button>
+                  <el-button type="primary" v-on:click="SaveVolunteerEdit('form')" style="width: 100px; margin-left: 300px" >保 存</el-button>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -424,8 +434,8 @@
   .DrawerClass{
     padding: 10px 10px;
     height: 100%;
-    margin-left: 250px;
-    margin-right: 250px;
+    margin-left: 350px;
+    margin-right: 350px;
     margin-top: 0px;
   }
   .InfoCard{
