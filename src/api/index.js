@@ -19,3 +19,7 @@ export const changePassword = (params) => post(`sysUser/changePassword`, params)
 export const addOldPerson = (params) => post(`oldperson/addOldPerson`, params)
 //查看老人信息
 export const queryOldPerson = (params) => post(`oldperson/queryOldPerson`, params)
+//修改老人信息
+export const editOldPerson = (params) => post(`oldperson/editOldPerson`, params)
+//删除老人
+export const removeOldPerson = (params) => post(`oldperson/removeOldPerson`, params)

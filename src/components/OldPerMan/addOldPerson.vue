@@ -8,7 +8,7 @@
     </el-breadcrumb>
 
     <!--  卡片视图区域  -->
-    <el-card class="oddCard" >
+    <el-card class="oldCard" >
 <!--      <el-form  ref="addOldPersonForm" :rules="rules" :model="addOldPersonForm" label-width="80px">-->
       <el-form ref="addOldPersonForm" :rules="rulesForm" :model="addOldPersonForm" label-width="90px" >
         <el-container>
@@ -17,18 +17,12 @@
               <el-input style="width: 200px" v-model="addOldPersonForm.username"></el-input>
             </el-form-item>
             <el-form-item label="性别" prop="gender">
-              <el-radio v-model="addOldPersonForm.gender" label="M">男</el-radio>
-              <el-radio v-model="addOldPersonForm.gender" label="F">女</el-radio>
+              <el-radio v-model="addOldPersonForm.gender" label="男">男</el-radio>
+              <el-radio v-model="addOldPersonForm.gender" label="女">女</el-radio>
             </el-form-item>
           </el-aside>
           <el-main>
-<!--            <el-form-item label="姓名" >-->
-<!--              <el-input style="width: 200px" v-model="addOldPersonForm.username"></el-input>-->
-<!--            </el-form-item>-->
-<!--            <el-form-item label="性别">-->
-<!--              <el-radio v-model="addOldPersonForm.gender" label="M">男</el-radio>-->
-<!--              <el-radio v-model="addOldPersonForm.gender" label="F">女</el-radio>-->
-<!--            </el-form-item>-->
+<!--    头像        -->
           </el-main>
         </el-container>
         <el-row>
@@ -100,22 +94,22 @@
         </el-row>
         <el-row>
           <el-col :span="6">
-            <el-form-item label="第二监护"  class="fontSize">
+            <el-form-item label="第二监护"prop="secondguardian_name" >
               <el-input style="width: 200px" v-model="addOldPersonForm.secondguardian_name"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="亲属关系" >
+            <el-form-item label="亲属关系" prop="secondguardian_relationship" >
               <el-input style="width: 200px" v-model="addOldPersonForm.secondguardian_relationship"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="电话号码" >
+            <el-form-item label="电话号码" prop="secondguardian_phone">
               <el-input style="width: 200px" v-model="addOldPersonForm.secondguardian_phone"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="微信号" >
+            <el-form-item label="微信号"  prop="secondguardian_wechat">
               <el-input style="width: 200px" v-model="addOldPersonForm.secondguardian_wechat"></el-input>
             </el-form-item>
           </el-col>
@@ -220,6 +214,22 @@
             {required: true, message: '请输入监护人微信号', trigger: 'blur'},
             {min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}
           ],
+          secondguardian_name: [
+            {required: true, message: '请输入监护人姓名', trigger: 'blur'},
+            {min: 2, max: 5, message: '长度在 2 到 5 个汉字', trigger: 'blur'}
+          ],
+          secondguardian_relationship: [
+            {required: true, message: '请输入如老人关系', trigger: 'blur'},
+            {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
+          ],
+          secondguardian_phone: [
+            {required: true, message: '请输入监护人电话', trigger: 'blur'},
+            {min: 11, max: 11, message: '请输入11位电话号码', trigger: 'blur'}
+          ],
+          secondguardian_wechat: [
+            {required: true, message: '请输入监护人微信号', trigger: 'blur'},
+            {min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}
+          ],
 
 
           health_state: [
@@ -268,48 +278,6 @@
               });
               console.log("服务呵呵呵");
              });
-            // that
-            //   .$axios({
-            //       //请求方式
-            //       method: "post",
-            //       //请求路劲
-            //       url: "/api/oldperson/addOldPerson",
-            //       //请求参数
-            //       data: params
-            //       //请求成功的回调函数
-            //     },
-            //     {
-            //       emulateJSON: true
-            //     }
-            //   )
-            //   .then(function(res) {
-            //     console.log("请求已经成功");
-            //     console.log(res.data.code);
-            //
-            //     if (res.data.code == "1") {
-            //       console.log("进入if");
-            //
-            //       that.$message({
-            //         title: "录入成功",
-            //         message: "录入成功",
-            //         type: 'success'
-            //       });
-            //       console.log(res);
-            //     }else{
-            //       that.$message({
-            //         title: "录入失败",
-            //         message: "老人已经住院了",
-            //         type: "error"
-            //       });
-            //     }
-            //   }).catch(function() {
-            //   that.$notify({
-            //     title: "录入失败",
-            //     message: "服务器异常",
-            //     type: "error"
-            //   });
-            //   console.log("服务呵呵呵");
-            // });
           }else{
             that.$message({
               message: '表单填写有误',
@@ -371,7 +339,7 @@
 </script>
 
 <style scoped>
-.oddCard{
+.oldCard{
   font-weight: bold;
   font-family: 幼圆;
   margin-left: 20px;

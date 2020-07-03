@@ -5,7 +5,7 @@ import Login from '../components/Login'
 import Main from "../components/Main";
 import Wel from "../components/Wel";
 import addOldPerson from "../components/OldPerMan/addOldPerson";
-import queryOddPerson from "../components/OldPerMan/queryOddPerson";
+import queryOldPerson from "../components/OldPerMan/queryOldPerson";
 import Employ from "../components/DataMan/Employ";
 import OldPer from "../components/DataMan/OldPer";
 import Volunteer from "../components/DataMan/Volunteer";
@@ -31,7 +31,7 @@ Vue.use(VueRouter)
     children:[
       {path:'/wel',name:'wel',component:Wel},
       {path:'/addOldPerson',name:'addOldPerson',component:addOldPerson},
-      {path:'/queryOddPerson',name:'queryOddPerson',component:queryOddPerson},
+      {path:'/queryOldPerson',name:'queryOldPerson',component:queryOldPerson},
       {path:'/Employ',name:'Employ',component:Employ},
       {path:'/OldPer',name:'OldPer',component:OldPer},
       {path:'/Volunteer',name:'Volunteer',component:Volunteer},
@@ -46,4 +46,9 @@ const router = new VueRouter({
   routes
 })
 
+// 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 export default router

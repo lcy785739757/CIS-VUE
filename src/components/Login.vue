@@ -279,51 +279,6 @@
                     }
                   })
                     .catch(failResponse => {})
-
-                  // that
-                  //   .$axios({
-                  //       //请求方式
-                  //       method: "post",
-                  //       //请求路劲
-                  //       url: "/api/sysUser/register",
-                  //       //请求参数
-                  //       data: params
-                  //       //请求成功的回调函数
-                  //     },
-                  //     {
-                  //       emulateJSON: true
-                  //     }
-                  //   )
-                  //   .then(function(res) {
-                  //     console.log("请求已经成功");
-                  //     console.log(res.data.code);
-                  //
-                  //     if (res.data.code == "1") {
-                  //       Cookies.set('User_name', res.data.msg, 3600)
-                  //       console.log("cookie完成设置");
-                  //
-                  //       that.$message({
-                  //         title: "注册成功",
-                  //         message: "注册成功",
-                  //         type: 'success'
-                  //       });
-                  //       that.$router.push("/app_login");
-                  //       console.log(res);
-                  //     }else{
-                  //       that.$message({
-                  //         title: "注册失败",
-                  //         message: "请填写正确信息",
-                  //         type: "error"
-                  //       });
-                  //     }
-                  //   }).catch(function() {
-                  //   that.$notify({
-                  //     title: "注册失败",
-                  //     message: "服务器异常",
-                  //     type: "error"
-                  //   });
-                  //   console.log("服务呵呵呵");
-                  // });
                 }else{
                   that.$message({
                     message: '输入正确格式',

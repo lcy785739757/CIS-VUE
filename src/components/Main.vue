@@ -35,35 +35,35 @@
         :visible.sync="InfoDrawer"
         :with-header="false">
         <div class="demo-drawer__content">
-          <el-card width="920px" @close="isEdit = false" class="dialog dialogAdd" custom-class="custom-dialog"
+          <el-card width="920px" @close="isEdit = false" class="InfoCard" custom-class="custom-dialog"
                      :close-on-click-modal='false'>
             <h3 class="register-title" style="margin-left: 140px;margin-top: 10px">管理员信息</h3>
-              <el-form ref="EditInfo" :model="EditInfo" style="margin-right: 20px;"   label-position="right" label-width="110px" >
+              <el-form :rules="InfoRules" ref="EditInfo" :model="EditInfo" style="margin-right: 20px;"   label-position="right" label-width="110px" >
                 <el-form-item label="用户ID" >
                   <el-input v-model="EditInfo.id" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="用户名" >
+                <el-form-item label="用户名" prop="UserName" >
                   <el-input v-model="EditInfo.UserName" :disabled="!isEdit"></el-input>
                 </el-form-item>
-                <el-form-item label="真实姓名" >
+                <el-form-item label="真实姓名" prop="REAL_NAME" >
                   <el-input v-model="EditInfo.REAL_NAME" :disabled="!isEdit" ></el-input>
                 </el-form-item>
                 <el-form-item label="性别">
                   <el-input v-model="EditInfo.SEX" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="电话" >
+                <el-form-item label="电话" prop="PHONE">
                   <el-input v-model="EditInfo.PHONE" :disabled="!isEdit"></el-input>
                 </el-form-item>
-                <el-form-item label="移动电话" >
+                <el-form-item label="移动电话" prop="MOBILE" >
                   <el-input v-model="EditInfo.MOBILE" :disabled="!isEdit"></el-input>
                 </el-form-item>
-                <el-form-item label="电子邮箱" >
+                <el-form-item label="电子邮箱"prop="EMAIL">
                   <el-input v-model="EditInfo.EMAIL" :disabled="!isEdit"></el-input>
                 </el-form-item>
                 <el-form-item >
                   <el-button v-if="!isEdit" @click="isEdit = true" style="width: 100px">编 辑</el-button>
                   <el-button v-else @click="cancelEdit"  style="width: 100px">取消编辑</el-button>
-                  <el-button type="primary" v-on:click="SaveEdit('EditInfo')" style="width: 100px">保 存</el-button>
+                  <el-button type="primary" v-on:click="SaveEdit('EditInfo')" style="width: 100px;margin-left: 100px">保 存</el-button>
                 </el-form-item>
               </el-form>
           </el-card>
@@ -74,24 +74,24 @@
         :visible.sync="PassDrawer"
         :with-header="false">
         <div class="demo-drawer__content">
-          <el-card width="920px" @close="isEdit2 = false" class="dialog dialogAdd" custom-class="custom-dialog"
+          <el-card width="1500px" @close="isEdit2 = false" class="InfoCard" custom-class="custom-dialog"
                    :close-on-click-modal='false'>
-            <h3 class="register-title" style="margin-left: 140px;margin-top: 10px">修改密码</h3>
-            <el-form ref="EditPass" :model="EditPass" style="margin-right: 20px;"   label-position="right" label-width="110px" >
+            <h3 class="register-title" style="margin-left: 190px;margin-top: 10px">修改密码</h3>
+            <el-form :rules="PassRules" ref="EditPass" :model="EditPass" style="margin-right: 20px;"   label-position="right" label-width="110px" >
               <el-form-item label="用户ID" >
                 <el-input v-model="EditPass.id" disabled></el-input>
               </el-form-item>
               <el-form-item label="用户名" >
                 <el-input v-model="EditPass.UserName" disabled></el-input>
               </el-form-item>
-              <el-form-item label="密码" >
-                <el-input v-model="EditPass.Password" :disabled="!isEdit2" ></el-input>
+              <el-form-item label="密码" prop="Password">
+                <el-input v-model="EditPass.Password" :disabled="!isEdit2" type="password"></el-input>
               </el-form-item>
 
               <el-form-item >
                 <el-button v-if="!isEdit2" @click="isEdit2 = true" style="width: 100px">编 辑</el-button>
                 <el-button v-else @click="cancelEdit2"  style="width: 100px">取消编辑</el-button>
-                <el-button type="primary" v-on:click="SavePassEdit('EditPass')" style="width: 100px">保 存</el-button>
+                <el-button type="primary" v-on:click="SavePassEdit('EditPass')" style="width: 100px; margin-left: 100px" >保 存</el-button>
               </el-form-item>
             </el-form>
           </el-card>
@@ -106,7 +106,7 @@
         <div class="toggle-button" @click="toggleCollapse">|||</div>
         <!--侧边栏菜单区域-->
         <el-menu
-          default-active="/queryOddPerson"
+          default-active="/queryOldPerson"
           background-color="#333744"
           text-color="#fff"
           active-text-color="#409EFF"
@@ -186,7 +186,7 @@
             path:'/OldPerMan',
             children:[
               {id:'addOldPerson', authName:'录入信息', path:'addOldPerson',},
-              {id:'queryOddPerson', authName:'老人列表', path:'queryOddPerson',},
+              {id:'queryOldPerson', authName:'老人列表', path:'queryOldPerson',},
             ]
           },
           {
@@ -293,7 +293,35 @@
           updated: "0",
           datafilter: ""
         },
+        InfoRules:{
+          UserName:[
+            {required:true,message:'请输入正确格式',trigger:'blur'},
+            { min: 3, max: 5, message: '长度在 3 到 5 个汉字', trigger: 'blur' }
+          ],
+          REAL_NAME:[
+            {required:true,message:'请输入真实姓名',trigger:'blur'},
+            { min: 2, max: 5, message: '长度在 2 到 5 个汉字', trigger: 'blur' }
+          ],
+          EMAIL:[
+            {required:true,message:'请输入电子邮箱',trigger:'blur'},
+            { min: 5, max: 25, message: '长度在 5 到 25 个字符之间', trigger: 'blur' }
+          ],
+          PHONE:[
+            {required:true,message:'请输入电话号码',trigger:'blur'},
+            { min: 5, max: 8, message: '长度在 5 到 8 个字符之间', trigger: 'blur' }
+          ],
+          MOBILE:[
+            {required:true,message:'请输入移动电话号码',trigger:'blur'},
+            { min: 11, max: 11, message: '11位电话号码', trigger: 'blur' }
+          ],
 
+        },
+        PassRules:{
+          Password:[
+            {required:true,message:'请输入密码',trigger:'blur'},
+            { min: 3, max: 9, message: '长度在 3 到 9 个字符', trigger: 'blur' }
+          ]
+        },
         //是否折叠
         isCollapsed:false,
       }
@@ -334,10 +362,7 @@
       //获得管理员资料
       getInfo(){
         let that = this;
-        // let params = new URLSearchParams()
-        console.log('-----------获取信息---------------')
-        // params.append('UserName', this.admin.admin_Name)
-        console.log(that.admin)
+        console.log('-----------获取老人信息---------------')
         let params = JSON.stringify(that.admin);
         console.log('-----------完成传参---------------')
 
@@ -467,7 +492,7 @@
         this.EditedInfo.UserName=this.EditInfo.UserName;
         this.EditedInfo.SEX=this.EditInfo.SEX;
         this.EditPass.id=this.EditInfo.id;
-        this.EditPass.Password=this.UserInfo.password;
+        this.EditPass.Password='';
         this.EditPass.UserName=this.UserInfo.userName;
         console.log("=======================EditInfo==================");
         console.log(this.EditInfo);
