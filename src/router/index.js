@@ -8,6 +8,8 @@ import addOldPerson from "../components/OldPerMan/addOldPerson";
 import queryOldPerson from "../components/OldPerMan/queryOldPerson";
 import addEmployee from "../components/EmployeeMan/addEmployee";
 import queryEmployee from "../components/EmployeeMan/queryEmployee";
+import addVolunteer from "../components/VolunteerMan/addVolunteer";
+import queryVolunteer from "../components/VolunteerMan/queryVolunteer";
 
 import Employ from "../components/DataMan/Employ";
 import OldPer from "../components/DataMan/OldPer";
@@ -37,6 +39,8 @@ Vue.use(VueRouter)
       {path:'/queryOldPerson',name:'queryOldPerson',component:queryOldPerson},
       {path:'/addEmployee',name:'addEmployee',component:addEmployee},
       {path:'/queryEmployee',name:'queryEmployee',component:queryEmployee},
+      {path:'/addVolunteer',name:'addVolunteer',component:addVolunteer},
+      {path:'/queryVolunteer',name:'queryVolunteer',component:queryVolunteer},
 
       {path:'/Employ',name:'Employ',component:Employ},
       {path:'/OldPer',name:'OldPer',component:OldPer},

@@ -202,10 +202,10 @@
           {
             id:'04',
             authName:'义工信息管理',
-            path:'blink',
+            path:'/VolunteerMan',
             children:[
-              {id:'quit', authName:'退出系统', path:'app_login',},
-              {id: 'wel', authName: '主页系统', path: 'wel',}
+              {id:'addVolunteer', authName:'录入信息', path:'addVolunteer',},
+              {id: 'queryVolunteer', authName: '义工列表', path: 'queryVolunteer',}
             ]
           },
           {

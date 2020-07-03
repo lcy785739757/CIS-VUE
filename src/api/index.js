@@ -33,3 +33,13 @@ export const queryEmployee = (params) => post(`employee/queryEmployee`, params)
 export const editEmployee = (params) => post(`employee/editEmployee`, params)
 //删除员工
 export const removeEmployee = (params) => post(`employee/removeEmployee`, params)
+
+// ==========================================》义工api
+// 录入信息
+export const addVolunteer = (params) => post(`volunteer/addVolunteer`, params)
+// 查看工作人员信息
+export const queryVolunteer = (params) => post(`volunteer/queryVolunteer`, params)
+//修改员工信息
+export const editVolunteer = (params) => post(`volunteer/editVolunteer`, params)
+//删除员工
+export const removeVolunteer = (params) => post(`volunteer/removeVolunteer`, params)

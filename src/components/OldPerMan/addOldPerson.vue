@@ -114,8 +114,13 @@
             </el-form-item>
           </el-col>
         </el-row>
+<!--        <el-form-item label="健康状态" prop="health_state">-->
+<!--          <el-input style="width: 200px" v-model="addOldPersonForm.health_state"></el-input>-->
+<!--        </el-form-item>-->
         <el-form-item label="健康状态" prop="health_state">
-          <el-input style="width: 200px" v-model="addOldPersonForm.health_state"></el-input>
+          <el-checkbox-group v-model="checkedHealth" @change="handleCheckedHealthChange">
+            <el-checkbox v-for="health in healths" :label="health" :key="health">{{health}}</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
         <el-row>
           <el-col :span="6">
@@ -139,11 +144,13 @@
   import Cookies from 'js-cookie';
   import { mapMutations } from 'vuex';
   import {addOldPerson, Register} from "../../api";
-
+  const healthsOptions = ['心脏病', '糖尿病', '高血压', '高血脂'];
   export default {
     name: "addOldPerson",
     data(){
       return{
+        healths: healthsOptions,
+        checkedHealth: [],
         btnBoolean: false,
         btnStatus: -1,
         admin_Name:'',
@@ -313,20 +320,6 @@
         }
         console.log("----");
 
-        // //UTC时间格式.toJSON().split('T')[0]截取后格式：2019-10-14
-        // let checkin_date = new Date(this.addOldPersonForm.checkin_date).toJSON().split('T')[0];
-        // this.addOldPersonForm.checkin_date=checkin_date;
-        // console.log(this.addOldPersonForm.checkin_date);
-
-        // UTC时间格式转换——2019-10-14 12:20:12
-        // let delayTime = new Date(this.addOldPersonForm.birthday).toJSON();
-        // this.addOldPersonForm.birthday = new Date(
-        //   +new Date(delayTime) + 8 * 3600 * 1000
-        // )
-        //   .toISOString()
-        //   .replace(/T/g, " ")
-        //   .replace(/\.[\d]{3}Z/, "");
-        // console.log(this.addOldPersonForm.birthday);
       },
       //获得管理员ID
       getID(){
@@ -334,6 +327,41 @@
         this.addOldPersonForm.CREATEBY=this.$store.state.userId;
         console.log(this.addOldPersonForm.CREATEBY);
       },
+      //检测选项框
+      handleCheckedHealthChange(value) {
+        // console.log(this.checkedHealth[0])
+        let checkedCount = value.length;
+        // console.log(checkedCount)
+        // let sick=0;
+        let sick0=0;
+        let sick1=0;
+        let sick2=0;
+        let sick3=0;
+
+        for(let sick=0;sick<checkedCount;sick++){
+          if(this.checkedHealth[sick]=='心脏病'){
+            sick0=1
+          }else if(this.checkedHealth[sick]=='糖尿病'){
+            sick1=1
+          }else if(this.checkedHealth[sick]=='高血压'){
+            sick2=1
+          }else if(this.checkedHealth[sick]=='高血脂'){
+            sick3=1
+          }
+        }
+        console.log(sick0)
+        console.log(sick1)
+        console.log(sick2)
+        console.log(sick3)
+
+        let total = sick0+'_'+sick1+'_'+sick2+'_'+sick3;
+        console.log(total)
+        this.addOldPersonForm.health_state=total
+        console.log(this.addOldPersonForm.health_state)
+
+        this.checkAll = checkedCount === this.healths.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.healths.length;
+      }
     }
   }
 </script>
