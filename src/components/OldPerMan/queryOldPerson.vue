@@ -170,7 +170,10 @@
               </el-col>
             </el-row>
             <el-form-item label="健康状态" prop="health_state">
-              <el-input style="width: 200px" v-model="form.health_state" :disabled="!isEdit"></el-input>
+<!--              <el-input style="width: 200px" v-model="form.health_state" :disabled="!isEdit"></el-input>-->
+              <el-checkbox-group v-model="checkedHealth" @change="handleCheckedHealthChange" :disabled="!isEdit">
+                <el-checkbox v-for="health in healths" :label="health" :key="health">{{health}}</el-checkbox>
+              </el-checkbox-group>
             </el-form-item>
             <el-row>
               <el-col :span="16">
@@ -200,12 +203,14 @@
 
 <script>
   import {editOldPerson, editSysUser, queryOldPerson, removeOldPerson} from "../../api";
-
+  const healthsOptions = ['心脏病', '糖尿病', '高血压', '高血脂'];
   export default {
     name: "queryOddPerson",
 
     data(){
       return{
+        healths: healthsOptions,
+        checkedHealth: [],
         isEdit: false,   // 是否编辑
         OldInfoAllDrawer: false,
         direction: 'ttb',
@@ -379,6 +384,8 @@
         this.idx = index;
         this.form = row;
         console.log(this.form);
+        console.log("+++++++++++++++解析字符串++++++++++++++++")
+        this.Analyse();
       },
       //取消编辑
       cancelEdit(){
@@ -393,6 +400,8 @@
             that.getID();
             that.getEditInfoFromInfo();
             that.ChangeDate();
+
+
             let params = JSON.stringify(that.EditedOldInfo);
 
             // console.log(params)
@@ -486,7 +495,7 @@
         this.EditedOldInfo.secondguardian_phone=this.form.secondguardian_phone;
         this.EditedOldInfo.secondguardian_relationship =this.form.secondguardian_relationship;
         this.EditedOldInfo.secondguardian_wechat=this.form.secondguardian_wechat;
-        this.EditedOldInfo.health_state=this.form.health_state;
+        // this.EditedOldInfo.health_state=this.form.health_state;
         this.EditedOldInfo.DESCRIPTION=this.form.description;
 
         console.log(this.EditedOldInfo.ID)
@@ -524,7 +533,62 @@
           console.log(this.EditedOldInfo.checkin_date);
         }
         console.log("----");
-      }
+      },
+      //检测选项框
+      handleCheckedHealthChange(value) {
+        // console.log(this.checkedHealth[0])
+        let checkedCount = value.length;
+        // console.log(checkedCount)
+        // let sick=0;
+        let sick0=0;
+        let sick1=0;
+        let sick2=0;
+        let sick3=0;
+
+        for(let sick=0;sick<checkedCount;sick++){
+          if(this.checkedHealth[sick]=='心脏病'){
+            sick0=1
+          }else if(this.checkedHealth[sick]=='糖尿病'){
+            sick1=1
+          }else if(this.checkedHealth[sick]=='高血压'){
+            sick2=1
+          }else if(this.checkedHealth[sick]=='高血脂'){
+            sick3=1
+          }
+        }
+        console.log(sick0)
+        console.log(sick1)
+        console.log(sick2)
+        console.log(sick3)
+
+        let total = sick0+'_'+sick1+'_'+sick2+'_'+sick3;
+        console.log(total)
+        this.EditedOldInfo.health_state=total
+        console.log(this.EditedOldInfo.health_state)
+      },
+      //解析健康状况
+      Analyse(){
+
+        let Data=this.form.health_state.split("_")
+
+        console.log(this.form.health_state)
+        for(let sick =0;sick<Data.length;sick++){
+          if(Data[sick]=='1'&&sick==0){
+            this.checkedHealth.push('心脏病')
+          }
+          if(Data[sick]=='1'&&sick==1){
+            this.checkedHealth.push('糖尿病')
+          }
+          if(Data[sick]=='1'&&sick==2){
+            this.checkedHealth.push('高血压')
+          }
+          if(Data[sick]=='1'&&sick==3){
+            this.checkedHealth.push('高血脂')
+          }
+
+        }
+        console.log(this.checkedHealth)
+      },
     }
   }
 </script>

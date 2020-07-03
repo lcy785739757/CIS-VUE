@@ -358,10 +358,8 @@
         console.log(total)
         this.addOldPersonForm.health_state=total
         console.log(this.addOldPersonForm.health_state)
+      },
 
-        this.checkAll = checkedCount === this.healths.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.healths.length;
-      }
     }
   }
 </script>
