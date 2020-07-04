@@ -95,27 +95,27 @@
                 </el-row>
               </el-main>
               <el-aside >
-                <el-upload
-                  :action="uploadUrl()"
-                  class="avatar-uploader"
-                  :http-request="getHttpRequest"
-                  :show-file-list="false"
-                  :on-success="handleAvatarSuccess"
-                  :before-upload="beforeAvatarUpload">
-                  <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
 <!--                <el-upload-->
-<!--                  class="avatar-uploader;"-->
-<!--                  style="margin-left: 76px"-->
 <!--                  :action="uploadUrl()"-->
+<!--                  class="avatar-uploader"-->
+<!--                  :http-request="getHttpRequest"-->
 <!--                  :show-file-list="false"-->
 <!--                  :on-success="handleAvatarSuccess"-->
 <!--                  :before-upload="beforeAvatarUpload">-->
-<!--                  <div class="el-upload__text" style="margin-left: -15px"><em>修改头像</em></div>-->
 <!--                  <img v-if="imageUrl" :src="imageUrl" class="avatar">-->
 <!--                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
 <!--                </el-upload>-->
+                <el-upload
+                  class="avatar-uploader;"
+                  style="margin-left: 76px"
+                  :action="uploadUrl()"
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccess"
+                  :before-upload="beforeAvatarUpload">
+                  <div class="el-upload__text" style="margin-left: -15px"><em>修改头像</em></div>
+                  <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
               </el-aside>
             </el-container>
             <el-row>
@@ -393,6 +393,7 @@
       // 上传头像
       uploadUrl () {
         return `${this.$store.state.HOST}/user/avatar/update?id=${this.form.id}`
+        console.log(this.imageUrl)
       },
       // 获得老人资料
       getOldPerson(){
