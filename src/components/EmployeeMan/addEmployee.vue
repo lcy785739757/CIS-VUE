@@ -254,7 +254,7 @@
         let face = this.fileList[0];
         // console.log(this.fileList[0])
         fd.append('file',this.fileList[0].raw)
-        fd.append('user',JSON.stringify(this.addEmployeeForm.id_card))
+        fd.append('user',this.stringify(this.addEmployeeForm.id_card))
         console.log("+++++++++file+user+++++++++++")
         console.log(fd.get('user'))
         console.log(fd.get('file'))

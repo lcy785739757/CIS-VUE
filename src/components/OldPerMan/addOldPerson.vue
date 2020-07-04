@@ -325,7 +325,7 @@
         let face = this.fileList[0];
         // console.log(this.fileList[0])
         fd.append('file',this.fileList[0].raw)
-        fd.append('user',JSON.stringify(this.addOldPersonForm.id_card))
+        fd.append('user',this.stringify(this.addOldPersonForm.id_card))
         console.log("+++++++++file+user+++++++++++")
         console.log(fd.get('user'))
         console.log(fd.get('file'))
@@ -375,7 +375,7 @@
                   message: "录入成功",
                   type: 'success'
                 });
-                // this.btnBoolean = true;
+                this.btnBoolean = true;
                 console.log('============上传图片-===========');
                 this.uploadUrl();
                 console.log('============上传图片完成-===========');

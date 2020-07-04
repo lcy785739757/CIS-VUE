@@ -24,6 +24,9 @@
       <!--    用户列表区域    -->
       <el-table :data="AllEmployeeList">
         <el-table-column label="姓名" prop="username"  align="center"></el-table-column>
+        <el-table-column label="头像" prop=""  align="center">
+          <img  :src=avatarUrl alt="头像" width="50px" style="margin: 0 0px 0px;" >
+        </el-table-column>
         <el-table-column label="姓别" prop="gender"  align="center"></el-table-column>
         <el-table-column label="电话" prop="phone"  align="center"></el-table-column>
         <el-table-column label="身份证号" prop="id_card" align="center"></el-table-column>
@@ -173,6 +176,7 @@
 
     data(){
       return{
+        avatarUrl:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
         isEdit: false,   // 是否编辑
         EmployeeInfoAllDrawer: false,
         direction: 'ttb',
