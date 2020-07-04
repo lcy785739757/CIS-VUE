@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { get, post } from './http'
 
+
 // ==========================================》管理员api
 // 获取管理员数据
 export const UserInfo = (params) => post(`sysUser/seeSysUser`, params)
@@ -45,3 +46,11 @@ export const queryVolunteer = (params) => post(`volunteer/queryVolunteer`, param
 export const editVolunteer = (params) => post(`volunteer/editVolunteer`, params)
 //删除员工
 export const removeVolunteer = (params) => post(`volunteer/removeVolunteer`, params)
+
+// ==========================================》数据统计api
+//工作人员统计分析
+export const Employ = (params) => post(`employee/statEmployee`, params)
+//老人统计分析
+export const OldPer = (params) => post(`oldperson/statOldPerson`, params)
+//义工统计分析
+export const Volunteer = (params) => post(`volunteer/statVolunteer`, params)

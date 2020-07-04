@@ -42,8 +42,8 @@ Vue.use(VueRouter)
       {path:'/addVolunteer',name:'addVolunteer',component:addVolunteer},
       {path:'/queryVolunteer',name:'queryVolunteer',component:queryVolunteer},
 
-      {path:'/Employ',name:'Employ',component:Employ},
       {path:'/OldPer',name:'OldPer',component:OldPer},
+      {path:'/Employ',name:'Employ',component:Employ},
       {path:'/Volunteer',name:'Volunteer',component:Volunteer},
     ]
   },

@@ -233,8 +233,8 @@
             authName:'数据管理',
             path:'dataMan',
             children:[
-              {id:'Employ', authName:'工作人员数据统计', path:'Employ',},
               {id: 'OldPer', authName: '老人数据统计', path: 'OldPer',},
+              {id:'Employ', authName:'工作人员数据统计', path:'Employ',},
               {id: 'Volunteer', authName: '义工数据统计', path: 'Volunteer',}
             ]
           },
@@ -567,12 +567,13 @@
     }
     font-family: 幼圆;
   }
-  .el-aside{
+  .el-aside {
     background-color: #333744;
+  }
     .el-menu{
       border-right: none;
     }
-  }
+
   .el-main{
     background-color: #eaedf1;
   }
