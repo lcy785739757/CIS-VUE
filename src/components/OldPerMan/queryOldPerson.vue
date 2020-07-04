@@ -403,8 +403,38 @@
       },
       // 上传头像
       uploadUrl () {
-        return `${this.$store.state.HOST}/user/avatar/update?id=${this.form.id}`
-        console.log(this.imageUrl)
+        // return `${this.$store.state.HOST}/user/avatar/update?id=${this.form.id}`
+        // console.log(this.imageUrl)
+        // that.getOldPerson();
+        let that =this
+        let fd= new FormData();
+        let face = this.fileList[0];
+        // console.log(this.fileList[0])
+        fd.append('file',this.fileList[0].raw)
+        fd.append('user',JSON.stringify(this.form.id))
+        console.log(fd)
+        addOldImg(fd)
+          .then(res =>{
+            if (res.code == 1) {
+              that.$message({
+                title: "修改成功",
+                message: "修改成功",
+                type: 'success'
+              });
+            }else {
+              that.$message({
+                title: "修改失败",
+                message: "修改失败",
+                type: 'warning'
+              });
+            }
+          }).catch(function() {
+          that.$notify({
+            title: "修改失败",
+            message: "服务器异常",
+            type: "error"
+          });
+        })
       },
       // 获得老人资料
       getOldPerson(){
@@ -447,7 +477,7 @@
             that.getID();
             that.getEditInfoFromInfo();
             that.ChangeDate();
-
+            that.uploadUrl();
 
             let params = JSON.stringify(that.EditedOldInfo);
 
@@ -481,35 +511,6 @@
             type: 'error'
           });
         }
-        })
-        // that.getOldPerson();
-        let fd= new FormData();
-        let face = this.fileList[0];
-        // console.log(this.fileList[0])
-        fd.append('file',this.fileList[0].raw)
-        fd.append('user',JSON.stringify(this.form.id))
-        console.log(fd)
-        addOldImg(fd)
-        .then(res =>{
-          if (res.code == 1) {
-            that.$message({
-              title: "修改成功",
-              message: "修改成功",
-              type: 'success'
-            });
-          }else {
-            that.$message({
-              title: "修改失败",
-              message: "修改失败",
-              type: 'warning'
-            });
-          }
-        }).catch(function() {
-          that.$notify({
-            title: "修改失败",
-            message: "服务器异常",
-            type: "error"
-          });
         })
         // let params2 = JSON.stringify(that.EditedOldInfo);
         // this.$axios.post('api/oldperson/addPhotoOP',fd,).then
