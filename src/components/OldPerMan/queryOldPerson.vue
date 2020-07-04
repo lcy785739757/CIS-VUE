@@ -95,27 +95,29 @@
                 </el-row>
               </el-main>
               <el-aside >
-<!--                <el-upload-->
-<!--                  :action="uploadUrl()"-->
-<!--                  class="avatar-uploader"-->
-<!--                  :http-request="getHttpRequest"-->
-<!--                  :show-file-list="false"-->
-<!--                  :on-success="handleAvatarSuccess"-->
-<!--                  :before-upload="beforeAvatarUpload">-->
-<!--                  <img v-if="imageUrl" :src="imageUrl" class="avatar">-->
-<!--                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-<!--                </el-upload>-->
                 <el-upload
-                  class="avatar-uploader;"
-                  style="margin-left: 76px"
-                  :action="uploadUrl()"
+                  :auto-upload="false"
+                  action="#"
+                  class="avatar-uploader"
+                  :limit="1"
+                  :on-change="handleChange"
                   :show-file-list="false"
                   :on-success="handleAvatarSuccess"
                   :before-upload="beforeAvatarUpload">
-                  <div class="el-upload__text" style="margin-left: -15px"><em>修改头像</em></div>
                   <img v-if="imageUrl" :src="imageUrl" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
+<!--                <el-upload-->
+<!--                  class="avatar-uploader;"-->
+<!--                  style="margin-left: 76px"-->
+<!--                  :action="uploadUrl()"-->
+<!--                  :show-file-list="false"-->
+<!--                  :on-success="handleAvatarSuccess"-->
+<!--                  :before-upload="beforeAvatarUpload">-->
+<!--                  <div class="el-upload__text" style="margin-left: -15px"><em>修改头像</em></div>-->
+<!--                  <img v-if="imageUrl" :src="imageUrl" class="avatar">-->
+<!--                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--                </el-upload>-->
               </el-aside>
             </el-container>
             <el-row>
@@ -231,13 +233,15 @@
 </template>
 
 <script>
-  import {editOldPerson, editSysUser, queryOldPerson, removeOldPerson} from "../../api";
+  import {addOldImg, editOldPerson, editSysUser, queryOldPerson, removeOldPerson} from "../../api";
   const healthsOptions = ['心脏病', '糖尿病', '高血压', '高血脂'];
   export default {
     name: "queryOddPerson",
 
     data(){
       return{
+        fileList:[],
+        imgUrl:'',
         fileReader:'',
         imageUrl: '',
         healths: healthsOptions,
@@ -390,6 +394,13 @@
       this.getOldPerson()
     },
     methods:{
+      handleChange(file,fileList){
+        this.fileList=fileList;
+        console.log(file)
+        this.imgUrl = URL.createObjectURL(file.raw)
+        console.log(this.imgUrl)
+
+      },
       // 上传头像
       uploadUrl () {
         return `${this.$store.state.HOST}/user/avatar/update?id=${this.form.id}`
@@ -472,6 +483,36 @@
         }
         })
         // that.getOldPerson();
+        let fd= new FormData();
+        let face = this.fileList[0];
+        // console.log(this.fileList[0])
+        fd.append('file',this.fileList[0].raw)
+        fd.append('user',JSON.stringify(this.form.id))
+        console.log(fd)
+        addOldImg(fd)
+        .then(res =>{
+          if (res.code == 1) {
+            that.$message({
+              title: "修改成功",
+              message: "修改成功",
+              type: 'success'
+            });
+          }else {
+            that.$message({
+              title: "修改失败",
+              message: "修改失败",
+              type: 'warning'
+            });
+          }
+        }).catch(function() {
+          that.$notify({
+            title: "修改失败",
+            message: "服务器异常",
+            type: "error"
+          });
+        })
+        // let params2 = JSON.stringify(that.EditedOldInfo);
+        // this.$axios.post('api/oldperson/addPhotoOP',fd,).then
       },
       //删除操作
       DeleteOldInfo(index,row){
@@ -658,36 +699,7 @@
         }
         return isJPG && isLt2M;
       },
-      getHttpRequest(options){
-        this.fileReader = new FileReader()
-        let file = options.file
-        let filename = file.name
-        console.log(file)
-        console.log(filename)
-        if(file){
-          this.fileReader.readAsDataURL(file)
-        }
-        this.fileReader.onload =()=> {
-          let base64Str = this.fileReader.result
-          let param = new URLSearchParams()
-          param.append('base64',base64Str.split(',')[1])
-          param.append('filename',filename)
-          let config = {
-            url: 'api/uploadbase',
-            method: 'post',
-            data:param,
-            timeout:10000,
-          }
-          this.$axios(config)
-            .then(res=>{
-              options.onSuccess(res,file)
-            })
-            .catch(err=>{
-              console.log("error")
-              options.onError(err)
-            })
-        }
-      },
+
     }
   }
 </script>

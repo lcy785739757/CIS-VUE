@@ -23,6 +23,8 @@ export const queryOldPerson = (params) => post(`oldperson/queryOldPerson`, param
 export const editOldPerson = (params) => post(`oldperson/editOldPerson`, params)
 //删除老人
 export const removeOldPerson = (params) => post(`oldperson/removeOldPerson`, params)
+//添加头像
+export const addOldImg = (params) => post(`oldperson/addPhotoOP`, params)
 
 // ==========================================》员工api
 // 录入信息
