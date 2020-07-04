@@ -10,20 +10,21 @@
     <!--  卡片视图区域  -->
     <el-card class="volunteerCard" >
       <el-form ref="addVolunteerForm" :rules="rulesForm" :model="addVolunteerForm" label-width="90px" >
-        <el-container>
-          <el-aside width="300px" style="transform: translate(0%,25%);margin-left: 160px">
+        <el-row>
+          <el-col :span="6" style=";margin-left: 160px">
             <el-form-item label="姓名" prop="name">
               <el-input style="width: 200px" v-model="addVolunteerForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="性别" prop="gender" style="margin-top: -20px">
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8" style=";margin-left: 160px">
+            <el-form-item label="性别" prop="gender">
               <el-radio v-model="addVolunteerForm.gender" label="男">男</el-radio>
               <el-radio v-model="addVolunteerForm.gender" label="女">女</el-radio>
             </el-form-item>
-          </el-aside>
-          <el-main style="background-color: #303133">
-            <!--    头像        -->
-          </el-main>
-        </el-container>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="6" style=";margin-left: 160px">
             <el-form-item label="电话号码" prop="phone">

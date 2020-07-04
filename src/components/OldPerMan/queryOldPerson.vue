@@ -28,7 +28,7 @@
         <el-table-column label="电话" prop="phone"  align="center"></el-table-column>
         <el-table-column label="身份证号" prop="id_card" align="center"></el-table-column>
         <el-table-column label="房间号" prop="room_number"  align="center"></el-table-column>
-
+        <el-table-column label="入院时间" prop="checkin_date"  align="center"></el-table-column>
         <el-table-column label="操作"   align="center">
           <template slot-scope="scope">
             <el-button
@@ -95,25 +95,27 @@
                 </el-row>
               </el-main>
               <el-aside >
-<!--                <el-upload-->
-<!--                  class="avatar-uploader"-->
-<!--                  action="https://jsonplaceholder.typicode.com/posts/"-->
-<!--                  :show-file-list="false"-->
-<!--                  :on-success="handleAvatarSuccess"-->
-<!--                  :before-upload="beforeAvatarUpload">-->
-<!--                  <img v-if="imageUrl" :src="imageUrl" class="avatar">-->
-<!--                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-<!--                </el-upload>-->
                 <el-upload
-                  class="avatar-uploader;"
-                  style="margin-left: 76px"
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :action="uploadUrl()"
+                  class="avatar-uploader"
+                  :http-request="getHttpRequest"
                   :show-file-list="false"
                   :on-success="handleAvatarSuccess"
                   :before-upload="beforeAvatarUpload">
                   <img v-if="imageUrl" :src="imageUrl" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
+<!--                <el-upload-->
+<!--                  class="avatar-uploader;"-->
+<!--                  style="margin-left: 76px"-->
+<!--                  :action="uploadUrl()"-->
+<!--                  :show-file-list="false"-->
+<!--                  :on-success="handleAvatarSuccess"-->
+<!--                  :before-upload="beforeAvatarUpload">-->
+<!--                  <div class="el-upload__text" style="margin-left: -15px"><em>修改头像</em></div>-->
+<!--                  <img v-if="imageUrl" :src="imageUrl" class="avatar">-->
+<!--                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--                </el-upload>-->
               </el-aside>
             </el-container>
             <el-row>
@@ -126,7 +128,7 @@
                       type="date"
                       placeholder="选择日期"
                       style="width: 200px"
-                      :disabled="!isEdit">
+                      disabled>
                     </el-date-picker>
                   </div>
                 </el-form-item>
@@ -140,7 +142,8 @@
                       type="date"
                       placeholder="选择日期"
                       style="width: 200px"
-                      :disabled="!isEdit">
+                      disabled
+                      >
                     </el-date-picker>
                   </div>
                 </el-form-item>
@@ -235,6 +238,7 @@
 
     data(){
       return{
+        fileReader:'',
         imageUrl: '',
         healths: healthsOptions,
         checkedHealth: [],
@@ -386,6 +390,10 @@
       this.getOldPerson()
     },
     methods:{
+      // 上传头像
+      uploadUrl () {
+        return `${this.$store.state.HOST}/user/avatar/update?id=${this.form.id}`
+      },
       // 获得老人资料
       getOldPerson(){
         let that = this;
@@ -462,6 +470,7 @@
           });
         }
         })
+        // that.getOldPerson();
       },
       //删除操作
       DeleteOldInfo(index,row){
@@ -616,19 +625,67 @@
         console.log(this.checkedHealth)
       },
       handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
+        if (res.code === 1) {
+          this.imageUrl = URL.createObjectURL(file.raw)
+
+          this.$store.commit('setAvator', res.avator)
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+        } else {
+          this.notify('修改失败', 'error')
+        }
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
 
         if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
+          this.$notify({
+            title: "上传失败",
+            message: "上传头像图片只能是 JPG 格式!",
+            type: "error"
+          });
         }
         if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
+          this.$notify({
+            title: "上传失败",
+            message: "上传头像图片大小不能超过 2MB!",
+            type: "error"
+          });
         }
         return isJPG && isLt2M;
+      },
+      getHttpRequest(options){
+        this.fileReader = new FileReader()
+        let file = options.file
+        let filename = file.name
+        console.log(file)
+        console.log(filename)
+        if(file){
+          this.fileReader.readAsDataURL(file)
+        }
+        this.fileReader.onload =()=> {
+          let base64Str = this.fileReader.result
+          let param = new URLSearchParams()
+          param.append('base64',base64Str.split(',')[1])
+          param.append('filename',filename)
+          let config = {
+            url: 'api/uploadbase',
+            method: 'post',
+            data:param,
+            timeout:10000,
+          }
+          this.$axios(config)
+            .then(res=>{
+              options.onSuccess(res,file)
+            })
+            .catch(err=>{
+              console.log("error")
+              options.onError(err)
+            })
+        }
       },
     }
   }

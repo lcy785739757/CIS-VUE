@@ -7,9 +7,11 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
 
   state:{
+    HOST: 'http://localhost:10000',
     userId: '',
     username: '',
     avator: '',
+    picUrl: '', // 头像图片
   },
   getters: {
     userId: state => {
@@ -32,7 +34,14 @@ const store = new Vuex.Store({
         avator = JSON.parse(window.localStorage.getItem('avator') || null)
       }
       return avator
-    }
+    },
+    picUrl: state => {
+      let picUrl = state.picUrl
+      if (!picUrl) {
+        picUrl = JSON.parse(window.sessionStorage.getItem('picUrl')) || 'http://localhost:8888/img/tubiao.jpg'
+      }
+      return picUrl
+    },
   },
 
 
@@ -48,7 +57,11 @@ const store = new Vuex.Store({
     setAvator: (state, avator) => {
       state.avator = avator
       window.localStorage.setItem('avator', JSON.stringify(avator))
-    }
+    },
+    setpicUrl: (state, picUrl) => {
+      state.picUrl = picUrl
+      window.sessionStorage.setItem('picUrl', JSON.stringify(picUrl))
+    },
   },
 
 

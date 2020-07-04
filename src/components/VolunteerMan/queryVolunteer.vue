@@ -27,7 +27,9 @@
         <el-table-column label="姓别" prop="gender"  align="center"></el-table-column>
         <el-table-column label="电话" prop="phone"  align="center"></el-table-column>
         <el-table-column label="身份证号" prop="id_card" align="center"></el-table-column>
+        <el-table-column label="入职日期" prop="checkin_date"  align="center"></el-table-column>
         <el-table-column label="操作"   align="center">
+
           <template slot-scope="scope">
             <el-button
               type="text"
@@ -123,7 +125,7 @@
                       type="date"
                       placeholder="选择日期"
                       style="width: 200px"
-                      :disabled="!isEdit">
+                      disabled>
                     </el-date-picker>
                   </div>
                 </el-form-item>

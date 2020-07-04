@@ -1,6 +1,6 @@
 <template>
   <div id="Login" class="login_container">
-    <img src="../assets/images/login_background.jpg" alt="" class="ima">
+    <img src="../assets/images/yanglao.jpg" alt="" class="ima">
     <div class="login_box">
       <div class="avatar_box">
         <img src="../assets/images/1.png" alt="">

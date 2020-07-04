@@ -4,7 +4,7 @@
     <!--头部区域-->
     <el-header>
       <div >
-        <img src="../assets/images/ye.jpg" alt=""   >
+        <img src="../assets/images/ye.png" alt=""   >
         <span>智慧养老系统</span>
       </div>
 <!--      <el-button type="info" @click="logout">退出</el-button>-->
@@ -25,6 +25,11 @@
             </el-button>
           </el-dropdown-item>
           <el-dropdown-item >
+            <el-button @click="ItemDrawer = true" style="width: 110px; border: none" >
+              更改主题
+            </el-button>
+          </el-dropdown-item>
+          <el-dropdown-item >
             <el-button @click="logout()" style="width: 110px; border: none">
               退出登录
             </el-button>
@@ -33,6 +38,7 @@
       </el-dropdown>
 
       <el-drawer
+        class="InfoClass"
         :visible.sync="InfoDrawer"
         :with-header="false">
         <div class="demo-drawer__content">
@@ -95,6 +101,20 @@
                 <el-button type="primary" v-on:click="SavePassEdit('EditPass')" style="width: 100px; margin-left: 50px" >保 存</el-button>
               </el-form-item>
             </el-form>
+          </el-card>
+        </div>
+      </el-drawer>
+      <el-drawer
+        class="DrawerClass"
+        :visible.sync="ItemDrawer"
+        :with-header="false"
+        direction="ttb">
+
+        <div class="demo-drawer__content">
+          <el-card width="1500px" @close="isEdit2 = false"
+                   :close-on-click-modal='false'>
+            <h3 class="register-title" style="margin-left: 110px;margin-top: 10px">修改密码</h3>
+
           </el-card>
         </div>
       </el-drawer>
@@ -167,6 +187,7 @@
         isEdit2:false,
         InfoDrawer: false,
         PassDrawer: false,
+        ItemDrawer: false,
         admin_Name:'',
         admin:{
           UserName:'',
@@ -177,8 +198,7 @@
             authName:'系统设置模块',
             path:'management',
             children:[
-              {id: 'project_browse', authName: '选择项目', path: 'project_browse',},
-              {id: 'project_my_apply', authName: '我的加入', path: 'project_my_apply',}
+              {id: 'project_browse', authName: '更改主题', path: 'project_browse',},
             ]
           },
           {
@@ -577,11 +597,31 @@
     margin-top: 50px;
     /*padding: 0px;*/
   }
+  .ItemCard{
+    font-weight: bold;
+    font-family: 幼圆;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-bottom: 10px;
+    margin-top: 50px;
+  }
   .PapaImg{
     background-color: #373d41;
     margin-left: 20px;
     margin-right: 20px;
     padding-bottom: 50px;
+  }
+  .DrawerClass{
+    position: absolute;
+    border-top: 1px solid #e8e8e8;
+    height: 500px;
+    width: 500px;
+    padding: 100px 100px;
+    text-align: right;
+    background-color: #409EFF;
+  }
+  .InfoClass{
+
   }
 
 </style>
