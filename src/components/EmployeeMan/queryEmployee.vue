@@ -84,7 +84,7 @@
                   </el-col>
                 </el-row>
               </el-main>
-              <el-aside style="background-color: #303133">
+              <el-aside>
 
               </el-aside>
             </el-container>

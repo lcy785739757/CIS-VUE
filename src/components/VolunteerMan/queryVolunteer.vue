@@ -59,7 +59,7 @@
       <div class="demo-drawer__content">
         <el-card @close="isEdit = false" class="InfoCard" custom-class="custom-dialog"
                  :close-on-click-modal='false'>
-          <h3 class="register-title" style="margin-left:250px;margin-top: 10px;font-size: 30px">工作人员信息管理</h3>
+          <h3 class="register-title" style="margin-left:280px;margin-top: 10px;font-size: 30px">义工信息管理</h3>
           <el-form ref="form" :rules="rulesForm" :model="form" label-width="90px" >
             <el-container>
               <el-main>
@@ -85,7 +85,7 @@
                   </el-col>
                 </el-row>
               </el-main>
-              <el-aside style="background-color: #303133">
+              <el-aside>
 
               </el-aside>
             </el-container>

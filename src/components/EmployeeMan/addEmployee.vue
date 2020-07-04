@@ -149,7 +149,7 @@
 <script>
   import Cookies from 'js-cookie';
   import { mapMutations } from 'vuex';
-  import {addEmployee, addOldImg, Register} from "../../api";
+  import {addEmployee, addEmployeeImg} from "../../api";
 
   export default {
     name: "addEmployee",
@@ -260,7 +260,7 @@
         console.log(fd.get('file'))
         console.log("+++++++++file+user+++++++++++")
         console.log(fd)
-        addOldImg(fd)
+        addEmployeeImg(fd)
           .then(res =>{
             if (res.code == 1) {
               that.$message({
