@@ -482,8 +482,6 @@
             that.getID();
             that.getEditInfoFromInfo();
             that.ChangeDate();
-            that.getOldPerson()
-
             // that.uploadUrl();
 
             let params = JSON.stringify(that.EditedOldInfo);
