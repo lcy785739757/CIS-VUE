@@ -11,21 +11,44 @@
     <el-card class="oldCard" >
 <!--      <el-form  ref="addOldPersonForm" :rules="rules" :model="addOldPersonForm" label-width="80px">-->
       <el-form ref="addOldPersonForm" :rules="rulesForm" :model="addOldPersonForm" label-width="90px" >
-        <el-row>
-          <el-col :span="6">
-            <el-form-item label="姓名" prop="username">
-              <el-input style="width: 200px" v-model="addOldPersonForm.username"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="6">
-            <el-form-item label="性别" prop="gender" style="margin-top: -20px">
-              <el-radio v-model="addOldPersonForm.gender" label="男">男</el-radio>
-              <el-radio v-model="addOldPersonForm.gender" label="女">女</el-radio>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-container>
+          <el-aside width="900px">
+            <el-row>
+              <el-col :span="1">
+                <el-form-item label="姓名" prop="username">
+                  <el-input style="width: 200px" v-model="addOldPersonForm.username"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="1">
+                <el-form-item label="性别" prop="gender" >
+                  <el-radio v-model="addOldPersonForm.gender" label="男">男</el-radio>
+                  <el-radio v-model="addOldPersonForm.gender" label="女">女</el-radio>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-aside>
+          <el-main >
+            <el-upload
+
+              :auto-upload="false"
+              action="#"
+              class="avatar-uploader"
+              :limit="1"
+              :on-change="handleChange"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload">
+              <div class="el-upload__text"> <em>头像</em></div>
+              <div class="el-upload__text">&nbsp</div>
+              <img v-if="imgUrl" :src="imgUrl" class="avatar">
+
+              <i v-else class="el-icon-plus avatar-uploader-icon;" style="size: A3"></i>
+            </el-upload>
+          </el-main>
+        </el-container>
+
         <el-row>
           <el-col :span="6">
             <el-form-item label="电话号码" prop="phone">
@@ -144,14 +167,16 @@
 <script>
   import Cookies from 'js-cookie';
   import { mapMutations } from 'vuex';
-  import {addOldPerson, Register} from "../../api";
+  import {addOldImg, addOldPerson, Register} from "../../api";
   const healthsOptions = ['心脏病', '糖尿病', '高血压', '高血脂'];
   export default {
     name: "addOldPerson",
     data(){
       return{
+        fileList:[],
+        imgUrl:'',
         healths: healthsOptions,
-        checkedHealth: [],
+        checkedHealth: ['心脏病'],
         btnBoolean: false,
         btnStatus: -1,
         admin_Name:'',
@@ -248,6 +273,87 @@
     },
     methods:{
       ...mapMutations(['setToken']),
+      handleAvatarSuccess(res, file) {
+        if (res.code === 1) {
+          this.imageUrl = URL.createObjectURL(file.raw)
+
+          this.$store.commit('setAvator', res.avator)
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+        } else {
+          this.notify('修改失败', 'error')
+        }
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$notify({
+            title: "上传失败",
+            message: "上传头像图片只能是 JPG 格式!",
+            type: "error"
+          });
+        }
+        if (!isLt2M) {
+          this.$notify({
+            title: "上传失败",
+            message: "上传头像图片大小不能超过 2MB!",
+            type: "error"
+          });
+        }
+        return isJPG && isLt2M;
+      },
+      handleChange(file,fileList){
+        this.fileList=fileList;
+        console.log(file)
+        this.imgUrl = URL.createObjectURL(file.raw)
+        console.log("+++++++++++++++++imgUrl+++++++++++++++++++")
+        console.log(this.imgUrl)
+
+      },
+      // 上传头像
+      uploadUrl () {
+        // return `${this.$store.state.HOST}/user/avatar/update?id=${this.form.id}`
+        // console.log(this.imageUrl)
+        // that.getOldPerson();
+        console.log("===========开始上传1++++++++++++")
+        let that =this
+        let fd= new FormData();
+        let face = this.fileList[0];
+        // console.log(this.fileList[0])
+        fd.append('file',this.fileList[0].raw)
+        fd.append('user',JSON.stringify(this.addOldPersonForm.id_card))
+        console.log("+++++++++file+user+++++++++++")
+        console.log(fd.get('user'))
+        console.log(fd.get('file'))
+        console.log("+++++++++file+user+++++++++++")
+        console.log(fd)
+        addOldImg(fd)
+          .then(res =>{
+            if (res.code == 1) {
+              that.$message({
+                title: "修改成功",
+                message: "修改成功",
+                type: 'success'
+              });
+            }else {
+              that.$message({
+                title: "修改失败",
+                message: "修改失败",
+                type: 'warning'
+              });
+            }
+          }).catch(function() {
+          that.$message({
+            title: "图片上传失败",
+            message: "图片上传失败，服务器异常",
+            type: "error"
+          });
+        })
+      },
       submitForm(addOldPersonForm){
         //为表单绑定验证功能
         let that = this;
@@ -257,7 +363,7 @@
           console.log('-----------addOldPersonForm---------------')
           console.log(that.addOldPersonForm);
           let params = JSON.stringify(that.addOldPersonForm);
-          if(valid){
+          if(valid && this.imgUrl!==''){
             console.log('-----------表单验证通过---------------')
             addOldPerson(params).then(res => {
               console.log('-----------res---------------')
@@ -269,9 +375,12 @@
                   message: "录入成功",
                   type: 'success'
                 });
-                this.btnBoolean = true;
+                // this.btnBoolean = true;
+                console.log('============上传图片-===========');
+                this.uploadUrl();
+                console.log('============上传图片完成-===========');
               }else {
-                console.log('-----------老人重复---------------')
+                console.log('-----------老人重复---------------');
                 that.$message({
                   title: "录入失败",
                   message: "用户名重复",
@@ -279,14 +388,21 @@
                 });
               }
             }).catch(function() {
-              that.$notify({
+              that.$message({
                 title: "录入失败",
                 message: "服务器异常",
                 type: "error"
               });
               console.log("服务呵呵呵");
              });
-          }else{
+          }else if(valid && this.imgUrl===''){
+            that.$message({
+              title: "请上传头像",
+              message: "请上传头像",
+              type: "error"
+            });
+          }
+          else{
             that.$message({
               message: '表单填写有误',
               type: 'error'
@@ -378,4 +494,28 @@
   .fontSize{
     font-size: 18px;
   }
+.avatar-uploader .el-upload {
+  border: 10px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #55a532;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+}
+.avatar {
+  width: 100px;
+  height: 100px;
+  display: block;
+}
 </style>

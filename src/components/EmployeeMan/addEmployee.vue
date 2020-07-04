@@ -10,6 +10,63 @@
     <!--  卡片视图区域  -->
     <el-card class="employeeCard" >
       <el-form ref="addEmployeeForm" :rules="rulesForm" :model="addEmployeeForm" label-width="90px" >
+<!--        <el-container>-->
+<!--          <el-aside width="500px">-->
+<!--            <el-row>-->
+<!--              <el-col :span="8" style=";margin-left: 160px">-->
+<!--                <el-form-item label="姓名" prop="username">-->
+<!--                  <el-input style="width: 200px" v-model="addEmployeeForm.username"></el-input>-->
+<!--                </el-form-item>-->
+<!--              </el-col>-->
+<!--            </el-row>-->
+<!--            <el-row >-->
+<!--              <el-col :span="8" style=";margin-left: 160px">-->
+<!--                <el-form-item label="性别" prop="gender">-->
+<!--                  <el-radio v-model="addEmployeeForm.gender" label="男">男</el-radio>-->
+<!--                  <el-radio v-model="addEmployeeForm.gender" label="女">女</el-radio>-->
+<!--                </el-form-item>-->
+<!--              </el-col>-->
+<!--            </el-row>-->
+<!--          </el-aside>-->
+<!--          <el-main style="background-color: #303133">-->
+<!--            <el-upload-->
+
+<!--              :auto-upload="false"-->
+<!--              action="#"-->
+<!--              class="avatar-uploader"-->
+<!--              :limit="1"-->
+<!--              :on-change="handleChange"-->
+<!--              :show-file-list="false"-->
+<!--              :on-success="handleAvatarSuccess"-->
+<!--              :before-upload="beforeAvatarUpload">-->
+<!--              <div class="el-upload__text"> <em>头像</em></div>-->
+<!--              <div class="el-upload__text">&nbsp</div>-->
+<!--              <img v-if="imgUrl" :src="imgUrl" class="avatar">-->
+
+<!--              <i v-else class="el-icon-plus avatar-uploader-icon;" style="size: A3"></i>-->
+<!--            </el-upload>-->
+<!--          </el-main>-->
+<!--        </el-container>-->
+        <el-row>
+          <el-col :span="8" style=";margin-left: 160px">
+            <el-form-item label="头像" style="height: 60px">
+          <el-upload style="margin-left: 80px"
+                     :auto-upload="false"
+                     action="#"
+                     class="avatar-uploader"
+                     :limit="1"
+                     :on-change="handleChange"
+                     :show-file-list="false"
+                     :on-success="handleAvatarSuccess"
+                     :before-upload="beforeAvatarUpload">
+            <div class="el-upload__text">&nbsp</div>
+            <img v-if="imgUrl" :src="imgUrl" class="avatar">
+
+            <i v-else style="width: 20px">上传</i>
+          </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="8" style=";margin-left: 160px">
             <el-form-item label="姓名" prop="username">
@@ -92,12 +149,14 @@
 <script>
   import Cookies from 'js-cookie';
   import { mapMutations } from 'vuex';
-  import {addEmployee, Register} from "../../api";
+  import {addEmployee, addOldImg, Register} from "../../api";
 
   export default {
     name: "addEmployee",
     data(){
       return{
+        fileList:[],
+        imgUrl:'',
         btnBoolean: false,
         btnStatus: -1,
         admin_Name:'',
@@ -143,6 +202,87 @@
     },
     methods:{
       ...mapMutations(['setToken']),
+      handleAvatarSuccess(res, file) {
+        if (res.code === 1) {
+          this.imageUrl = URL.createObjectURL(file.raw)
+
+          this.$store.commit('setAvator', res.avator)
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+        } else {
+          this.notify('修改失败', 'error')
+        }
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$notify({
+            title: "上传失败",
+            message: "上传头像图片只能是 JPG 格式!",
+            type: "error"
+          });
+        }
+        if (!isLt2M) {
+          this.$notify({
+            title: "上传失败",
+            message: "上传头像图片大小不能超过 2MB!",
+            type: "error"
+          });
+        }
+        return isJPG && isLt2M;
+      },
+      handleChange(file,fileList){
+        this.fileList=fileList;
+        console.log(file)
+        this.imgUrl = URL.createObjectURL(file.raw)
+        console.log("+++++++++++++++++imgUrl+++++++++++++++++++")
+        console.log(this.imgUrl)
+
+      },
+      // 上传头像
+      uploadUrl () {
+        // return `${this.$store.state.HOST}/user/avatar/update?id=${this.form.id}`
+        // console.log(this.imageUrl)
+        // that.getOldPerson();
+        console.log("===========开始上传1++++++++++++")
+        let that =this
+        let fd= new FormData();
+        let face = this.fileList[0];
+        // console.log(this.fileList[0])
+        fd.append('file',this.fileList[0].raw)
+        fd.append('user',JSON.stringify(this.addEmployeeForm.id_card))
+        console.log("+++++++++file+user+++++++++++")
+        console.log(fd.get('user'))
+        console.log(fd.get('file'))
+        console.log("+++++++++file+user+++++++++++")
+        console.log(fd)
+        addOldImg(fd)
+          .then(res =>{
+            if (res.code == 1) {
+              that.$message({
+                title: "修改成功",
+                message: "修改成功",
+                type: 'success'
+              });
+            }else {
+              that.$message({
+                title: "修改失败",
+                message: "修改失败",
+                type: 'warning'
+              });
+            }
+          }).catch(function() {
+          that.$message({
+            title: "图片上传失败",
+            message: "图片上传失败，服务器异常",
+            type: "error"
+          });
+        })
+      },
       submitForm(addEmployeeForm){
         //为表单绑定验证功能
         let that = this;
@@ -152,7 +292,7 @@
           console.log('-----------addEmployeeForm---------------')
           console.log(that.addEmployeeForm);
           let params = JSON.stringify(that.addEmployeeForm);
-          if(valid){
+          if(valid&& this.imgUrl!==''){
             console.log('-----------表单验证通过---------------')
             addEmployee(params).then(res => {
               console.log('-----------res---------------')
@@ -165,6 +305,9 @@
                   type: 'success'
                 });
                 this.btnBoolean = true;
+                console.log('============上传图片-===========');
+                this.uploadUrl();
+                console.log('============上传图片完成-===========');
               }else {
                 console.log('-----------员工重复---------------')
                 that.$message({
@@ -180,6 +323,12 @@
                 type: "error"
               });
               console.log("服务呵呵呵");
+            });
+          }else if(valid && this.imgUrl===''){
+            that.$message({
+              title: "请上传头像",
+              message: "请上传头像",
+              type: "error"
             });
           }else{
             that.$message({

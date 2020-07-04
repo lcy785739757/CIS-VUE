@@ -61,15 +61,14 @@
                  :close-on-click-modal='false'>
           <h3 class="register-title" style="margin-left: 600px;margin-top: 10px;font-size: 30px">老人信息管理</h3>
           <el-form ref="form" :rules="rulesForm" :model="form" label-width="90px" >
-            <el-container>
-              <el-main>
+
                 <el-row>
-                  <el-col :span="8" style="margin-left: -20px">
+                  <el-col :span="6" style="margin-left: 0px">
                     <el-form-item label="ID" prop="id">
                       <el-input style="width: 200px" v-model="form.id" disabled></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8" style="margin-left: -10px">
+                  <el-col :span="6" style="margin-left: 0px">
                     <el-form-item label="姓名" prop="username">
                       <el-input style="width: 200px" v-model="form.username" disabled></el-input>
                     </el-form-item>
@@ -82,44 +81,19 @@
 
                 </el-row>
                 <el-row>
-                  <el-col :span="8" style="margin-left: -20px">
+                  <el-col :span="6" style="margin-left:0px">
                     <el-form-item label="电话号码" prop="phone">
                       <el-input style="width: 200px" v-model="form.phone" :disabled="!isEdit"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="7" style="margin-left: -10px">
+                  <el-col :span="6" style="margin-left: 0px">
                     <el-form-item label="身份证号" prop="id_card" >
                       <el-input style="width: 200px" v-model="form.id_card" disabled></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
-              </el-main>
-              <el-aside >
-                <el-upload
-                  :auto-upload="false"
-                  action="#"
-                  class="avatar-uploader"
-                  :limit="1"
-                  :on-change="handleChange"
-                  :show-file-list="false"
-                  :on-success="handleAvatarSuccess"
-                  :before-upload="beforeAvatarUpload">
-                  <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-<!--                <el-upload-->
-<!--                  class="avatar-uploader;"-->
-<!--                  style="margin-left: 76px"-->
-<!--                  :action="uploadUrl()"-->
-<!--                  :show-file-list="false"-->
-<!--                  :on-success="handleAvatarSuccess"-->
-<!--                  :before-upload="beforeAvatarUpload">-->
-<!--                  <div class="el-upload__text" style="margin-left: -15px"><em>修改头像</em></div>-->
-<!--                  <img v-if="imageUrl" :src="imageUrl" class="avatar">-->
-<!--                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-<!--                </el-upload>-->
-              </el-aside>
-            </el-container>
+
+
             <el-row>
               <el-col :span="6">
                 <el-form-item label="出生日期" prop="birthday" >
@@ -240,8 +214,8 @@
 
     data(){
       return{
-        fileList:[],
-        imgUrl:'',
+        // fileList:[],
+        // imgUrl:'',
         fileReader:'',
         imageUrl: '',
         healths: healthsOptions,
@@ -402,45 +376,45 @@
         console.log(this.imgUrl)
 
       },
-      // 上传头像
-      uploadUrl () {
-        // return `${this.$store.state.HOST}/user/avatar/update?id=${this.form.id}`
-        // console.log(this.imageUrl)
-        // that.getOldPerson();
-        let that =this
-        let fd= new FormData();
-        let face = this.fileList[0];
-        // console.log(this.fileList[0])
-        fd.append('file',this.fileList[0].raw)
-        fd.append('user',JSON.stringify(this.form.id))
-        console.log("+++++++++file+user+++++++++++")
-        console.log(fd.get('user'))
-        console.log(fd.get('file'))
-        console.log("+++++++++file+user+++++++++++")
-        console.log(fd)
-        addOldImg(fd)
-          .then(res =>{
-            if (res.code == 1) {
-              that.$message({
-                title: "修改成功",
-                message: "修改成功",
-                type: 'success'
-              });
-            }else {
-              that.$message({
-                title: "修改失败",
-                message: "修改失败",
-                type: 'warning'
-              });
-            }
-          }).catch(function() {
-          that.$notify({
-            title: "修改失败",
-            message: "服务器异常",
-            type: "error"
-          });
-        })
-      },
+      // // 上传头像
+      // uploadUrl () {
+      //   // return `${this.$store.state.HOST}/user/avatar/update?id=${this.form.id}`
+      //   // console.log(this.imageUrl)
+      //   // that.getOldPerson();
+      //   let that =this
+      //   let fd= new FormData();
+      //   let face = this.fileList[0];
+      //   // console.log(this.fileList[0])
+      //   fd.append('file',this.fileList[0].raw)
+      //   fd.append('user',JSON.stringify(this.form.id))
+      //   console.log("+++++++++file+user+++++++++++")
+      //   console.log(fd.get('user'))
+      //   console.log(fd.get('file'))
+      //   console.log("+++++++++file+user+++++++++++")
+      //   console.log(fd)
+      //   addOldImg(fd)
+      //     .then(res =>{
+      //       if (res.code == 1) {
+      //         that.$message({
+      //           title: "修改成功",
+      //           message: "修改成功",
+      //           type: 'success'
+      //         });
+      //       }else {
+      //         that.$message({
+      //           title: "修改失败",
+      //           message: "修改失败",
+      //           type: 'warning'
+      //         });
+      //       }
+      //     }).catch(function() {
+      //     that.$notify({
+      //       title: "修改失败",
+      //       message: "服务器异常",
+      //       type: "error"
+      //     });
+      //   })
+      // },
       // 获得老人资料
       getOldPerson(){
         let that = this;
@@ -730,51 +704,6 @@
      margin-top: 10px;
      /*padding: 0px;*/
    }
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 150px;
-    height: 150px;
-    line-height: 150px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 150px;
-    height: 150px;
-    line-height: 150px;
-    text-align: center;
-  }
-  .avatar {
-    width: 150px;
-    height: 150px;
-    display: block;
-  }
+
 
 </style>
