@@ -398,6 +398,7 @@
         this.fileList=fileList;
         console.log(file)
         this.imgUrl = URL.createObjectURL(file.raw)
+        console.log("+++++++++++++++++imgUrl+++++++++++++++++++")
         console.log(this.imgUrl)
 
       },
@@ -412,6 +413,10 @@
         // console.log(this.fileList[0])
         fd.append('file',this.fileList[0].raw)
         fd.append('user',JSON.stringify(this.form.id))
+        console.log("+++++++++file+user+++++++++++")
+        console.log(fd.get('user'))
+        console.log(fd.get('file'))
+        console.log("+++++++++file+user+++++++++++")
         console.log(fd)
         addOldImg(fd)
           .then(res =>{
@@ -477,7 +482,9 @@
             that.getID();
             that.getEditInfoFromInfo();
             that.ChangeDate();
-            that.uploadUrl();
+            that.getOldPerson()
+
+            // that.uploadUrl();
 
             let params = JSON.stringify(that.EditedOldInfo);
 
