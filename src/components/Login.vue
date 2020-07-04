@@ -303,7 +303,7 @@
   background-color: #2b4b6b;
   height: 100%;
 }
-.login_box{
+.login_box {
   width: 450px;
   height: 300px;
   background-color: #fff;
@@ -311,9 +311,10 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
+}
 
-  .avatar_box{
+  .avatar_box {
     height: 100px;
     width: 100px;
     border: 1px solid #eeeeee;
@@ -322,15 +323,16 @@
     box-shadow: 0 0 10px #eeeeee;
     position: absolute;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     background-color: #ffffff;
-    img{
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background-color: #eeeeee;
-    }
   }
+
+img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #eeeeee;
+
 }
 .btns{
   display: flex;

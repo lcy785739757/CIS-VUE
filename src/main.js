@@ -6,6 +6,7 @@ import store from './store/index'
 import axios from 'axios'
 import promise from 'es6-promise'
 import qs from 'qs'
+import echarts from 'echarts'
 
 
 import {
@@ -87,7 +88,6 @@ import {
   Message,
   Notification
 } from 'element-ui';
-
 
 Vue.use(Pagination);
 Vue.use(Dialog);
@@ -176,6 +176,7 @@ Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
+Vue.prototype.$echarts = echarts;
 
 Vue.config.productionTip = false
 
