@@ -431,6 +431,7 @@
           ],
         },
         FaceInfo: {},
+        //采集人脸用到的ID
         FaceInfoId: {
           ID:"",
           userID:''

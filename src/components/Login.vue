@@ -164,7 +164,7 @@
                 // that.UserName=res.data.data[0]
                 this.$store.commit('setUserId', res.data[0])
                 console.log('=====================');
-                console.log(res.data.msg);
+                console.log(res.msg);
                 this.$store.commit('setUsername', res.msg)
                 console.log("$store完成设置");
                 that.$message({

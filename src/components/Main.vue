@@ -178,6 +178,7 @@
 <script >
   import Cookies from "js-cookie";
   import {changePassword, editSysUser, UserInfo} from "../api";
+  import {initWebSocket, websocketClose, websocketonmessage, websocketsend} from "../webSocket";
 
   export default {
     name: "Main",
@@ -351,6 +352,11 @@
     created() {
       this.getName();
       this.getInfo();
+      this.createConnect();
+      // websocketsend("56")
+    },
+    destroyed(){
+      websocketClose() //离开路由之后断开websocket连接
     },
     mounted() {
       // this.getInfo();
@@ -365,6 +371,7 @@
           type: 'success'
         });
         this.$router.push("/app_login");
+        websocketClose()
       },
       //点击按钮切换菜单折叠与展开
       toggleCollapse(){
@@ -384,7 +391,7 @@
       //获得管理员资料
       getInfo(){
         let that = this;
-        console.log('-----------获取老人信息---------------')
+        console.log('-----------获取管理员信息---------------')
         let params = JSON.stringify(that.admin);
         console.log('-----------完成传参---------------')
 
@@ -396,13 +403,14 @@
               console.log('-----------UserInfo---------------')
               that.UserInfo=res.data[0]
               console.log( that.UserInfo)
+              console.log( this.$store.state.userId)
+
               console.log('-----------UserInfo---------------')
               this.getEditInfoFromInfo();
             }else {
               _this.notify('错误', 'error')
             }
         }).catch(failResponse => {})
-
       },
       //查看修改资料
       viewInfo(){
@@ -537,7 +545,14 @@
         this.EditedPass.NewPassword=this.EditPass.Password;
         this.EditedPass.UserName=this.EditPass.UserName;
       },
-
+      //WebSocket建立连接
+      createConnect(){
+        // 建立webSocket连接
+        console.log("========建立连接==========");
+        console.log(this.$store.state.userId+"id================");
+        initWebSocket(this.$store.state.userId)
+        console.log("========连接完成==========");
+      },
     },
     computed:{
       activeIndex(){

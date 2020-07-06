@@ -265,7 +265,7 @@
 </template>
 
 <script>
-  import {editEmployee,  queryEmployee,  removeEmployee} from "../../api";
+  import {collectEmployee, collectOldPer, editEmployee, queryEmployee, removeEmployee} from "../../api";
 
   export default {
     name: "queryEmployee",
@@ -338,6 +338,11 @@
           ],
         },
         FaceInfo: {},
+        //采集人脸用到的ID
+        FaceInfoId: {
+          ID:"",
+          userID:''
+        },
         FaceDialog:false,
         form: {},
         EditedEmployeeInfo:{
@@ -539,7 +544,38 @@
       },
       // 开始采集
       StartCollect(){
+        this.FaceInfoId.ID=this.FaceInfo.id
+        this.getID();
+        console.log(this.FaceInfoId.ID)
+        let that = this;
+        let params= new FormData();
+        params.append('userID',that.FaceInfoId.userID);
+        params.append('ID',that.FaceInfoId.ID);
 
+        // let params = JSON.stringify(that.FaceInfoId);
+        collectEmployee(params)
+          .then(res =>{
+            if (res.code == 1) {
+              that.$message({
+                title: "采集成功",
+                message: "采集成功",
+                type: 'success'
+              });
+            }else {
+              that.$message({
+                title: "采集失败",
+                message: "采集失败",
+                type: 'warning'
+              });
+            }
+          }).catch(function() {
+          that.$notify({
+            title: "采集失败",
+            message: "服务器异常",
+            type: "error"
+          });
+          console.log("服务呵呵呵");
+        });
       },
       //查看大图
       showHuge(index,row){

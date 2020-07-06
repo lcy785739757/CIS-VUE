@@ -41,7 +41,7 @@ export const removeEmployee = (params) => post(`employee/removeEmployee`, params
 //添加头像
 export const addEmployeeImg = (params) => post(`employee/addPhotoE`, params)
 //员工请求采集
-export const collectEmployee = (params) => post(`employee/collectEmployee`, params)
+export const collectEmployee = (params) => post(`employee/runPython`, params)
 
 // ==========================================》义工api
 // 录入信息
@@ -55,7 +55,7 @@ export const removeVolunteer = (params) => post(`volunteer/removeVolunteer`, par
 //添加义工头像
 export const addVolunteerImg = (params) => post(`volunteer/addPhotoV`, params)
 //义工请求采集
-export const collectVolunteer = (params) => post(`volunteer/collectVolunteer`, params)
+export const collectVolunteer = (params) => post(`volunteer/runPython`, params)
 
 // ==========================================》数据统计api
 //工作人员统计分析
