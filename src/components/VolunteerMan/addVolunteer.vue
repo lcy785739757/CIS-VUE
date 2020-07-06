@@ -150,7 +150,7 @@
 <script>
   import Cookies from 'js-cookie';
   import { mapMutations } from 'vuex';
-  import {addOldImg, addVolunteer} from "../../api";
+  import {addVolunteer, addVolunteerImg} from "../../api";
 
   export default {
     name: "addVolunteer",
@@ -169,7 +169,7 @@
           birthday:'',
           checkin_date:'',
           DESCRIPTION:'好得很',
-          ISACTIVE:'不知道',
+          ISACTIVE:'0',
           CREATEBY:'',
         },
         rulesForm:{
@@ -255,24 +255,24 @@
         let face = this.fileList[0];
         // console.log(this.fileList[0])
         fd.append('file',this.fileList[0].raw)
-        fd.append('user',JSON.stringify(this.addVolunteerForm.id_card))
+        fd.append('user',this.addVolunteerForm.id_card)
         console.log("+++++++++file+user+++++++++++")
         console.log(fd.get('user'))
         console.log(fd.get('file'))
         console.log("+++++++++file+user+++++++++++")
         console.log(fd)
-        addOldImg(fd)
+        addVolunteerImg(fd)
           .then(res =>{
             if (res.code == 1) {
               that.$message({
-                title: "修改成功",
-                message: "修改成功",
+                title: "图片上传成功",
+                message: "图片上传成功",
                 type: 'success'
               });
             }else {
               that.$message({
-                title: "修改失败",
-                message: "修改失败",
+                title: "图片上传失败",
+                message: "图片上传失败",
                 type: 'warning'
               });
             }
@@ -367,20 +367,7 @@
         }
         console.log("----");
 
-        // //UTC时间格式.toJSON().split('T')[0]截取后格式：2019-10-14
-        // let checkin_date = new Date(this.addVolunteerForm.checkin_date).toJSON().split('T')[0];
-        // this.addVolunteerForm.checkin_date=checkin_date;
-        // console.log(this.addVolunteerForm.checkin_date);
 
-        // UTC时间格式转换——2019-10-14 12:20:12
-        // let delayTime = new Date(this.addVolunteerForm.birthday).toJSON();
-        // this.addVolunteerForm.birthday = new Date(
-        //   +new Date(delayTime) + 8 * 3600 * 1000
-        // )
-        //   .toISOString()
-        //   .replace(/T/g, " ")
-        //   .replace(/\.[\d]{3}Z/, "");
-        // console.log(this.addVolunteerForm.birthday);
       },
       //获得管理员ID
       getID(){

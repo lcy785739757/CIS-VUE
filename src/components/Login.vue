@@ -3,7 +3,7 @@
     <img src="../assets/images/yanglao.jpg" alt="" class="ima">
     <div class="login_box">
       <div class="avatar_box">
-        <img src="../assets/images/1.png" alt="">
+        <img src="../assets/images/1.png" alt="" class="img_a">
       </div>
       <h3 class="login-title" >智慧养老系统</h3>
       <el-form ref="loginForm" :rules="rules" :model="loginForm" label-width="0px" class="login_form">
@@ -327,7 +327,7 @@
     background-color: #ffffff;
   }
 
-img {
+.img_a {
   width: 100%;
   height: 100%;
   border-radius: 50%;

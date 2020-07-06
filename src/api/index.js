@@ -36,16 +36,20 @@ export const queryEmployee = (params) => post(`employee/queryEmployee`, params)
 export const editEmployee = (params) => post(`employee/editEmployee`, params)
 //删除员工
 export const removeEmployee = (params) => post(`employee/removeEmployee`, params)
+//添加头像
+export const addEmployeeImg = (params) => post(`employee/addPhotoE`, params)
 
 // ==========================================》义工api
 // 录入信息
 export const addVolunteer = (params) => post(`volunteer/addVolunteer`, params)
-// 查看工作人员信息
+// 查看义工信息
 export const queryVolunteer = (params) => post(`volunteer/queryVolunteer`, params)
-//修改员工信息
+//修改义工信息
 export const editVolunteer = (params) => post(`volunteer/editVolunteer`, params)
-//删除员工
+//删除义工
 export const removeVolunteer = (params) => post(`volunteer/removeVolunteer`, params)
+//添加义工头像
+export const addVolunteerImg = (params) => post(`volunteer/addPhotoV`, params)
 
 // ==========================================》数据统计api
 //工作人员统计分析
