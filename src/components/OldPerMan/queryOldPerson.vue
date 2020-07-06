@@ -729,7 +729,11 @@
         this.getID();
         console.log(this.FaceInfoId.ID)
         let that = this;
-        let params = JSON.stringify(that.FaceInfoId);
+        let params= new FormData();
+        params.append('userID',that.FaceInfoId.userID);
+        params.append('ID',that.FaceInfoId.ID);
+
+        // let params = JSON.stringify(that.FaceInfoId);
         collectOldPer(params)
           .then(res =>{
             if (res.code == 1) {
@@ -767,7 +771,7 @@
       //获得管理员ID
       getID(){
         // this.addOldPersonForm.CREATEBY=Cookies.get('User_ID')
-        this.FaceInfoId.userID=this.$store.state.username;
+        this.FaceInfoId.userID=this.$store.state.userId;
         console.log(this.FaceInfoId.userID);
       },
 
