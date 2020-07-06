@@ -23,6 +23,7 @@
   import {OldPer} from "../../api";
   import echarts from 'echarts'
   var echart = require('echarts');
+  var userid = "123";
 
   export default {
     name: 'OldPer',
@@ -31,6 +32,7 @@
     },
     data() {
       return {
+        websock: null,
         oldPerData:{},
         // EmployInfoAllDrawer: false,
         AllOldPerList:[
@@ -49,9 +51,41 @@
       };
     },
     created() {
-      this.getOldPerData()
+      this.getOldPerData();
+      this.initWebSocket();
+    },
+    destroyed() {
+      this.websock.close() //离开路由之后断开websocket连接
     },
     methods:{
+      initWebSocket(){ //初始化weosocket
+        const wsuri = "ws://localhost:10000/imserver/"+userid;
+        this.websock = new WebSocket(wsuri);
+        // this.websock = new WebSocket('ws://echo.websocket.org/echo');
+        this.websock.onmessage = this.websocketonmessage;
+        this.websock.onopen = this.websocketonopen;
+        this.websock.onerror = this.websocketonerror;
+        this.websock.onclose = this.websocketclose;
+      },
+      websocketonopen(){ //连接建立之后执行send方法发送数据
+        let actions = {"test":"12345"};
+        this.websocketsend(JSON.stringify(actions));
+        console.log('ws连接状态：' + this.websock.readyState);
+      },
+      websocketonerror(){//连接建立失败重连
+        this.initWebSocket();
+      },
+      websocketonmessage(e){ //数据接收
+        console.log("接收："+e.data);
+        // const redata = JSON.parse(e.data);
+        // console.log("接收："+redata);
+      },
+      websocketsend(Data){//数据发送
+        this.websock.send(Data);
+      },
+      websocketclose(e){  //关闭
+        console.log('断开连接',e);
+      },
       getOldPerData(){
         let that = this;
         let params = JSON.stringify(that.info);
@@ -59,6 +93,7 @@
                 .then(res =>{
                   console.log('-----------获取信息---------------')
                   console.log(res)
+
                   console.log(res.numberOfFe)
                   if (res.code == 1) {
                     console.log('-----------VolunteerInfo---------------')
