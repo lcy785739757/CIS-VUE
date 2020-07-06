@@ -1,6 +1,6 @@
 <template>
   <h2>
-    <div class="font">欢迎来到养老院</div>
+    <div class="font">欢迎来到智能养老系统</div>
 
   </h2>
 </template>

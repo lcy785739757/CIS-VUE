@@ -23,12 +23,38 @@
 
       <!--    用户列表区域    -->
       <el-table :data="AllOldPersonList">
-        <el-table-column label="姓名" prop="username"  align="center"></el-table-column>
-        <el-table-column label="姓别" prop="gender"  align="center"></el-table-column>
-        <el-table-column label="电话" prop="phone"  align="center"></el-table-column>
-        <el-table-column label="身份证号" prop="id_card" align="center"></el-table-column>
-        <el-table-column label="房间号" prop="room_number"  align="center"></el-table-column>
+        <el-table-column label="姓名" width="80px"  prop="username"  align="center"></el-table-column>
+
+        <el-table-column label="头像" prop="imgset_dir"  align="center" width="80px"  >
+          <template slot-scope="scope">
+            <img :src=baseURL+scope.row.imgset_dir alt="头像" title="查看大图"  width="50px" style="margin: 0 0px 0px; cursor:pointer" @click="showHuge(scope.$index, scope.row)">
+          </template>
+        </el-table-column>
+
+        <el-table-column label="姓别" width="80px" prop="gender"  align="center"></el-table-column>
+        <el-table-column label="电话" width="120px"  prop="phone"  align="center"></el-table-column>
+        <el-table-column label="身份证号" width="190px" prop="id_card" align="center"></el-table-column>
+        <el-table-column label="房间号" width="80px" prop="room_number"  align="center"></el-table-column>
         <el-table-column label="入院时间" prop="checkin_date"  align="center"></el-table-column>
+        <el-table-column label="人脸采集" prop="isactive"  align="center">
+          <template slot-scope="scope">
+            <el-button
+              v-if="scope.row.isactive=='0'"
+              size="mini"
+              type="primary"
+              @click="getFaceInfo(scope.$index, scope.row)"
+              style="width: 80px"
+            >点击采集</el-button>
+
+            <el-button
+              v-else
+              size="mini"
+              type="primary"
+              disabled
+              style="width: 80px"
+            >已采集</el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="操作"   align="center">
           <template slot-scope="scope">
             <el-button
@@ -200,6 +226,75 @@
       </div>
     </el-drawer>
 
+    <el-dialog
+      :visible.sync="FaceDialog"
+      class="faceDialog"
+      title="人脸数据采集"   >
+      <el-card
+      class="faceCard">
+
+        <el-form ref="FaceInfo" :model="FaceInfo" label-width="90px" >
+          <el-container>
+            <el-header style="background-color: #55a532;margin-top: -10px">
+              <el-row>
+                <el-col :span="4">
+                  <el-form-item label="老人ID：" prop="id" style="margin-left: -20px; margin-top: 10px">
+                    <label >
+                      {{FaceInfo.id}}
+                    </label>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="老人姓名：" prop="username" style="margin-left: 80px;  margin-top: 10px">
+                    <label>
+                      {{FaceInfo.username}}
+                    </label>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-header>
+            <el-main style="background-color: #409EFF">
+              <el-container>
+                <el-aside style="background-color: #2b4b6b; width: 150px">
+                  <h2 style="margin-left:37%">提示:</h2>
+                  <h2 style="margin-left:25%; margin-top: 50%">{{collectTips}}</h2>
+                </el-aside>
+                <el-main style="background: red">
+                  <el-card style="height: 280px">
+
+                  </el-card>
+                </el-main>
+                <el-aside style="background-color: #2b4b6b; width: 20px">
+
+                </el-aside>
+              </el-container>
+            </el-main>
+            <el-footer style="background-color: #55a532">
+              <el-row>
+
+                <el-form-item>
+                  <el-button type="danger" v-on:click="CancelFaceDialog()" style="width: 100px; margin-top: 10px ;margin-left: 110px"  >退出</el-button>
+                  <el-button type="primary" v-on:click="StartCollect()" style="width: 100px; margin-top: 10px;margin-left: 20px" >开始采集</el-button>
+                </el-form-item>
+              </el-row>
+            </el-footer>
+          </el-container>
+        </el-form>
+
+      </el-card>
+    </el-dialog>
+
+    <el-dialog
+      :visible.sync="TouDialogVisible"
+      class="touDialog"
+      title="头像大图"
+      @close='closeDialog'
+      :close-on-click-modal="false">
+      <el-card
+        class="touCard">
+        <img :src="HugeURL" width="300px" style="margin: 0 0px 0px;" >
+      </el-card>
+    </el-dialog>
     </body>
 
 
@@ -208,16 +303,16 @@
 
 <script>
   import {addOldImg, editOldPerson, editSysUser, queryOldPerson, removeOldPerson} from "../../api";
+  // import
   const healthsOptions = ['心脏病', '糖尿病', '高血压', '高血脂'];
   export default {
     name: "queryOddPerson",
 
     data(){
       return{
-        // fileList:[],
-        // imgUrl:'',
-        fileReader:'',
-        imageUrl: '',
+        baseURL:'http://localhost:10000/',
+        TouDialogVisible:false,
+        HugeURL:'',
         healths: healthsOptions,
         checkedHealth: [],
         isEdit: false,   // 是否编辑
@@ -335,6 +430,9 @@
             {required: true, message: '请输入项健康状态', trigger: 'blur'}
           ],
         },
+        FaceInfo: {},
+        FaceDialog:false,
+        collectTips:'等待开始',
         form: {},
         EditedOldInfo:{
           ID:"",
@@ -376,58 +474,22 @@
         console.log(this.imgUrl)
 
       },
-      // // 上传头像
-      // uploadUrl () {
-      //   // return `${this.$store.state.HOST}/user/avatar/update?id=${this.form.id}`
-      //   // console.log(this.imageUrl)
-      //   // that.getOldPerson();
-      //   let that =this
-      //   let fd= new FormData();
-      //   let face = this.fileList[0];
-      //   // console.log(this.fileList[0])
-      //   fd.append('file',this.fileList[0].raw)
-      //   fd.append('user',JSON.stringify(this.form.id))
-      //   console.log("+++++++++file+user+++++++++++")
-      //   console.log(fd.get('user'))
-      //   console.log(fd.get('file'))
-      //   console.log("+++++++++file+user+++++++++++")
-      //   console.log(fd)
-      //   addOldImg(fd)
-      //     .then(res =>{
-      //       if (res.code == 1) {
-      //         that.$message({
-      //           title: "修改成功",
-      //           message: "修改成功",
-      //           type: 'success'
-      //         });
-      //       }else {
-      //         that.$message({
-      //           title: "修改失败",
-      //           message: "修改失败",
-      //           type: 'warning'
-      //         });
-      //       }
-      //     }).catch(function() {
-      //     that.$notify({
-      //       title: "修改失败",
-      //       message: "服务器异常",
-      //       type: "error"
-      //     });
-      //   })
-      // },
+
       // 获得老人资料
       getOldPerson(){
         let that = this;
         let params = JSON.stringify(that.info);
+        console.log('-----------获取信息1---------------')
         queryOldPerson(params)
         .then(res =>{
-          console.log('-----------获取信息---------------')
+          console.log('-----------获取信息2---------------')
           console.log( res)
           if (res.code == 1) {
 
             console.log('-----------OldPersonInfo---------------')
             that.AllOldPersonList=res.data;
             console.log(that.AllOldPersonList);
+            console.log(this.baseURL+that.AllOldPersonList[0].imgset_dir+"+++++++++++++++");
             console.log('-----------OldPersonInfo---------------')
           }else {
             _this.notify('错误', 'error')
@@ -646,38 +708,30 @@
         }
         console.log(this.checkedHealth)
       },
-      handleAvatarSuccess(res, file) {
-        if (res.code === 1) {
-          this.imageUrl = URL.createObjectURL(file.raw)
-
-          this.$store.commit('setAvator', res.avator)
-          this.$message({
-            message: '修改成功',
-            type: 'success'
-          })
-        } else {
-          this.notify('修改失败', 'error')
-        }
+      // 采集人脸数据界面
+      getFaceInfo(index,row){
+        this.idx=index
+        this.FaceInfo=row
+        console.log(row)
+        this.FaceDialog=true;
       },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
+      //关闭人脸数据采集界面
+      CancelFaceDialog(){
+        this.FaceDialog=false;
+      },
+      // 开始采集
+      StartCollect(){
 
-        if (!isJPG) {
-          this.$notify({
-            title: "上传失败",
-            message: "上传头像图片只能是 JPG 格式!",
-            type: "error"
-          });
-        }
-        if (!isLt2M) {
-          this.$notify({
-            title: "上传失败",
-            message: "上传头像图片大小不能超过 2MB!",
-            type: "error"
-          });
-        }
-        return isJPG && isLt2M;
+      },
+      //查看大图
+      showHuge(index,row){
+        this.TouDialogVisible=true;
+        this.idx=index;
+        this.HugeURL=this.baseURL+row.imgset_dir
+      },
+      // 关闭大图
+      closeDialog(){
+        this.TouDialogVisible=false
       },
 
     }
@@ -704,6 +758,18 @@
      margin-top: 10px;
      /*padding: 0px;*/
    }
+  .faceDialog{
+    width: 100%;
+  }
+  .faceCard{
+    margin-top: -30px;
+    /*height: 450px;*/
+  }
+  .touDialog{
+    width: 50%;
+  }
+  .touCard{
 
+  }
 
 </style>

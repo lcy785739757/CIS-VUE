@@ -24,10 +24,39 @@
       <!--    用户列表区域    -->
       <el-table :data="AllVolunteerList">
         <el-table-column label="姓名" prop="name"  align="center"></el-table-column>
+        <el-table-column label="头像" prop="imgset_dir"  align="center" >
+          <template slot-scope="scope">
+            <img :src=baseURL+scope.row.imgset_dir
+                 alt="头像"
+                 title="查看大图"
+                 width="50px"
+                 style="margin: 0 0px 0px; cursor:pointer"
+                 @click="showHuge(scope.$index, scope.row)">
+          </template>
+        </el-table-column>
         <el-table-column label="姓别" prop="gender"  align="center"></el-table-column>
         <el-table-column label="电话" prop="phone"  align="center"></el-table-column>
         <el-table-column label="身份证号" prop="id_card" align="center"></el-table-column>
         <el-table-column label="入职日期" prop="checkin_date"  align="center"></el-table-column>
+        <el-table-column label="人脸采集" prop="isactive"  align="center">
+          <template slot-scope="scope">
+            <el-button
+              v v-if="scope.row.isactive=='0'"
+              size="mini"
+              type="primary"
+              @click="getFaceInfo(scope.$index, scope.row)"
+              style="width: 80px"
+            >点击采集</el-button>
+
+            <el-button
+              v-else
+              size="mini"
+              type="primary"
+              disabled
+              style="width: 80px"
+            >已采集</el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="操作"   align="center">
 
           <template slot-scope="scope">
@@ -160,6 +189,75 @@
       </div>
     </el-drawer>
 
+    <el-dialog
+      :visible.sync="FaceDialog"
+      class="faceDialog"
+      title="人脸数据采集"   >
+      <el-card
+        class="faceCard">
+
+        <el-form ref="FaceInfo" :model="FaceInfo" label-width="90px" >
+          <el-container>
+            <el-header style="background-color: #55a532;margin-top: -10px">
+              <el-row>
+                <el-col :span="4">
+                  <el-form-item label="义工ID：" prop="id" style="margin-left: -20px; margin-top: 10px">
+                    <label >
+                      {{FaceInfo.id}}
+                    </label>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="义工姓名：" prop="name" style="margin-left: 80px;  margin-top: 10px">
+                    <label>
+                      {{FaceInfo.name}}
+                    </label>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-header>
+            <el-main style="background-color: #409EFF">
+              <el-container>
+                <el-aside style="background-color: #2b4b6b; width: 150px">
+                  <h2 style="margin-left:37%">提示:</h2>
+                  <h2 style="margin-left:37%; margin-top: 50%">大笑</h2>
+                </el-aside>
+                <el-main style="background: red">
+                  <el-card style="height: 280px">
+
+                  </el-card>
+                </el-main>
+                <el-aside style="background-color: #2b4b6b; width: 20px">
+
+                </el-aside>
+              </el-container>
+            </el-main>
+            <el-footer style="background-color: #55a532">
+              <el-row>
+
+                <el-form-item>
+                  <el-button type="danger" v-on:click="CancelFaceDialog()" style="width: 100px; margin-top: 10px ;margin-left: 110px"  >退出</el-button>
+                  <el-button type="primary" v-on:click="StartCollect()" style="width: 100px; margin-top: 10px;margin-left: 20px" >开始采集</el-button>
+                </el-form-item>
+              </el-row>
+            </el-footer>
+          </el-container>
+        </el-form>
+      </el-card>
+    </el-dialog>
+
+    <el-dialog
+      :visible.sync="TouDialogVisible"
+      class="touDialog"
+      title="头像大图"
+      @close='closeDialog'
+      :close-on-click-modal="false">
+      <el-card
+        class="touCard">
+        <img :src="HugeURL" width="300px" style="margin: 0 0px 0px;" >
+      </el-card>
+    </el-dialog>
+
     </body>
 
 
@@ -174,6 +272,9 @@
 
     data(){
       return{
+        baseURL:'http://localhost:10000/',
+        TouDialogVisible:false,
+        HugeURL:'',
         isEdit: false,   // 是否编辑
         VolunteerInfoAllDrawer: false,
         direction: 'ttb',
@@ -235,6 +336,8 @@
             {required: true, message: '请输入项健康状态', trigger: 'blur'}
           ],
         },
+        FaceInfo: {},
+        FaceDialog:false,
         form: {},
         EditedVolunteerInfo:{
           id:"",
@@ -421,7 +524,32 @@
           console.log(this.EditedVolunteerInfo.checkin_date);
         }
         console.log("----");
-      }
+      },
+      // 采集人脸数据界面
+      getFaceInfo(index,row){
+        this.idx=index
+        this.FaceInfo=row
+        console.log(row)
+        this.FaceDialog=true;
+      },
+      //关闭人脸数据采集界面
+      CancelFaceDialog(){
+        this.FaceDialog=false;
+      },
+      // 开始采集
+      StartCollect(){
+
+      },
+      //查看大图
+      showHuge(index,row){
+        this.TouDialogVisible=true;
+        this.idx=index;
+        this.HugeURL=this.baseURL+row.imgset_dir
+      },
+      // 关闭大图
+      closeDialog(){
+        this.TouDialogVisible=false
+      },
     }
   }
 </script>
@@ -448,6 +576,19 @@
     padding-bottom: 0px;
     margin-top: 10px;
     /*padding: 0px;*/
+  }
+  .faceDialog{
+    width: 100%;
+  }
+  .faceCard{
+    margin-top: -30px;
+    /*height: 450px;*/
+  }
+  .touDialog{
+    width: 50%;
+  }
+  .touCard{
+
   }
 
 </style>

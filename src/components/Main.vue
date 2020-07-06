@@ -208,6 +208,7 @@
             children:[
               {id:'addOldPerson', authName:'录入信息', path:'addOldPerson',},
               {id:'queryOldPerson', authName:'老人列表', path:'queryOldPerson',},
+              {id: 'OldPer', authName: '老人数据统计', path: 'OldPer',},
             ]
           },
           {
@@ -216,7 +217,8 @@
             path:'/EmployeeMan',
             children:[
               {id: 'addEmployee', authName: '录入信息', path: 'addEmployee',},
-              {id: 'queryEmployee', authName: '工作人员列表', path: 'queryEmployee',}
+              {id: 'queryEmployee', authName: '工作人员列表', path: 'queryEmployee',},
+              {id:'Employ', authName:'工作人员数据统计', path:'Employ',},
             ]
           },
           {
@@ -225,7 +227,8 @@
             path:'/VolunteerMan',
             children:[
               {id:'addVolunteer', authName:'录入信息', path:'addVolunteer',},
-              {id: 'queryVolunteer', authName: '义工列表', path: 'queryVolunteer',}
+              {id: 'queryVolunteer', authName: '义工列表', path: 'queryVolunteer',},
+              {id: 'Volunteer', authName: '义工数据统计', path: 'Volunteer',}
             ]
           },
           {

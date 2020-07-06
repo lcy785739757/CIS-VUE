@@ -168,7 +168,7 @@
           birthday:'',
           hire_date:'',
           DESCRIPTION:'好得很',
-          ISACTIVE:'不知道',
+          ISACTIVE:'0',
           CREATEBY:'',
         },
         rulesForm:{
@@ -254,7 +254,7 @@
         let face = this.fileList[0];
         // console.log(this.fileList[0])
         fd.append('file',this.fileList[0].raw)
-        fd.append('user',this.stringify(this.addEmployeeForm.id_card))
+        fd.append('user',this.addEmployeeForm.id_card)
         console.log("+++++++++file+user+++++++++++")
         console.log(fd.get('user'))
         console.log(fd.get('file'))
@@ -264,13 +264,13 @@
           .then(res =>{
             if (res.code == 1) {
               that.$message({
-                title: "修改成功",
-                message: "修改成功",
+                title: "图片上传成功",
+                message: "图片上传成功",
                 type: 'success'
               });
             }else {
               that.$message({
-                title: "修改失败",
+                title: "图片上传失败",
                 message: "修改失败",
                 type: 'warning'
               });

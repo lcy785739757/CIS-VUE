@@ -198,7 +198,7 @@
           secondguardian_wechat:'aaaaaa',
           health_state:'好',
           DESCRIPTION:'好得很',
-          ISACTIVE:'不知道',
+          ISACTIVE:'0',
           CREATEBY:'',
         },
         rulesForm:{
@@ -325,7 +325,7 @@
         let face = this.fileList[0];
         // console.log(this.fileList[0])
         fd.append('file',this.fileList[0].raw)
-        fd.append('user',this.stringify(this.addOldPersonForm.id_card))
+        fd.append('user',JSON.stringify(this.addOldPersonForm.id_card))
         console.log("+++++++++file+user+++++++++++")
         console.log(fd.get('user'))
         console.log(fd.get('file'))
@@ -335,8 +335,8 @@
           .then(res =>{
             if (res.code == 1) {
               that.$message({
-                title: "修改成功",
-                message: "修改成功",
+                title: "图片上传成功",
+                message: "图片上传成功",
                 type: 'success'
               });
             }else {
@@ -346,7 +346,8 @@
                 type: 'warning'
               });
             }
-          }).catch(function() {
+          }).catch(function(e) {
+          console.log(e);
           that.$message({
             title: "图片上传失败",
             message: "图片上传失败，服务器异常",
@@ -390,7 +391,7 @@
             }).catch(function() {
               that.$message({
                 title: "录入失败",
-                message: "服务器异常",
+                message: "服务器异常啊啊啊",
                 type: "error"
               });
               console.log("服务呵呵呵");
