@@ -231,7 +231,7 @@
       class="faceDialog"
       title="人脸数据采集"   >
       <el-card
-      class="faceCard">
+        class="faceCard">
 
         <el-form ref="FaceInfo" :model="FaceInfo" label-width="90px" >
           <el-container>
@@ -245,19 +245,20 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="老人姓名：" prop="username" style="margin-left: 80px;  margin-top: 10px">
-                    <label>
+                  <el-form-item label="老人姓名：" prop="username" style="margin-left: 80px; margin-top: 10px">
+                    <label >
                       {{FaceInfo.username}}
                     </label>
                   </el-form-item>
                 </el-col>
+
               </el-row>
             </el-header>
             <el-main style="background-color: #409EFF">
               <el-container>
                 <el-aside style="background-color: #2b4b6b; width: 150px">
                   <h2 style="margin-left:37%">提示:</h2>
-                  <h2 style="margin-left:25%; margin-top: 50%">{{collectTips}}</h2>
+                  <h2 style="margin-left:37%; margin-top: 50%">大笑</h2>
                 </el-aside>
                 <el-main style="background: red">
                   <el-card style="height: 280px">
@@ -280,7 +281,6 @@
             </el-footer>
           </el-container>
         </el-form>
-
       </el-card>
     </el-dialog>
 
@@ -295,6 +295,7 @@
         <img :src="HugeURL" width="300px" style="margin: 0 0px 0px;" >
       </el-card>
     </el-dialog>
+
     </body>
 
 
@@ -303,7 +304,6 @@
 
 <script>
   import {addOldImg, editOldPerson, editSysUser, queryOldPerson, removeOldPerson} from "../../api";
-  // import
   const healthsOptions = ['心脏病', '糖尿病', '高血压', '高血脂'];
   export default {
     name: "queryOddPerson",
@@ -431,6 +431,9 @@
           ],
         },
         FaceInfo: {},
+        FaceInfoId:{
+          ID:''
+        },
         FaceDialog:false,
         collectTips:'等待开始',
         form: {},
@@ -479,7 +482,6 @@
       getOldPerson(){
         let that = this;
         let params = JSON.stringify(that.info);
-        console.log('-----------获取信息1---------------')
         queryOldPerson(params)
         .then(res =>{
           console.log('-----------获取信息2---------------')
@@ -489,7 +491,6 @@
             console.log('-----------OldPersonInfo---------------')
             that.AllOldPersonList=res.data;
             console.log(that.AllOldPersonList);
-            console.log(this.baseURL+that.AllOldPersonList[0].imgset_dir+"+++++++++++++++");
             console.log('-----------OldPersonInfo---------------')
           }else {
             _this.notify('错误', 'error')
@@ -708,6 +709,39 @@
         }
         console.log(this.checkedHealth)
       },
+      handleAvatarSuccess(res, file) {
+        if (res.code === 1) {
+          this.imageUrl = URL.createObjectURL(file.raw)
+
+          this.$store.commit('setAvator', res.avator)
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+        } else {
+          this.notify('修改失败', 'error')
+        }
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$notify({
+            title: "上传失败",
+            message: "上传头像图片只能是 JPG 格式!",
+            type: "error"
+          });
+        }
+        if (!isLt2M) {
+          this.$notify({
+            title: "上传失败",
+            message: "上传头像图片大小不能超过 2MB!",
+            type: "error"
+          });
+        }
+        return isJPG && isLt2M;
+      },
       // 采集人脸数据界面
       getFaceInfo(index,row){
         this.idx=index
@@ -721,7 +755,8 @@
       },
       // 开始采集
       StartCollect(){
-
+        this.FaceInfoId=this.FaceInfo.id;
+        console.log( this.FaceInfoId)
       },
       //查看大图
       showHuge(index,row){
