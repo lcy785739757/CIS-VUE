@@ -551,7 +551,7 @@
       // 开始采集
       StartCollect(){
         this.FaceInfoId.ID=this.FaceInfo.id
-        this.getID();
+        this.getUserID();
         console.log(this.FaceInfoId.ID)
         let that = this;
         let params= new FormData();
@@ -593,6 +593,12 @@
       // 关闭大图
       closeDialog(){
         this.TouDialogVisible=false
+      },
+      //获得管理员ID
+      getUserID(){
+        // this.addOldPersonForm.CREATEBY=Cookies.get('User_ID')
+        this.FaceInfoId.userID=this.$store.state.userId;
+        console.log(this.FaceInfoId.userID);
       },
     }
   }
