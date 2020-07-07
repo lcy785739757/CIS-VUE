@@ -25,9 +25,8 @@ export const websocketonerror= () =>{//连接建立失败重连
 }
 export const websocketonmessage = e =>{ //数据接收
   console.log("接收数据接收");
-  console.log("接收："+e.data);
-  // const redata = JSON.parse(e.data);
-  // console.log("接收："+redata);
+  console.log("接收："+e.data+'==============');
+
   return e.data
 }
 export const websocketsend = Data =>{//数据发送

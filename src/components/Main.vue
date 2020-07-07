@@ -352,7 +352,7 @@
     created() {
       this.getName();
       this.getInfo();
-      this.createConnect();
+      // this.createConnect();
       // websocketsend("56")
     },
     destroyed(){

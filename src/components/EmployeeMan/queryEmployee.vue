@@ -198,10 +198,10 @@
 
         <el-form ref="FaceInfo" :model="FaceInfo" label-width="90px" >
           <el-container>
-            <el-header style="background-color: #55a532;margin-top: -10px">
+            <el-header style="margin-top: -10px">
               <el-row>
                 <el-col :span="4">
-                  <el-form-item label="员工D：" prop="id" style="margin-left: -20px; margin-top: 10px">
+                  <el-form-item label="员工ID：" prop="id" style="margin-left: -20px; margin-top: 10px">
                     <label >
                       {{FaceInfo.id}}
                     </label>
@@ -216,28 +216,27 @@
                 </el-col>
               </el-row>
             </el-header>
-            <el-main style="background-color: #409EFF">
-              <el-container>
-                <el-aside style="background-color: #2b4b6b; width: 150px">
+            <el-main style="">
+              <el-container >
+                <el-aside style=" width: 200px ">
+                  <el-progress :show-text="false" :stroke-width="15" :percentage=collectLength style="margin-top: 0px;width: 200px"></el-progress>
                   <h2 style="margin-left:37%">提示:</h2>
-                  <h2 style="margin-left:37%; margin-top: 50%">大笑</h2>
+                  <h2 style="margin-left:25%; margin-top: 50%">{{collectTips}}</h2>
                 </el-aside>
-                <el-main style="background: red">
-                  <el-card style="height: 280px">
-
-                  </el-card>
+                <el-main style="" >
+                  <iframe :src="vedioURL" width="325px" height="250px" frameborder="0" id="mobsf" scrolling="no" style="margin-left: 30px"></iframe>
                 </el-main>
-                <el-aside style="background-color: #2b4b6b; width: 20px">
+                <!--                <el-aside style=" width: 20px;background-color: #303133">-->
 
-                </el-aside>
+                <!--                </el-aside>-->
               </el-container>
             </el-main>
-            <el-footer style="background-color: #55a532">
+            <el-footer style="">
               <el-row>
 
                 <el-form-item>
-                  <el-button type="danger" v-on:click="CancelFaceDialog()" style="width: 100px; margin-top: 10px ;margin-left: 110px"  >退出</el-button>
-                  <el-button type="primary" v-on:click="StartCollect()" style="width: 100px; margin-top: 10px;margin-left: 20px" >开始采集</el-button>
+                  <el-button type="danger" v-on:click="CancelFaceDialog()" style="width: 100px; margin-top: 0px ;margin-left: 110px"  >退出</el-button>
+                  <el-button type="primary" v-on:click="StartCollect()"  style="width: 100px; margin-top: 0px;margin-left: 20px" >开始采集</el-button>
                 </el-form-item>
               </el-row>
             </el-footer>
@@ -273,14 +272,17 @@
     removeEmployee,
     runFaceCollectPython
   } from "../../api";
+  import {initWebSocket} from "../../webSocket";
 
   export default {
     name: "queryEmployee",
 
     data(){
       return{
+        collectLength:0,
+        Socket:'',
+        vedioURL:'http://127.0.0.1:5001/',
         baseURL:'http://localhost:10000/',
-        avatarUrl:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
         TouDialogVisible:false,
         HugeURL:'',
         isEdit: false,   // 是否编辑
@@ -351,6 +353,7 @@
           userID:''
         },
         FaceDialog:false,
+        collectTips:'等待开始',
         form: {},
         EditedEmployeeInfo:{
           id:"",
@@ -372,6 +375,7 @@
     },
     created() {
       this.getEmployee()
+      this.initWebSocket(this.$store.state.userId)
     },
     mounted() {
       this.ChangeDate()
@@ -569,6 +573,9 @@
                 message: "采集成功",
                 type: 'success'
               });
+              this.collectTips='采集完成'
+              this.collectLength=100
+              this.getEmployee()
             }else {
               that.$message({
                 title: "采集失败",
@@ -600,6 +607,66 @@
         // this.addOldPersonForm.CREATEBY=Cookies.get('User_ID')
         this.FaceInfoId.userID=this.$store.state.userId;
         console.log(this.FaceInfoId.userID);
+      },
+      initWebSocket(userid){
+        //初始化websocket
+        console.log(userid+'index中userid')
+        let wsUrl = "ws://localhost:10000/imserver/" + userid;
+        this.Socket = new WebSocket(wsUrl);
+        // this.websock = new WebSocket('ws://echo.websocket.org/echo');
+        this.Socket.onmessage = this.websocketonmessage;
+        this.Socket.onopen = this.websocketonopen ;
+        this.Socket.onerror = this.websocketonerror;
+        this.Socket.onclose = this.websocketclose;
+      },
+
+      websocketonopen (message ){ //连接建立之后执行send方法发送数据
+        let actions = {"test":message};
+        this.websocketsend(JSON.stringify(actions));
+        console.log('ws连接状态：' + this.Socket.readyState);
+      },
+
+      websocketonerror(){//连接建立失败重连
+        initWebSocket();
+      },
+      websocketonmessage (e){ //数据接收
+        console.log("接收数据接收");
+        console.log("接收："+e.data+'==============');
+        if(e.data=='开始采集15张眨眼图片'){
+          this.collectTips='请眨眼睛'
+          this.collectLength=0
+        }
+        if(e.data=='开始采集15张张嘴图片'){
+          this.collectTips='请张嘴'
+          this.collectLength=14
+        }
+        if(e.data=='开始采集15张笑的图片'){
+          this.collectTips='请微笑'
+          this.collectLength=28
+        }
+        if(e.data=='开始采集15张抬头图片'){
+          this.collectTips='请向上看'
+          this.collectLength=42
+        }
+        if(e.data=='开始采集15张低头图片'){
+          this.collectTips='请向下看'
+          this.collectLength=56
+        }
+        if(e.data=='开始采集15张看左边的图片'){
+          this.collectTips='请看左边'
+          this.collectLength=71
+        }
+        if(e.data=='开始采集15张看右边的图片'){
+          this.collectTips='请看右边'
+          this.collectLength=86
+        }
+      },
+      websocketsend (Data){//数据发送
+        this.Socket.send(Data);
+      },
+
+      websocketclose( e ){  //关闭
+        console.log('断开连接',e);
       },
     }
   }

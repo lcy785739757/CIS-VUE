@@ -229,7 +229,7 @@
     <el-dialog
       :visible.sync="FaceDialog"
       class="faceDialog"
-      title="人脸数据采集"   >
+      title="人脸数据采集">
       <el-card
       class="faceCard">
 
@@ -254,25 +254,26 @@
               </el-row>
             </el-header>
             <el-main style="">
-              <el-container>
-                <el-aside style=" width: 150px">
+              <el-container >
+                <el-aside style=" width: 200px ">
+                  <el-progress :show-text="false" :stroke-width="15" :percentage=collectLength style="margin-top: 0px;width: 200px"></el-progress>
                   <h2 style="margin-left:37%">提示:</h2>
                   <h2 style="margin-left:25%; margin-top: 50%">{{collectTips}}</h2>
                 </el-aside>
-<!--                <el-main style="" >-->
-<!--                    <iframe :src="vedioURL" width="390px" height="300px" frameborder="0" id="mobsf" scrolling="no" style="margin-left: 30px"></iframe>-->
-<!--                </el-main>-->
-                <el-aside style=" width: 20px">
+                <el-main style="" >
+                    <iframe :src="vedioURL" width="325px" height="250px" frameborder="0" id="mobsf" scrolling="no" style="margin-left: 30px"></iframe>
+                </el-main>
+<!--                <el-aside style=" width: 20px;background-color: #303133">-->
 
-                </el-aside>
+<!--                </el-aside>-->
               </el-container>
             </el-main>
             <el-footer style="">
               <el-row>
 
                 <el-form-item>
-                  <el-button type="danger" v-on:click="CancelFaceDialog()" style="width: 100px; margin-top: 10px ;margin-left: 110px"  >退出</el-button>
-                  <el-button type="primary" v-on:click="StartCollect()" style="width: 100px; margin-top: 10px;margin-left: 20px" >开始采集</el-button>
+                  <el-button type="danger" v-on:click="CancelFaceDialog()" style="width: 100px; margin-top: 0px ;margin-left: 110px"  >退出</el-button>
+                  <el-button type="primary" v-on:click="StartCollect()"  style="width: 100px; margin-top: 0px;margin-left: 20px" >开始采集</el-button>
                 </el-form-item>
               </el-row>
             </el-footer>
@@ -301,24 +302,21 @@
 
 <script>
   import {
-    addOldImg,
-    collectOldPer,
     editOldPerson,
     editSysUser,
     queryOldPerson,
     removeOldPerson,
     runFaceCollectPython
   } from "../../api";
-  import 'video.js/dist/video-js.css'
-  import 'vue-video-player/src/custom-theme.css'
-  // import {videoPlayer} from 'vue-video-player'
-  // import 'vediojs-flash'
+  import {initWebSocket, websocketclose, websocketonerror, websocketonmessage, websocketonopen} from "../../webSocket";
   const healthsOptions = ['心脏病', '糖尿病', '高血压', '高血脂'];
   export default {
     name: "queryOddPerson",
 
     data(){
       return{
+        collectLength:0,
+        Socket:'',
         vedioURL:'http://127.0.0.1:5001/',
         baseURL:'http://localhost:10000/',
         TouDialogVisible:false,
@@ -479,21 +477,11 @@
     },
     created() {
       this.getOldPerson()
+      this.initWebSocket(this.$store.state.userId)
     },
     mounted() {
-      function changeMobsfIframe(){
-        const mobsf = document.getElementById('mobsf');
-        const deviceWidth = document.body.clientWidth;
-        const deviceHeight = document.body.clientHeight;
-        mobsf.style.width = (Number(deviceWidth)-500) + 'px'; //数字是页面布局宽度差值
-        mobsf.style.height = (Number(deviceHeight)-400) + 'px'; //数字是页面布局高度差
-      }
-
-      changeMobsfIframe()
-
-      window.onresize = function(){
-        changeMobsfIframe()
-      }
+      // this.message = websocketonmessage()
+      // console.log(this.message+'aaaaaaaaaaaaaaaaaaa')
     },
     methods:{
       handleChange(file,fileList){
@@ -751,6 +739,7 @@
       },
       // 开始采集
       StartCollect(){
+
         this.FaceInfoId.ID=this.FaceInfo.id
         this.getUserID();
         console.log(this.FaceInfoId.ID)
@@ -758,7 +747,7 @@
         let params= new FormData();
         params.append('userID',that.FaceInfoId.userID);
         params.append('ID',that.FaceInfoId.ID);
-        params.append('type',"oldperson")
+        params.append('type',"oldpeople")
 
 
         // let params = JSON.stringify(that.FaceInfoId);
@@ -770,6 +759,9 @@
                 message: "采集成功",
                 type: 'success'
               });
+              this.collectTips='采集完成'
+              this.collectLength=100
+              this.getOldPerson()
             }else {
               that.$message({
                 title: "采集失败",
@@ -801,6 +793,68 @@
         // this.addOldPersonForm.CREATEBY=Cookies.get('User_ID')
         this.FaceInfoId.userID=this.$store.state.userId;
         console.log(this.FaceInfoId.userID);
+      },
+
+
+      initWebSocket(userid){
+        //初始化websocket
+        console.log(userid+'index中userid')
+        let wsUrl = "ws://localhost:10000/imserver/" + userid;
+        this.Socket = new WebSocket(wsUrl);
+        // this.websock = new WebSocket('ws://echo.websocket.org/echo');
+        this.Socket.onmessage = this.websocketonmessage;
+        this.Socket.onopen = this.websocketonopen ;
+        this.Socket.onerror = this.websocketonerror;
+        this.Socket.onclose = this.websocketclose;
+      },
+
+      websocketonopen (message ){ //连接建立之后执行send方法发送数据
+        let actions = {"test":message};
+        this.websocketsend(JSON.stringify(actions));
+        console.log('ws连接状态：' + this.Socket.readyState);
+      },
+
+      websocketonerror(){//连接建立失败重连
+        initWebSocket();
+      },
+      websocketonmessage (e){ //数据接收
+        console.log("接收数据接收");
+        console.log("接收："+e.data+'==============');
+        if(e.data=='开始采集15张眨眼图片'){
+          this.collectTips='请眨眼睛'
+          this.collectLength=0
+        }
+        if(e.data=='开始采集15张张嘴图片'){
+          this.collectTips='请张嘴'
+          this.collectLength=14
+        }
+        if(e.data=='开始采集15张笑的图片'){
+          this.collectTips='请微笑'
+          this.collectLength=28
+        }
+        if(e.data=='开始采集15张抬头图片'){
+          this.collectTips='请向上看'
+          this.collectLength=42
+        }
+        if(e.data=='开始采集15张低头图片'){
+          this.collectTips='请向下看'
+          this.collectLength=56
+        }
+        if(e.data=='开始采集15张看左边的图片'){
+          this.collectTips='请看左边'
+          this.collectLength=71
+        }
+        if(e.data=='开始采集15张看右边的图片'){
+          this.collectTips='请看右边'
+          this.collectLength=86
+        }
+      },
+      websocketsend (Data){//数据发送
+        this.Socket.send(Data);
+      },
+
+      websocketclose( e ){  //关闭
+        console.log('断开连接',e);
       },
 
     }
