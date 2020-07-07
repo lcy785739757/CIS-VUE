@@ -261,7 +261,7 @@
                 </el-aside>
                 <el-main style="background: red">
                   <el-card style="height: 280px">
-
+                    <iframe :src="vedioURL" width="1200" height="300" frameborder="0" scrolling="auto" style="margin-left: 10px;margin-right: 10px"></iframe>
                   </el-card>
                 </el-main>
                 <el-aside style="background-color: #2b4b6b; width: 20px">
@@ -302,14 +302,26 @@
 </template>
 
 <script>
-  import {addOldImg, collectOldPer, editOldPerson, editSysUser, queryOldPerson, removeOldPerson} from "../../api";
-  // import
+  import {
+    addOldImg,
+    collectOldPer,
+    editOldPerson,
+    editSysUser,
+    queryOldPerson,
+    removeOldPerson,
+    runFaceCollectPython
+  } from "../../api";
+  import 'video.js/dist/video-js.css'
+  import 'vue-video-player/src/custom-theme.css'
+  // import {videoPlayer} from 'vue-video-player'
+  // import 'vediojs-flash'
   const healthsOptions = ['心脏病', '糖尿病', '高血压', '高血脂'];
   export default {
     name: "queryOddPerson",
 
     data(){
       return{
+        vedioURL:'http://127.0.0.1:5001/',
         baseURL:'http://localhost:10000/',
         TouDialogVisible:false,
         HugeURL:'',
@@ -733,9 +745,10 @@
         let params= new FormData();
         params.append('userID',that.FaceInfoId.userID);
         params.append('ID',that.FaceInfoId.ID);
+        params.append('type',"oldperson")
 
         // let params = JSON.stringify(that.FaceInfoId);
-        collectOldPer(params)
+        runFaceCollectPython(params)
           .then(res =>{
             if (res.code == 1) {
               that.$message({

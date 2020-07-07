@@ -265,7 +265,14 @@
 </template>
 
 <script>
-  import {collectEmployee, collectOldPer, editEmployee, queryEmployee, removeEmployee} from "../../api";
+  import {
+    collectEmployee,
+    collectOldPer,
+    editEmployee,
+    queryEmployee,
+    removeEmployee,
+    runFaceCollectPython
+  } from "../../api";
 
   export default {
     name: "queryEmployee",
@@ -551,9 +558,10 @@
         let params= new FormData();
         params.append('userID',that.FaceInfoId.userID);
         params.append('ID',that.FaceInfoId.ID);
+        params.append('type',"employee")
 
         // let params = JSON.stringify(that.FaceInfoId);
-        collectEmployee(params)
+        runFaceCollectPython(params)
           .then(res =>{
             if (res.code == 1) {
               that.$message({

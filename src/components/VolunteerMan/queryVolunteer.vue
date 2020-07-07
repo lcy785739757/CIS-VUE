@@ -265,7 +265,14 @@
 </template>
 
 <script>
-  import {collectOldPer, collectVolunteer, editVolunteer, queryVolunteer, removeVolunteer} from "../../api";
+  import {
+    collectOldPer,
+    collectVolunteer,
+    editVolunteer,
+    queryVolunteer,
+    removeVolunteer,
+    runFaceCollectPython
+  } from "../../api";
 
   export default {
     name: "queryVolunteer",
@@ -550,9 +557,10 @@
         let params= new FormData();
         params.append('userID',that.FaceInfoId.userID);
         params.append('ID',that.FaceInfoId.ID);
+        params.append('type',"volunteer")
 
         // let params = JSON.stringify(that.FaceInfoId);
-        collectVolunteer(params)
+        runFaceCollectPython(params)
           .then(res =>{
             if (res.code == 1) {
               that.$message({

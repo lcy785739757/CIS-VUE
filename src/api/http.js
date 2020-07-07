@@ -95,6 +95,18 @@ export function post(url, data = {}) {
   })
 }
 
+export function Ppost(url, data = {}) {
+  let pythonURL = '';
+  return new Promise((resolve, reject) => {
+    axios.post(pythonURL+url, data)
+      .then(response => {
+        resolve(response.data);
+      }, err => {
+        reject(err)
+      })
+  })
+}
+
 /**
    * 封装delete请求
    * @param url
