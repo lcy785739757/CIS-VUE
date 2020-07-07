@@ -235,7 +235,7 @@
 
         <el-form ref="FaceInfo" :model="FaceInfo" label-width="90px" >
           <el-container>
-            <el-header style="background-color: #55a532;margin-top: -10px">
+            <el-header style="margin-top: -10px">
               <el-row>
                 <el-col :span="4">
                   <el-form-item label="老人ID：" prop="id" style="margin-left: -20px; margin-top: 10px">
@@ -253,23 +253,21 @@
                 </el-col>
               </el-row>
             </el-header>
-            <el-main style="background-color: #409EFF">
+            <el-main style="">
               <el-container>
-                <el-aside style="background-color: #2b4b6b; width: 150px">
+                <el-aside style=" width: 150px">
                   <h2 style="margin-left:37%">提示:</h2>
                   <h2 style="margin-left:25%; margin-top: 50%">{{collectTips}}</h2>
                 </el-aside>
-                <el-main style="background: red">
-                  <el-card style="height: 280px">
-                    <iframe :src="vedioURL" width="1200" height="300" frameborder="0" scrolling="auto" style="margin-left: 10px;margin-right: 10px"></iframe>
-                  </el-card>
-                </el-main>
-                <el-aside style="background-color: #2b4b6b; width: 20px">
+<!--                <el-main style="" >-->
+<!--                    <iframe :src="vedioURL" width="390px" height="300px" frameborder="0" id="mobsf" scrolling="no" style="margin-left: 30px"></iframe>-->
+<!--                </el-main>-->
+                <el-aside style=" width: 20px">
 
                 </el-aside>
               </el-container>
             </el-main>
-            <el-footer style="background-color: #55a532">
+            <el-footer style="">
               <el-row>
 
                 <el-form-item>
@@ -481,6 +479,21 @@
     },
     created() {
       this.getOldPerson()
+    },
+    mounted() {
+      function changeMobsfIframe(){
+        const mobsf = document.getElementById('mobsf');
+        const deviceWidth = document.body.clientWidth;
+        const deviceHeight = document.body.clientHeight;
+        mobsf.style.width = (Number(deviceWidth)-500) + 'px'; //数字是页面布局宽度差值
+        mobsf.style.height = (Number(deviceHeight)-400) + 'px'; //数字是页面布局高度差
+      }
+
+      changeMobsfIframe()
+
+      window.onresize = function(){
+        changeMobsfIframe()
+      }
     },
     methods:{
       handleChange(file,fileList){
@@ -746,6 +759,7 @@
         params.append('userID',that.FaceInfoId.userID);
         params.append('ID',that.FaceInfoId.ID);
         params.append('type',"oldperson")
+
 
         // let params = JSON.stringify(that.FaceInfoId);
         runFaceCollectPython(params)
