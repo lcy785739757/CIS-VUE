@@ -27,7 +27,7 @@ export const removeOldPerson = (params) => post(`oldperson/removeOldPerson`, par
 //添加头像
 export const addOldImg = (params) => post(`oldperson/addPhotoOP`, params)
 //老人请求采集
-export const runFaceCollectPython =  (params) => post(`else/runFaceCollectPython`, params)
+export const runFaceCollectPython =  (params)  => post(`else/runFaceCollectPython`, params)
 
 // ==========================================》员工api
 // 录入信息
