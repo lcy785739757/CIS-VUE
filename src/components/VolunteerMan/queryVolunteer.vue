@@ -595,7 +595,7 @@
         this.TouDialogVisible=false
       },
       //获得管理员ID
-      getUserID(){
+      getUserID() {
         // this.addOldPersonForm.CREATEBY=Cookies.get('User_ID')
         this.FaceInfoId.userID=this.$store.state.userId;
         console.log(this.FaceInfoId.userID);

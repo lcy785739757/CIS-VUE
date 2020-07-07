@@ -592,7 +592,7 @@
         this.HugeURL=this.baseURL+row.imgset_dir
       },
       // 关闭大图
-      closeDialog(){
+      closeDialog() {
         this.TouDialogVisible=false
       },
       //获得管理员ID
