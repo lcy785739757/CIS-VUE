@@ -190,6 +190,7 @@
     </el-drawer>
 
     <el-dialog
+      :destroyOnClose="true"
       :visible.sync="FaceDialog"
       class="faceDialog"
       title="人脸数据采集"   >
@@ -217,26 +218,36 @@
               </el-row>
             </el-header>
             <el-main style="">
-              <el-container >
+              <el-container style="height: 324px" >
                 <el-aside style=" width: 200px ">
-                  <el-progress :show-text="false" :stroke-width="15" :percentage=collectLength style="margin-top: 0px;width: 200px"></el-progress>
+<!--                  <el-progress :show-text="false" :stroke-width="15" :percentage=collectLength style="margin-top: 0px;width: 200px"></el-progress>-->
+                  <el-progress v-if="collectLength!=100" :show-text="false" type="circle" :percentage=collectLength :width=80 status="success"></el-progress>
+                  <el-progress v-else type="circle" :percentage=collectLength :width=80 status="success"></el-progress>
                   <h2 style="margin-left:37%">提示:</h2>
                   <h2 style="margin-left:25%; margin-top: 50%">{{collectTips}}</h2>
                 </el-aside>
                 <el-main style="" >
-                  <iframe :src="vedioURL" width="325px" height="250px" frameborder="0" id="mobsf" scrolling="no" style="margin-left: 30px"></iframe>
+<!--                  <iframe :src="vedioURL" width="325px" height="250px" frameborder="0" id="mobsf" scrolling="no" style="margin-left: 30px"></iframe>-->
+                  <video-player
+                    width="500px" height="500px"
+                    class="video-player vjs-custom-skin"
+                    ref="videoPlayer"
+                    :playsinline="true"
+                    :options="playerOptions"
+
+                  ></video-player>
                 </el-main>
                 <!--                <el-aside style=" width: 20px;background-color: #303133">-->
 
                 <!--                </el-aside>-->
               </el-container>
             </el-main>
-            <el-footer style="">
+            <el-footer style="height: 60px">
               <el-row>
 
                 <el-form-item>
                   <el-button type="danger" v-on:click="CancelFaceDialog()" style="width: 100px; margin-top: 0px ;margin-left: 110px"  >退出</el-button>
-                  <el-button type="primary" v-on:click="StartCollect()"  style="width: 100px; margin-top: 0px;margin-left: 20px" >开始采集</el-button>
+                  <el-button type="primary" v-on:click="StartCollect()" :disabled="IfCollect" style="width: 100px; margin-top: 0px;margin-left: 20px" >开始采集</el-button>
                 </el-form-item>
               </el-row>
             </el-footer>
@@ -265,8 +276,6 @@
 
 <script>
   import {
-    collectOldPer,
-    collectVolunteer,
     editVolunteer,
     queryVolunteer,
     removeVolunteer,
@@ -279,6 +288,30 @@
 
     data(){
       return{
+        playerOptions:{
+          playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+          autoplay: true, //如果true,浏览器准备好时开始回放。
+          muted: false, // 默认情况下将会消除任何音频。
+          loop: false, // 导致视频一结束就重新开始。
+          preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+          language: 'zh-CN',
+          aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+          // fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+          sources: [{
+            type: "application/x-mpegURL",//这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
+            src: "rtmp://182.92.84.33:1935/stream/pupils_trace" //url地址
+          }],
+          // hls:true, //如果是播放m3u8必须加（需注释掉techOrder,不然会有报错）
+          techOrder: ['flash'], //播放rtmp必须加
+          poster: "http://localhost:10000/images/oldPerson/1003/1003.jpg", //你的封面地址
+          notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+          controlBar: {
+            timeDivider: true,
+            durationDisplay: true,
+            remainingTimeDisplay: false,
+            fullscreenToggle: true  //全屏按钮
+          }
+        },
         collectLength:0,
         Socket:'',
         vedioURL:'http://127.0.0.1:5001/',
@@ -346,6 +379,7 @@
             {required: true, message: '请输入项健康状态', trigger: 'blur'}
           ],
         },
+        IfCollect:false,
         FaceInfo: {},
         //采集人脸用到的ID
         FaceInfoId: {
@@ -371,6 +405,11 @@
         DeleteVolunteerId:{
           id: ''
         },
+      }
+    },
+    computed:{
+      player(){
+        return this.$refs.videoPlayer.player
       }
     },
     created() {
@@ -544,6 +583,9 @@
       },
       // 采集人脸数据界面
       getFaceInfo(index,row){
+        this.IfCollect=false
+        this.collectTips='等待采集'
+        this.collectLength=0
         this.idx=index
         this.FaceInfo=row
         console.log(row)
@@ -555,6 +597,7 @@
       },
       // 开始采集
       StartCollect(){
+        this.IfCollect=true
         this.FaceInfoId.ID=this.FaceInfo.id
         this.getUserID();
         console.log(this.FaceInfoId.ID)

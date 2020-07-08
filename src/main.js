@@ -8,7 +8,12 @@ import promise from 'es6-promise'
 import qs from 'qs'
 import echarts from 'echarts'
 
-
+import VideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css' //videoJs的样式
+// import 'vue-video-player/src/custom-theme.css' //vue-video-player的样式
+import 'videojs-flash'; //引入才能播放rtmp视屏
+// import 'videojs-contrib-hls' //引入才能播放m3u8文件
+Vue.use(VideoPlayer)
 import {
   Pagination,
   Dialog,

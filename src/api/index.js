@@ -26,8 +26,7 @@ export const editOldPerson = (params) => post(`oldperson/editOldPerson`, params)
 export const removeOldPerson = (params) => post(`oldperson/removeOldPerson`, params)
 //添加头像
 export const addOldImg = (params) => post(`oldperson/addPhotoOP`, params)
-//老人请求采集
-export const runFaceCollectPython =  (params)  => post(`else/runFaceCollectPython`, params)
+
 
 // ==========================================》员工api
 // 录入信息
@@ -64,3 +63,9 @@ export const Employ = (params) => post(`employee/statEmployee`, params)
 export const OldPer = (params) => post(`oldperson/statOldPerson`, params)
 //义工统计分析
 export const Volunteer = (params) => post(`volunteer/statVolunteer`, params)
+
+
+// ==========================================》脚本api
+//人脸采集
+export const runFaceCollectPython =  (params)  => post(`else/runFaceCollectPython`, params)
+export const runTrainingPython =  (params)  => post(`else/runTrainingPython`, params)

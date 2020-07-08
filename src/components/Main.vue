@@ -234,21 +234,14 @@
           },
           {
             id:'05',
-            authName:'数据管理',
-            path:'dataMan',
-            children:[
-              {id: 'OldPer', authName: '老人数据统计', path: 'OldPer',},
-              {id:'Employ', authName:'工作人员数据统计', path:'Employ',},
-              {id: 'Volunteer', authName: '义工数据统计', path: 'Volunteer',}
-            ]
-          },
-          {
-            id:'06',
             authName:'摄像头管理',
             path:'blink',
             children:[
-              {id:'quit', authName:'退出系统', path:'app_login',},
-              {id: 'wel', authName: '主页系统', path: 'wel',}
+              {id:'Camera', authName:'房间摄像头', path:'Camera',},
+              {id:'Camera2', authName:'走廊摄像头', path:'Camera2',},
+              {id:'Camera3', authName:'院子摄像头', path:'Camera3',},
+              {id:'Camera4', authName:'桌子摄像头', path:'Camera4',},
+              {id:'Event', authName:'实时事件通知', path:'Event',},
             ]
           }
         ],
@@ -350,6 +343,7 @@
       }
     },
     created() {
+      this.admin_Name=this.$store.state.username;
       this.getName();
       this.getInfo();
       // this.createConnect();

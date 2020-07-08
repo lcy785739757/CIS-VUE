@@ -15,6 +15,12 @@ import Employ from "../components/DataMan/Employ";
 import OldPer from "../components/DataMan/OldPer";
 import Volunteer from "../components/DataMan/Volunteer";
 
+import Camera from "../components/CameraMan/Camera";
+import Camera2 from "../components/CameraMan/Camera2";
+import Camera3 from "../components/CameraMan/Camera3";
+import Camera4 from "../components/CameraMan/Camera4";
+import Event from "../components/CameraMan/Event";
+
 Vue.use(VueRouter)
 
   const routes = [
@@ -45,6 +51,12 @@ Vue.use(VueRouter)
       {path:'/OldPer',name:'OldPer',component:OldPer},
       {path:'/Employ',name:'Employ',component:Employ},
       {path:'/Volunteer',name:'Volunteer',component:Volunteer},
+
+      {path: '/Camera',name: 'Camera',component: Camera},
+      {path: '/Camera2',name: 'Camera2',component: Camera2},
+      {path: '/Camera3',name: 'Camera3',component: Camera3},
+      {path: '/Camera4',name: 'Camera4',component: Camera4},
+      {path: '/Event',name: 'Event',component: Event},
     ]
   },
 
