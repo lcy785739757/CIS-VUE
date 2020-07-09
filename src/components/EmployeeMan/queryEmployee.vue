@@ -276,6 +276,8 @@
 
 <script>
   import {
+    BaseRtmp,
+    ComputerRtmp,
     editEmployee,
     queryEmployee,
     removeEmployee,
@@ -299,7 +301,7 @@
           // fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
           sources: [{
             type: "application/x-mpegURL",//这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
-            src: "rtmp://182.92.84.33:1935/stream/pupils_trace" //url地址
+            src: BaseRtmp //url地址
           }],
           // hls:true, //如果是播放m3u8必须加（需注释掉techOrder,不然会有报错）
           techOrder: ['flash'], //播放rtmp必须加
@@ -610,29 +612,8 @@
         // let params = JSON.stringify(that.FaceInfoId);
         runFaceCollectPython(params)
           .then(res =>{
-            if (res.code == 1) {
-              that.$message({
-                title: "采集成功",
-                message: "采集成功",
-                type: 'success'
-              });
-              this.collectTips='采集完成'
-              this.collectLength=100
-              this.getEmployee()
-            }else {
-              that.$message({
-                title: "采集失败",
-                message: "采集失败",
-                type: 'warning'
-              });
-            }
           }).catch(function() {
-          that.$notify({
-            title: "采集失败",
-            message: "服务器异常",
-            type: "error"
-          });
-          console.log("服务呵呵呵");
+
         });
       },
       //查看大图
@@ -702,6 +683,16 @@
         if(e.data=='开始采集15张看右边的图片'){
           this.collectTips='请看右边'
           this.collectLength=86
+        }
+        if(e.data=='采集完成'){
+          this.collectTips='采集完成'
+          this.collectLength=100
+          this.$message({
+            title: "采集成功",
+            message: "采集成功",
+            type: 'success'
+          });
+          this.getEmployee()
         }
       },
       websocketsend (Data){//数据发送

@@ -2,6 +2,8 @@
 import axios from 'axios'
 import { get, post } from './http'
 
+export const ComputerRtmp = 'rtmp://182.92.84.33:1935/stream/computer'
+export const BaseRtmp ='rtmp://182.92.84.33:1935/stream/base'
 
 // ==========================================》管理员api
 // 获取管理员数据
