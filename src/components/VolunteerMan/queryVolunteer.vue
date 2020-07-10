@@ -193,7 +193,7 @@
       :destroyOnClose="true"
       :visible.sync="FaceDialog"
       class="faceDialog"
-      title="人脸数据采集"   >
+      title="人脸数据采集">
       <el-card
         class="faceCard">
 
@@ -219,15 +219,15 @@
             </el-header>
             <el-main style="">
               <el-container style="height: 324px" >
-                <el-aside style=" width: 200px ">
-<!--                  <el-progress :show-text="false" :stroke-width="15" :percentage=collectLength style="margin-top: 0px;width: 200px"></el-progress>-->
+                <el-aside style=" width: 100px ">
+                  <!--                  <el-progress :show-text="false" :stroke-width="44" :percentage=collectLength style="margin-top: 0px;width: 100px"></el-progress>-->
                   <el-progress v-if="collectLength!=100" :show-text="false" type="circle" :percentage=collectLength :width=80 status="success"></el-progress>
                   <el-progress v-else type="circle" :percentage=collectLength :width=80 status="success"></el-progress>
-                  <h2 style="margin-left:37%">提示:</h2>
-                  <h2 style="margin-left:25%; margin-top: 50%">{{collectTips}}</h2>
+                  <h2 style="margin-left:15%">提示:</h2>
+                  <h2 style="margin-left:0%; margin-top: 50%">{{collectTips}}</h2>
                 </el-aside>
                 <el-main style="" >
-<!--                  <iframe :src="vedioURL" width="325px" height="250px" frameborder="0" id="mobsf" scrolling="no" style="margin-left: 30px"></iframe>-->
+                  <!--                    <iframe :src="vedioURL" width="325px" height="250px" frameborder="0" id="mobsf" scrolling="no" style="margin-left: 30px"></iframe>-->
                   <video-player
                     width="500px" height="500px"
                     class="video-player vjs-custom-skin"
@@ -247,12 +247,13 @@
 
                 <el-form-item>
                   <el-button type="danger" v-on:click="CancelFaceDialog()" style="width: 100px; margin-top: 0px ;margin-left: 110px"  >退出</el-button>
-                  <el-button type="primary" v-on:click="StartCollect()" :disabled="IfCollect" style="width: 100px; margin-top: 0px;margin-left: 20px" >开始采集</el-button>
+                  <el-button type="primary" :disabled="IfCollect" v-on:click="StartCollect()"  style="width: 100px; margin-top: 0px;margin-left: 200px" >开始采集</el-button>
                 </el-form-item>
               </el-row>
             </el-footer>
           </el-container>
         </el-form>
+
       </el-card>
     </el-dialog>
 

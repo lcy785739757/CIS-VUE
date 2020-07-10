@@ -21,6 +21,8 @@ import Camera3 from "../components/CameraMan/Camera3";
 import Camera4 from "../components/CameraMan/Camera4";
 import Event from "../components/CameraMan/Event";
 
+import FaceSetting from "../components/Setting/FaceSetting";
+
 Vue.use(VueRouter)
 
   const routes = [
@@ -57,6 +59,8 @@ Vue.use(VueRouter)
       {path: '/Camera3',name: 'Camera3',component: Camera3},
       {path: '/Camera4',name: 'Camera4',component: Camera4},
       {path: '/Event',name: 'Event',component: Event},
+
+      {path: '/FaceSetting',name: 'FaceSetting',component: FaceSetting},
     ]
   },
 

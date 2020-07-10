@@ -4,6 +4,10 @@ import { get, post } from './http'
 
 export const ComputerRtmp = 'rtmp://182.92.84.33:1935/stream/computer'
 export const BaseRtmp ='rtmp://182.92.84.33:1935/stream/base'
+export const RoomRtmp ='rtmp://192.168.0.9:1935/stream/room'
+export const CorridorRtmp = 'rtmp://192.168.0.9:1935/stream/corridor'
+export const DeskRtmp = 'rtmp://192.168.0.9:1935/stream/desk'
+export const YardRtmp = 'rtmp://192.168.0.9:1935/stream/yard'
 
 // ==========================================》管理员api
 // 获取管理员数据
@@ -70,4 +74,9 @@ export const Volunteer = (params) => post(`volunteer/statVolunteer`, params)
 // ==========================================》脚本api
 //人脸采集
 export const runFaceCollectPython =  (params)  => post(`else/runFaceCollectPython`, params)
+//人脸训练
 export const runTrainingPython =  (params)  => post(`else/runTrainingPython`, params)
+
+// ==========================================》事件api
+// 查询所有事件
+export const queryEvent =  (params)  => post(`eventInfo/queryEvent`, params)

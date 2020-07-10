@@ -145,16 +145,33 @@
               <!-- 图标 -->
               <i :class="iconsObj[item.id]"></i>
               <!-- 文本 -->
-              <span>
-                {{item.authName}}
-              </span>
+<!--              <span>-->
+<!--                {{item.authName}}-->
+<!--              </span>-->
+              <span v-if="item.authName==VIF2">
+                  <el-badge v-if="Event!=0" value="new" class="item">
+                    {{item.authName}}
+                  </el-badge>
+                  <el-badge v-else class="item">
+                    {{item.authName}}
+                  </el-badge>
+                </span>
+              <span v-else>{{item.authName}}</span>
             </template>
 
             <!-- 二级菜单 -->
             <el-menu-item :index="subItem.path+''" v-for="subItem in item.children" :key="subItem.authName" >
               <template slot="title">
                 <i class="el-icon-menu"></i>
-                <span>{{subItem.authName}}</span>
+                <span v-if="subItem.authName==VIF">
+                  <el-badge v-if="Event!=0" value="new" class="item">
+                    {{subItem.authName}}
+                  </el-badge>
+                  <el-badge v-else class="item">
+                    {{subItem.authName}}
+                  </el-badge>
+                </span>
+                <span v-else>{{subItem.authName}}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -184,6 +201,9 @@
     name: "Main",
     data(){
       return{
+        VIF2:'摄像头管理',
+        VIF:'实时事件通知',
+        Event:0,
         isEdit: false,   // 是否编辑
         isEdit2:false,
         InfoDrawer: false,
@@ -199,7 +219,7 @@
             authName:'系统设置模块',
             path:'management',
             children:[
-              {id: 'project_browse', authName: '更改主题', path: 'project_browse',},
+              {id: 'faceSetting', authName: '人脸识别', path: 'faceSetting',},
             ]
           },
           {
@@ -346,8 +366,9 @@
       this.admin_Name=this.$store.state.username;
       this.getName();
       this.getInfo();
-      // this.createConnect();
-      // websocketsend("56")
+      this.Event=0
+      console.log(this.$store.state.userId+'-主界面')
+      this.initWebSocket(this.$store.state.userId+'-主界面')
     },
     destroyed(){
       websocketClose() //离开路由之后断开websocket连接
@@ -539,13 +560,41 @@
         this.EditedPass.NewPassword=this.EditPass.Password;
         this.EditedPass.UserName=this.EditPass.UserName;
       },
-      //WebSocket建立连接
-      createConnect(){
-        // 建立webSocket连接
-        console.log("========建立连接==========");
-        console.log(this.$store.state.userId+"id================");
-        initWebSocket(this.$store.state.userId)
-        console.log("========连接完成==========");
+      initWebSocket(userid){
+        //初始化websocket
+        console.log(userid+'index中userid')
+        let wsUrl = "ws://localhost:10000/imserver/" + userid;
+        this.Socket = new WebSocket(wsUrl);
+        // this.websock = new WebSocket('ws://echo.websocket.org/echo');
+        this.Socket.onmessage = this.websocketonmessage;
+        this.Socket.onopen = this.websocketonopen ;
+        this.Socket.onerror = this.websocketonerror;
+        this.Socket.onclose = this.websocketclose;
+      },
+
+      websocketonopen (message ){ //连接建立之后执行send方法发送数据
+        let actions = {"test":message};
+        this.websocketsend(JSON.stringify(actions));
+        console.log('主界面ws连接状态：' + this.Socket.readyState);
+      },
+
+      websocketonerror(){//连接建立失败重连
+        initWebSocket();
+      },
+      websocketonmessage (e){ //数据接收
+        console.log("主界面接收数据接收");
+        console.log("主界面接收："+e.data+'==============');
+        if(e.data=='事件更新'){
+          this.Event=this.Event+1
+        }
+
+      },
+      websocketsend (Data){//数据发送
+        this.Socket.send(Data);
+      },
+
+      websocketclose( e ){  //关闭
+        console.log('主界面ws断开连接',e);
       },
     },
     computed:{
