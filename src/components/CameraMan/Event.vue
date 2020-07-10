@@ -38,28 +38,14 @@
         <el-table-column label="发生地点"  prop="event_location" align="center"></el-table-column>
         <el-table-column label="老人ID"  prop="oldperson_id" align="center"></el-table-column>
 
-        <el-table-column label="操作"   align="center">
-          <template slot-scope="scope">
-            <el-button
-              type="text"
-              icon="el-icon-zoom-in"
-              @click="getOldInfoAllDrawer(scope.$index, scope.row)"
-            >查看</el-button>
-            <el-button
-              type="text"
-              icon="el-icon-delete-solid"
-              class="red"
-              @click="DeleteOldInfo(scope.$index, scope.row)"
-            >删除</el-button>
-          </template>
-        </el-table-column>
+
       </el-table>
     </el-card>
 
     <el-dialog
       :visible.sync="TouDialogVisible"
       class="touDialog"
-      title="时间截图"
+      title="事件图片"
       @close='closeDialog'
       :close-on-click-modal="false">
       <el-card
@@ -145,7 +131,7 @@
 
         for (i;i<this.EventList.length;i++) {
           console.log(i + '<<==================i===========')
-          if(this.EventList[i].event_type==0){
+          if(this.EventList[i].event_type==5){
 
             this.EventList[i].event_type='出现陌生人'
             // this.EventList[i].imgPath='http://localhost:10000/supervision/strangers/'+this.EventListChange[i].id+'/snapshot.jpg'

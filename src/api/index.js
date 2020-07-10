@@ -4,10 +4,12 @@ import { get, post } from './http'
 
 export const ComputerRtmp = 'rtmp://182.92.84.33:1935/stream/computer'
 export const BaseRtmp ='rtmp://182.92.84.33:1935/stream/base'
-export const RoomRtmp ='rtmp://192.168.0.9:1935/stream/room'
-export const CorridorRtmp = 'rtmp://192.168.0.9:1935/stream/corridor'
-export const DeskRtmp = 'rtmp://192.168.0.9:1935/stream/desk'
-export const YardRtmp = 'rtmp://192.168.0.9:1935/stream/yard'
+export const RoomRtmp ='rtmp://182.92.84.33:1935/stream/room'
+export const CorridorRtmp = 'rtmp://182.92.84.33:1935/stream/corridor'
+export const DeskRtmp = 'rtmp://182.92.84.33:1935/stream/desk'
+export const YardRtmp = 'rtmp://182.92.84.33:1935/stream/yard'
+
+// export NNumber =''
 
 // ==========================================》管理员api
 // 获取管理员数据

@@ -100,8 +100,8 @@
         },
         loginForm:{
         //  这是登录界面
-          UserName:'aaa',
-          Password:'123456',
+          UserName:'',
+          Password:'',
         },
         rules:{
           UserName:[

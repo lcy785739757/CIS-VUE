@@ -22,11 +22,7 @@
       </el-header>
       <el-container>
 
-        <el-main >
-          <el-card style="background-color: #55a532;">
 
-          </el-card>
-        </el-main>
       </el-container>
     </el-container>
   </div>

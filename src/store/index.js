@@ -9,6 +9,7 @@ const store = new Vuex.Store({
   state:{
     HOST: 'http://localhost:10000',
     userId: '',
+    eventNum:'',
     username: '',
     avator: '',
     picUrl: '', // 头像图片
@@ -20,6 +21,13 @@ const store = new Vuex.Store({
         userId = JSON.parse(window.localStorage.getItem('userId') || null)
       }
       return userId
+    },
+    eventNum: state => {
+      let eventNum = state.eventNum
+      if (!eventNum) {
+        eventNum = JSON.parse(window.localStorage.getItem('eventNum') || null)
+      }
+      return eventNum
     },
     username: state => {
       let username = state.username

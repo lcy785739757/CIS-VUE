@@ -2,7 +2,8 @@
 
   <el-container class="home-container">
     <!--头部区域-->
-    <el-header>
+    <el-header
+      >
       <div >
         <img src="../assets/images/ye.png" alt=""   >
         <span>智慧养老系统</span>
@@ -105,15 +106,13 @@
         </div>
       </el-drawer>
       <el-drawer
-        class="DrawerClass"
+        class="InfoClass"
         :visible.sync="ItemDrawer"
-        :with-header="false"
-        direction="ttb">
-
+        :with-header="false">
         <div class="demo-drawer__content">
-          <el-card width="1500px" @close="isEdit2 = false"
+          <el-card width="920px" @close="isEdit = false" class="InfoCard" custom-class="custom-dialog"
                    :close-on-click-modal='false'>
-            <h3 class="register-title" style="margin-left: 110px;margin-top: 10px">修改密码</h3>
+            <h3 class="register-title" style="margin-left: 100px;margin-top: 10px">更换主题</h3>
 
           </el-card>
         </div>
@@ -128,9 +127,9 @@
         <!--侧边栏菜单区域-->
         <el-menu
           default-active="/queryOldPerson"
-          background-color="#333744"
+          background-color="#1BAD30"
           text-color="#fff"
-          active-text-color="#409EFF"
+          active-text-color="#1BAD30"
           :unique-opened="true"
           :collapse="isCollapsed"
           :collapse-transition="false"
@@ -163,7 +162,7 @@
             <el-menu-item :index="subItem.path+''" v-for="subItem in item.children" :key="subItem.authName" >
               <template slot="title">
                 <i class="el-icon-menu"></i>
-                <span v-if="subItem.authName==VIF">
+                <span v-if="subItem.authName==VIF" @click="ChangeEvent">
                   <el-badge v-if="Event!=0" value="new" class="item">
                     {{subItem.authName}}
                   </el-badge>
@@ -358,8 +357,14 @@
             { min: 3, max: 9, message: '长度在 3 到 9 个字符', trigger: 'blur' }
           ]
         },
-        //是否折叠
+        // 是否折叠
         isCollapsed:false,
+
+        // 颜色设置
+        HeaderColor:'#1533DA',
+        toggleColor:'#1533DA',
+        menuColor:'#1533DA',
+        menuTextColor:'#1533DA'
       }
     },
     created() {
@@ -596,6 +601,9 @@
       websocketclose( e ){  //关闭
         console.log('主界面ws断开连接',e);
       },
+      ChangeEvent(){
+        this.Event=0
+      }
     },
     computed:{
       activeIndex(){
@@ -629,7 +637,7 @@
     font-family: 幼圆;
   }
   .el-aside {
-    background-color: #333744;
+    background-color: #1BAD30;
   }
     .el-menu{
       border-right: none;
@@ -642,7 +650,7 @@
     margin-right: 10px;
   }
   .toggle-button{
-    background-color: #4A5064;
+    background-color: #1BAD30;
     font-size: 10px;
     line-height: 24px;
     color: #eeeeee;
