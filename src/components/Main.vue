@@ -127,9 +127,9 @@
         <!--侧边栏菜单区域-->
         <el-menu
           default-active="/queryOldPerson"
-          background-color="#1BAD30"
+          background-color="#575A5E"
           text-color="#fff"
-          active-text-color="#1BAD30"
+          active-text-color="#FFF540"
           :unique-opened="true"
           :collapse="isCollapsed"
           :collapse-transition="false"
@@ -637,7 +637,7 @@
     font-family: 幼圆;
   }
   .el-aside {
-    background-color: #1BAD30;
+    background-color: #575A5E;
   }
     .el-menu{
       border-right: none;
@@ -650,7 +650,7 @@
     margin-right: 10px;
   }
   .toggle-button{
-    background-color: #1BAD30;
+    background-color: #161617;
     font-size: 10px;
     line-height: 24px;
     color: #eeeeee;
