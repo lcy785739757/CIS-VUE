@@ -39,7 +39,7 @@
         <el-table-column label="人脸采集" prop="isactive"  align="center">
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.isactive=='0'"
+              v-if="scope.row.isactive=='未采集'"
               size="mini"
               type="primary"
               @click="getFaceInfo(scope.$index, scope.row)"
@@ -338,7 +338,7 @@
           // fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
           sources: [{
             type: "application/x-mpegURL",//这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
-            src: ComputerRtmp//url地址
+            src: BaseRtmp//url地址
           }],
           // hls:true, //如果是播放m3u8必须加（需注释掉techOrder,不然会有报错）
           techOrder: ['flash'], //播放rtmp必须加
@@ -845,31 +845,31 @@
         console.log("接收数据接收");
         console.log("接收："+e.data+'==============');
         if(e.data=='开始采集15张眨眼图片'){
-          this.collectTips='请眨眼睛'
+          this.collectTips='正在采集眨眼图像'
           this.collectLength=0
         }
         if(e.data=='开始采集15张张嘴图片'){
-          this.collectTips='请张嘴'
+          this.collectTips='正在采集张嘴图像'
           this.collectLength=14
         }
         if(e.data=='开始采集15张笑的图片'){
-          this.collectTips='请微笑'
+          this.collectTips='正在采集微笑图片'
           this.collectLength=28
         }
         if(e.data=='开始采集15张抬头图片'){
-          this.collectTips='请向上看'
+          this.collectTips='正在采集抬头图像'
           this.collectLength=42
         }
         if(e.data=='开始采集15张低头图片'){
-          this.collectTips='请向下看'
+          this.collectTips='正在采集低头图像'
           this.collectLength=56
         }
         if(e.data=='开始采集15张看左边的图片'){
-          this.collectTips='请看左边'
+          this.collectTips='正在采集向左看图像'
           this.collectLength=71
         }
         if(e.data=='开始采集15张看右边的图片'){
-          this.collectTips='请看右边'
+          this.collectTips='正在采集向右看图像'
           this.collectLength=86
         }
         if(e.data=='采集完成'){

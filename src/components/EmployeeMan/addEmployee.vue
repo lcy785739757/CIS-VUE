@@ -184,8 +184,8 @@
             {min: 11, max: 11, message: '请输入11位电话号码', trigger: 'blur'}
           ],
           id_card: [
-            {required: true, message: '请输入省份证号', trigger: 'blur'},
-            {min: 22, max: 22, message: '请输入22位省份证号', trigger: 'blur'}
+            {required: true, message: '请输入身份证号', trigger: 'blur'},
+            {min: 18, max: 18, message: '请输入18位身份证号', trigger: 'blur'}
           ],
           birthday: [
             {required: true, message: '请选择出生日期', trigger: 'blur'},

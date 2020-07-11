@@ -127,7 +127,7 @@
         <!--侧边栏菜单区域-->
         <el-menu
           default-active="/queryOldPerson"
-          background-color="#575A5E"
+          background-color="#2F2E27"
           text-color="#fff"
           active-text-color="#FFF540"
           :unique-opened="true"
@@ -650,7 +650,7 @@
     margin-right: 10px;
   }
   .toggle-button{
-    background-color: #161617;
+    background-color: #575A5E;
     font-size: 10px;
     line-height: 24px;
     color: #eeeeee;

@@ -168,14 +168,14 @@
                 this.$store.commit('setUsername', res.msg)
                 console.log("$store完成设置");
                 that.$message({
-                  title: "登陆成功",
-                  message: "登陆成功",
+                  title: "登录成功",
+                  message: "登录成功",
                   type: 'success'
                 });
                 that.$router.push("/main");
               } else {
                 that.$message({
-                  title: "登陆失败",
+                  title: "登录失败",
                   message: "请输入正确的用户名或密码",
                   type: "error"
                 });
@@ -190,63 +190,6 @@
                 });
                 return false;
               }
-          // if(valid){
-          //   that
-          //     .$axios({
-          //         //请求方式
-          //         method: "post",
-          //         //请求路劲
-          //         url: "/api/sysUser/login",
-          //         //请求参数
-          //         data: params
-          //         //请求成功的回调函数
-          //       },
-          //       {
-          //         emulateJSON: true
-          //       }
-          //     )
-          //     .then(function(res) {
-          //       console.log("请求已经成功");
-          //       // console.log(res.data.data[0]);
-          //
-          //       if (res.data.code == "1") {
-          //
-          //         console.log("进入if");
-          //         Cookies.set('User_name', res.data.msg, 3600);
-          //         Cookies.set('User_id', res.data.data[0], 3600);
-          //         console.log("cookie完成设置");
-          //
-          //         that.$message({
-          //           title: "登陆成功",
-          //           message: "登陆成功",
-          //           type: 'success'
-          //         });
-          //         that.$router.push("/main");
-          //         console.log(res);
-          //       }else{
-          //           that.$message({
-          //             title: "登陆失败",
-          //             message: "请输入正确的用户名或密码",
-          //             type: "error"
-          //           });
-          //         }
-          //       }).catch(function() {
-          //         that.$notify({
-          //           title: "登陆失败",
-          //           message: "服务器异常",
-          //           type: "error"
-          //      });
-          //       console.log("服务呵呵呵");
-          //     });
-          //
-          //
-          // }else{
-          //   that.$message({
-          //     message: '用户名或密码格式错误',
-          //     type: 'error'
-          //   });
-          //   return false;
-          // }
         });
 
       },

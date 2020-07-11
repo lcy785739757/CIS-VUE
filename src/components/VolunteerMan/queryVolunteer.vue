@@ -34,7 +34,7 @@
                  @click="showHuge(scope.$index, scope.row)">
           </template>
         </el-table-column>
-        <el-table-column label="姓别" prop="gender"  align="center"></el-table-column>
+        <el-table-column label="性别" prop="gender"  align="center"></el-table-column>
         <el-table-column label="电话" prop="phone"  align="center"></el-table-column>
         <el-table-column label="身份证号" prop="id_card" align="center"></el-table-column>
         <el-table-column label="入职日期" prop="checkin_date"  align="center"></el-table-column>
