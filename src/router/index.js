@@ -19,6 +19,7 @@ import Camera from "../components/CameraMan/Camera";
 import Camera2 from "../components/CameraMan/Camera2";
 import Camera3 from "../components/CameraMan/Camera3";
 import Camera4 from "../components/CameraMan/Camera4";
+import Camera5 from "../components/CameraMan/Camera5";
 import Event from "../components/CameraMan/Event";
 
 import FaceSetting from "../components/Setting/FaceSetting";
@@ -58,6 +59,7 @@ Vue.use(VueRouter)
       {path: '/Camera2',name: 'Camera2',component: Camera2},
       {path: '/Camera3',name: 'Camera3',component: Camera3},
       {path: '/Camera4',name: 'Camera4',component: Camera4},
+      {path: '/Camera5',name: 'Camera5',component: Camera5},
       {path: '/Event',name: 'Event',component: Event},
 
       {path: '/FaceSetting',name: 'FaceSetting',component: FaceSetting},

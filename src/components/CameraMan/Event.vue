@@ -151,6 +151,10 @@
             console.log("进行到这一步了么")
             this.EventList[i].event_type='义工互动'
             console.log(this.EventList[i])
+          }else if(this.EventList[i].event_type==6){
+            console.log("进行到这一步了么")
+            this.EventList[i].event_type='发生火灾'
+            console.log(this.EventList[i])
           }
 
         }
@@ -176,6 +180,9 @@
         }else if(row.event_type=='出现陌生人'){
           console.log(row.event_type)
           this.HugeURL=this.baseURL+'strangers/'+row.id+this.picName
+        }else if(row.event_type=='发生火灾'){
+          console.log(row.event_type)
+          this.HugeURL=this.baseURL+'fire/'+row.id+this.picName
         }
         console.log(this.HugeURL)
       },

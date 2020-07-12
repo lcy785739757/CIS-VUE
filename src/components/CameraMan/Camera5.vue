@@ -4,7 +4,7 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/wel' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item >摄像头管理</el-breadcrumb-item>
-      <el-breadcrumb-item >房间摄像头</el-breadcrumb-item>
+      <el-breadcrumb-item >火灾检测</el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-container>
@@ -28,10 +28,10 @@
 </template>
 
 <script>
-  import {BaseRtmp, RoomRtmp} from "../../api";
+  import {BaseRtmp, FireRtmp, RoomRtmp} from "../../api";
 
   export default {
-    name: "Camera",
+    name: "Camera5",
     data(){
       return{
         playerOptions:{
@@ -45,7 +45,7 @@
           // fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
           sources: [{
             type: "application/x-mpegURL",//这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
-            src: RoomRtmp //url地址
+            src: FireRtmp //url地址
           }],
           // hls:true, //如果是播放m3u8必须加（需注释掉techOrder,不然会有报错）
           techOrder: ['flash'], //播放rtmp必须加
@@ -69,7 +69,7 @@
 </script>
 
 <style scoped>
-.CamCard{
-  height: 500px;
-}
+  .CamCard{
+    height: 500px;
+  }
 </style>

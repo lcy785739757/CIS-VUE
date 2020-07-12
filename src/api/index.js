@@ -8,6 +8,7 @@ export const RoomRtmp ='rtmp://182.92.84.33:1935/stream/room'
 export const CorridorRtmp = 'rtmp://182.92.84.33:1935/stream/corridor'
 export const DeskRtmp = 'rtmp://182.92.84.33:1935/stream/desk'
 export const YardRtmp = 'rtmp://182.92.84.33:1935/stream/yard'
+export const FireRtmp = 'rtmp://182.92.84.33:1935/stream/fire'
 
 // export NNumber =''
 

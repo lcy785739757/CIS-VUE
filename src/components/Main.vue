@@ -260,6 +260,7 @@
               {id:'Camera2', authName:'走廊摄像头', path:'Camera2',},
               {id:'Camera3', authName:'院子摄像头', path:'Camera3',},
               {id:'Camera4', authName:'桌子摄像头', path:'Camera4',},
+              {id:'Camera5', authName:'火灾检测', path:'Camera5',},
               {id:'Event', authName:'实时事件通知', path:'Event',},
             ]
           }
